@@ -113,7 +113,7 @@
       <para style='body-bold' alignment='RIGHT'>Condición de Venta:</para>
       <para style='body-bold' alignment='RIGHT'>Nro. de Remito:</para>
       <nextFrame/>
-      <para style='body'>[[ o.partner_id.vat or removeParentNode('para') ]]</para>
+      <para style='body'>[[ o.partner_id.printed_vat or removeParentNode('para') ]]</para>
       <para style='body'>[[ o.partner_id.title.name or '' ]] [[ o.partner_id.name ]]</para>
       <para style='body'>[[ o.address_invoice_id.street ]], ( [[ o.address_invoice_id.zip or 'xxxx' ]] )</para>
       <para style='body'>[[ o.address_invoice_id.city or '']], [[ o.address_invoice_id.state_id.name or '' ]], [[ o.address_invoice_id.country_id.name or '' ]].</para>
