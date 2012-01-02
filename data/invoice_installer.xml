@@ -1,0 +1,50 @@
+<openerp>
+    <data>
+        <record id="view_invoice_ar_installer" model="ir.ui.view">
+            <field name="name">account.invoice.ar.installer.form</field>
+            <field name="model">account.invoice.ar.installer</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="base.res_config_installer"/>
+            <field name="arch" type="xml">
+              <data>
+                    <form position="attributes">
+                        <attribute name="string">Invoice Configuration for Argentina</attribute>
+                    </form>
+                    <separator string="title" position="attributes">
+                         <attribute name="string">Invoice Configuration for Argentina</attribute>
+                    </separator>
+                    <xpath expr="//label[@string='description']" position="attributes">
+                        <attribute name="string">In this section you will configure all low level elements and journals nescesary for manage argentinian invoices types</attribute>
+                    </xpath>
+                    <xpath expr="//button[@string='Install Modules']" position="attributes">
+                        <attribute name="string">Configure</attribute>
+                    </xpath>
+                    <xpath expr='//separator[@string="vsep"]' position='attributes'>
+                        <attribute name='string'></attribute>
+                    </xpath>
+		    <group colspan="8">
+			    <field name="situation"/><newline/>
+			    <field name="currency"/><newline/>
+			    <field name="do_export"/>
+		    </group>
+              </data>
+            </field>
+        </record>
+
+	<record id="action_invoice_ar_installer" model="ir.actions.act_window">
+	  <field name="name">Configuración de Facturación</field>
+	  <field name="type">ir.actions.act_window</field>
+	  <field name="res_model">account.invoice.ar.installer</field>
+	  <field name="view_id" ref="view_invoice_ar_installer"/>
+          <field name="view_type">form</field>
+          <field name="view_mode">form</field>
+          <field name="target">new</field>
+	</record>
+
+	<record id="invoice_installer_todo" model="ir.actions.todo">
+		<field name="action_id" ref="action_invoice_ar_installer"/>
+		<field name="sequence">12</field>
+		<field name="restart">always</field>
+	</record>
+    </data>
+</openerp>

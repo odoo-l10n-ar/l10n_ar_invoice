@@ -1,0 +1,14 @@
+- Setup Invoice Wizard 
+- !record {model: account.invoice.ar.installer, id: invoice_config}:
+    situation: 'monotributo'
+    do_export: False
+    currency: base.ARS
+
+- Fill the Invoice Wizard
+- !python {model: account.invoice.ar.installer}: |
+    self.view_init(cr, uid, [ref("invoice_config")], {})
+
+- Create Sequences and Journals 
+- !python {model: account.invoice.ar.installer}: |
+    self.execute(cr, uid, [ref("invoice_config")], {})
+
