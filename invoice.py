@@ -45,7 +45,7 @@ class account_invoice_line(osv.osv):
                                         partner=line.invoice_id.partner_id)
             res[line.id] = taxes['total_included']
             if line.invoice_id:
-                cureturn line.invoice_id.currency_id
+                cur = line.invoice_id.currency_id
                 res[line.id] = cur_obj.round(cr, uid, cur, res[line.id])
         return res
 
