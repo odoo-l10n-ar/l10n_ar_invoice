@@ -25,7 +25,9 @@
 		    <group colspan="8">
 			    <field name="situation"/><newline/>
 			    <field name="currency"/><newline/>
-			    <field name="do_export"/>
+			    <field name="do_export"/><newline/>
+			    <field name="remove_old_journals"/><newline/>
+			    <field name="point_of_sale"/>
 		    </group>
               </data>
             </field>

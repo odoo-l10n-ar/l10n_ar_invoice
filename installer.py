@@ -21,21 +21,20 @@
 
 from osv import fields, osv
 
-_invoice_types = {
-    'XXX': { 'name': 'Fact A' },
-}
-
 _invoice_types = [ ('A', 'A'), ('B', 'B'), ('C','C'), ('E','E'), ('M','M'), ('X','X')]
 _action_types = [
-    ('FV', 'Ventas', 'sale'),
-    ('RV', 'Reembolso de Ventas', 'sale_refund'),
-    ('FC', 'Compras', 'purchase'),
-    ('RC', 'Reembolso de Compras', 'purchase_refund') ]
+    ('FC', 'Factura', 'sale'),
+    ('DC', 'Nota de Débito', 'sale'),
+    ('CC', 'Nota de Crédito', 'sale_refund'),
+    ('FP', 'Factura de Compras', 'purchase'),
+    ('DP', 'Nota de Débito de Compra', 'purchase'),
+    ('CP', 'Nota de Crédito de Compra', 'purchase_refund'),
+]
 _currency_types = [ ('ARS', 'A'), ('USD', 'U') ]
 _situation_invoices = {
-    'monotributo': { 'sent': 'C', 'receive': 'BCX' },
-    'responsableinscripto': { 'sent': 'ABEMX', 'receive': 'ABCMX' },
-    'noresponsableinscripto': { 'sent': 'ABEMX', 'receive': 'ABCMX' },
+    'monotributo': { 'sent': 'C', 'receive': 'X' },
+    'responsableinscripto': { 'sent': 'ABM', 'receive': 'X' },
+    'noresponsableinscripto': { 'sent': 'ABM', 'receive': 'X' },
 }
 
 class account_invoice_ar_installer(osv.osv_memory):
@@ -46,21 +45,25 @@ class account_invoice_ar_installer(osv.osv_memory):
             ('monotributo','Monotributista'),
             ('responsableinscripto','Responsable Inscripto'),
             ('noresponsableinscripto','No Responsable Inscripto')],
-            'Situación ante la AFIP', required=True),
+            'Situación con respecto al IVA', required=True),
         'do_export': fields.boolean('Realiza o realizará operaciones de Exportación', required=True),
+        'remove_old_journals': fields.boolean('Eliminar los diarios existentes', required=True, help='Si es su primera instalación indique que necesita borrar los diarios existentes. Si agrega un nuevo punto de ventas indique que no va a eliminar los journals.'),
         'currency': fields.selection([
             ('ARS','Pesos'),
             ('ARS+USD','Pesos y Dolares')],
             'Opera con monedas', required=True),
+        'point_of_sale': fields.integer('Número de Punto de Venta', help='Este es el número que aparecerá como prefijo del número de la factura. Si solo tiene un solo talonario ese número es 1. Si necesita agregar un nuevo punto de venta debe acceder a opciones Administración/Configuración/Wizards de Configuración/Wizards de Configuración y ejecutar nuevamente el wizard de "Configuración de Facturación".'),
     }
 
     _defaults= {
         'situation': 'monotributo',
         'do_export': False,
         'currency': 'ARS',
+        'remove_old_journals': True,
+        'point_of_sale': 1,
     }
 
-    def generate_invoice_journals(self, cr, uid, ids, situation, export, currency, context=None):
+    def generate_invoice_journals(self, cr, uid, ids, situation, export, currency, remove_old_journals, point_of_sale, context=None):
         """
         Generate Sequences and Journals associated to Invoices Types
         """
@@ -70,40 +73,51 @@ class account_invoice_ar_installer(osv.osv_memory):
         obj_acc_journal_view = self.pool.get('account.journal.view')
         obj_acc_chart_template = self.pool.get('account.chart.template')
         obj_acc_template = self.pool.get('account.account.template')
-        analytic_journal_obj = self.pool.get('account.analytic.journal')
+        obj_analytic_journal = self.pool.get('account.analytic.journal')
         obj_journal = self.pool.get('account.journal')
-        mod_obj = self.pool.get('ir.model.data')
-
-        result = mod_obj.get_object_reference(cr, uid, 'l10n_chart_ar_generic', 'l10nAR_chart_template')
-        id = result and result[1] or False
-        obj_multi = obj_acc_chart_template.browse(cr, uid, id, context=context)
+        obj_mod = self.pool.get('ir.model.data')
+        obj_property = self.pool.get('ir.property')
+        obj_user = self.pool.get('res.users')
 
         # Remove Sale Journal, Purchase Journal, Sale Refund Journal, Purchase Refund Journal.
-        jou_ids = obj_journal.search(cr, uid, [('type','in',['sale','purchase','sale_refund','purchase_refund'])])
-        obj_journal.unlink(cr, uid, jou_ids)
+        if remove_old_journals:
+            jou_ids = obj_journal.search(cr, uid, [('type','in',['sale','purchase','sale_refund','purchase_refund'])])
+            obj_journal.unlink(cr, uid, jou_ids)
 
-        # Create Jounals for Argentinian Invoices.
-        s = lambda v: obj_acc_account.search(cr, uid, [('code', '=', '%s0' % v)], context=context)[0]
+        # Create Journals for Argentinian Invoices.
+        company_id = obj_user.browse(cr, uid, uid).company_id
+
+        def get_property(p):
+            property_id = obj_property.search(cr, uid, [('name','=',p),('company_id','=',company_id.id)])
+            if property_id and len(property_id) == 1:
+                obj = obj_property.browse(cr, uid, property_id[0]).value_reference
+                return obj.id
+            else:
+                return False
 
         account_id = {
-            'A': s(obj_multi.property_account_receivable.code),
-            'B': s(obj_multi.property_account_payable.code),
-            'sale': s(obj_multi.property_account_income_categ.code),
-            'sale_refund': s(obj_multi.property_account_income_categ.code),
-            'purchase': s(obj_multi.property_account_expense_categ.code),
-            'purchase_refund': s(obj_multi.property_account_expense_categ.code),
+            'A': get_property('property_account_receivable'),
+            'B': get_property('property_account_payable'),
+            'sale': get_property('property_account_income_categ'),
+            'sale_refund': get_property('property_account_income_categ'),
+            'purchase': get_property('property_account_expense_categ'),
+            'purchase_refund': get_property('property_account_expense_categ'),
         }
 
         invoices_filter = {
-            'FV': _situation_invoices[situation]['sent'],
-            'FC': _situation_invoices[situation]['receive'],
-            'RV': _situation_invoices[situation]['sent'],
-            'RC': _situation_invoices[situation]['receive'],
+            'FC': _situation_invoices[situation]['sent'],
+            'DC': _situation_invoices[situation]['sent'],
+            'CC': _situation_invoices[situation]['sent'],
+            'FP': _situation_invoices[situation]['receive'],
+            'DP': _situation_invoices[situation]['receive'],
+            'CP': _situation_invoices[situation]['receive'],
         }
-        if export:
-            invoices_filter['FV'] += 'E'
 
-        company_id = self.pool.get('res.users').browse(cr, uid, uid).company_id
+        if export:
+            invoices_filter['FC'] += 'E'
+            invoices_filter['DC'] += 'E'
+            invoices_filter['CC'] += 'E'
+
         view_id_invoice = obj_acc_journal_view.search(cr, uid, [('name', '=', 'Sale/Purchase Journal View')], context=context)[0]
         view_id_refund = obj_acc_journal_view.search(cr, uid, [('name', '=', 'Sale/Purchase Refund Journal View')], context=context)[0]
         view_id = {
@@ -118,18 +132,19 @@ class account_invoice_ar_installer(osv.osv_memory):
                 if not invoice_code in invoices_filter[action_code]:
                     continue
 
-                data = {'act_name': action_name,
+                data = {'point_of_sale': point_of_sale,
+                        'act_name': action_name,
                         'act_code': action_code,
                         'inv_name': invoice_name,
                         'inv_code': invoice_code,
                         'journal_type': action_type}
                 # Create Sequences
                 vals_seq = {
-                    'name': '%(act_name)s Fact %(inv_code)s' % data,
+                    'name': '%(act_name)s %(inv_code)s %(point_of_sale)04i' % data,
                     'code': 'account.journal',
-                    'prefix': '%(inv_code)s/' % data,
+                    'prefix': '%(point_of_sale)04i-' % data,
                     'company_id': company_id.id,
-                    'padding': 5,
+                    'padding': 8,
                 }
                 seq_id = obj_sequence.create(cr, uid, vals_seq, context=context)
 
@@ -140,12 +155,12 @@ class account_invoice_ar_installer(osv.osv_memory):
                                  'cur_code': currency_code })
                     currency_id = obj_currency.search(cr, uid, [('name', '=', currency_code)], context=context)[0]
                     # Create Journals
-                    analitical_ids = analytic_journal_obj.search(cr, uid, [('type', '=', data['journal_type'])], context=context)
+                    analitical_ids = obj_analytic_journal.search(cr, uid, [('type', '=', data['journal_type'])], context=context)
                     analitical_journal = analitical_ids and analitical_ids[0] or False
                     vals_journal = {}
                     vals_journal = {
-                        'name': "%(act_name)s Fact %(inv_code)s (%(cur_code)s)" % data,
-                        'code': "%(act_code)s%(inv_code)s%(cur_name)s" % data,
+                        'name': "%(act_name)s (%(point_of_sale)04i-%(inv_code)s-%(cur_code)s)" % data,
+                        'code': "%(act_code)s%(inv_code)s%(cur_name)s%(point_of_sale)1i" % data,
                         'sequence_id': seq_id,
                         'type': "%(journal_type)s" % data, #'cash',
                         'company_id': company_id.id,
@@ -170,6 +185,8 @@ class account_invoice_ar_installer(osv.osv_memory):
                                            record.situation,
                                            record.do_export,
                                            record.currency.split('+'),
+                                           record.remove_old_journals,
+                                           record.point_of_sale,
                                            context=None)
 
 account_invoice_ar_installer()
