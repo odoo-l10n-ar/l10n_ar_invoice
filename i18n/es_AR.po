@@ -5153,7 +5153,7 @@ msgstr "  365 Días  "
 #: model:ir.actions.act_window,name:account.action_invoice_tree3
 #: model:ir.ui.menu,name:account.menu_action_invoice_tree3
 msgid "Customer Refunds"
-msgstr "Notas de Débito"
+msgstr "Notas de crédito"
 
 #. module: account
 #: view:account.payment.term.line:0
@@ -5582,7 +5582,7 @@ msgstr "¡Introduzca una fecha inicial!"
 #: selection:account.invoice.report,type:0
 #: selection:report.invoice.created,type:0
 msgid "Supplier Refund"
-msgstr "Notas de Crédito de proveedor"
+msgstr "Notas de crédito de proveedor"
 
 #. module: account
 #: model:ir.ui.menu,name:account.menu_dashboard_acc

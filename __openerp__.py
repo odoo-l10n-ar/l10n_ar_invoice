@@ -40,6 +40,7 @@ Generador de Talonarios para la Argentina.
     ],
     'update_xml': [
         'data/invoice_installer.xml',
+        'data/reports.xml',
     ],
     'active': False,
     'installable': True,
