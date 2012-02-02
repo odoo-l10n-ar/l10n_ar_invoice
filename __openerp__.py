@@ -20,7 +20,7 @@
 
 {
     'name': 'Argentina - Generador de Talonarios',
-    'version': '1.0',
+    'version': '2.0',
     'author': 'Moldeo Interactive',
     'category': 'Argentina/Invoices',
     'website': 'http://www.moldeointeractive.com/',
