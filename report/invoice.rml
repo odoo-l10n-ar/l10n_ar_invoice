@@ -138,33 +138,33 @@
 	  <td><para><b>[[ l.name ]]</b></para><para>[[ l.note ]]</para></td>
           <td>[[ formatLang(l.quantity) ]]</td>
           <td>[[ formatLang(l.uos_id.name) ]]</td>
-	  <td><para>[[ formatLang(l.price_unit) ]] $
-		  [[ (o.journal_id.code in [ 'FVA01', 'NCA01', 'NDA01'] or removeParentNode('td')) and '' ]]</para></td>
-	  <td><para>[[ formatLang(l.price_subtotal) ]] $
-		  [[ (o.journal_id.code in [ 'FVA01', 'NCA01', 'NDA01'] or removeParentNode('td')) and '' ]]</para></td>
-	  <td><para>[[ formatLang(l.price_unit_included) ]] $
-		  [[ (o.journal_id.code in [ 'FVA01', 'NCA01', 'NDA01'] and removeParentNode('td')) or '' ]]</para></td>
-	  <td><para>[[ formatLang(l.price_unit_included * l.quantity) ]] $
-		  [[ (o.journal_id.code in [ 'FVA01', 'NCA01', 'NDA01'] and removeParentNode('td')) or '' ]]</para></td>
+	  <td><para>[[ formatLang(l.price_unit_not_vat_included) ]] $
+		  [[ (o.journal_id.code[3] in [ 'A' ] or removeParentNode('td')) and '' ]]</para></td>
+	  <td><para>[[ formatLang(l.price_unit_vat_included) ]] $
+		  [[ (not o.journal_id.code[3] in [ 'A' ] or removeParentNode('td')) and '' ]]</para></td>
+	  <td><para>[[ formatLang(l.price_subtotal_not_vat_included) ]] $
+		  [[ (o.journal_id.code[3] in [ 'A' ] or removeParentNode('td')) and '' ]]</para></td>
+	  <td><para>[[ formatLang(l.price_subtotal_vat_included) ]] $
+		  [[ (not o.journal_id.code[3] in [ 'A' ] or removeParentNode('td')) and '' ]]</para></td>
         </tr>
           </blockTable>
         </section>
       <nextFrame/>
         <para style="tiny-bold">Información de Facturación</para>
-	<para style="tiny">Factura [[ ((o.journal_id.code in ['FVA01']) or removeParentNode('para')) and '']] [[ o.number ]]</para>
-	<para style="tiny">Nota de Crédito [[ ((o.journal_id.code in ['NCA01']) or removeParentNode('para')) and '']] [[ o.number ]]</para>
-	<para style="tiny">Nota de Débito [[ ((o.journal_id.code in ['NDA01']) or removeParentNode('para')) and '']] [[ o.number ]]</para>
+	<para style="tiny">Factura [[ ((o.journal_id.code[0] in ['F']) or removeParentNode('para')) and '']] [[ o.number ]]</para>
+	<para style="tiny">Nota de Crédito [[ ((o.journal_id.code[0] in ['C']) or removeParentNode('para')) and '']] [[ o.number ]]</para>
+	<para style="tiny">Nota de Débito [[ ((o.journal_id.code[0] in ['D']) or removeParentNode('para')) and '']] [[ o.number ]]</para>
 	<para style="tiny">PRO-FORMA [[ ((o.type == 'out_invoice' and o.state == 'proforma2') or removeParentNode('para')) and '' ]]</para>
 	<para style="tiny">Factura Preliminar [[ ((o.type == 'out_invoice' and o.state == 'draft') or removeParentNode('para')) and '' ]]</para>
 	<para style="tiny">Factura Cancelada [[ ((o.type == 'out_invoice' and o.state == 'cancel') or removeParentNode('para')) and '' ]]</para>
       <nextFrame/>
 	<blockTable colWidths="2cm,2cm" style="Total">
 	  <tr>
-	    <td>Subtotal:[[ ((o.journal_id.code in ['FVA01', 'NCA01', 'NDA01']) or removeParentNode('tr')) and '']]</td>
+	    <td>Subtotal:[[ ((o.journal_id.code[3] in ['A']) or removeParentNode('tr')) and '']]</td>
 	    <td>[[ formatLang(o.amount_untaxed) ]] $</td>
 	  </tr>
 	  <tr>
-	    <td>IVA 21%:[[ ((o.journal_id.code in ['FVA01', 'NCA01', 'NDA01']) or removeParentNode('tr')) and '']]</td>
+	    <td>IVA 21%:[[ ((o.journal_id.code[3] in ['A']) or removeParentNode('tr')) and '']]</td>
 	    <td>[[ formatLang(o.amount_tax) ]] $</td>
 	  </tr>
 	  <tr>

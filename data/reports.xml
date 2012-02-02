@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<openerp>
+	<data noupdate="0">
+		<!-- account -->
+	        <report
+			auto="False"
+			id="account.account_invoices"
+			model="account.invoice"
+			name="account.invoice"
+			rml="l10n_ar_invoice/report/invoice.rml"
+			string="Invoices"
+                        header="False"
+			attachment="(object.state in ('open','paid')) and ('DOC'+(object.number or '').replace('/',''))"
+			attachment_use="1"/>
+	</data>
+</openerp>
+
