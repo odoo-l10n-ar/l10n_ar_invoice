@@ -1,8 +1,7 @@
-Módulo de facturas de la localización Argentina
+Módulo de Facturación de la localización Argentina
 
-Autores:
-    Cristian S. Rocha <cristian.rocha@moldeointeractive.com.ar>
+Incluye:
 
-Licencia: GPL
+  - Configuración de libros, diarios y otros detalles para facturación argentina.
+  - Wizard para configurar los talonarios necesarios para facturar.
 
-(C) 2011 - present
