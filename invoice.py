@@ -22,7 +22,14 @@ from osv import fields, osv
 import decimal_precision as dp
 
 _all_taxes = lambda x: True
-_all_except_vat = lambda x: x.name not in ['IVA Ventas 21%', 'IVA Compras 21%']
+_all_except_vat = lambda x: x.name not in [u'IVA Ventas 21%', u'IVA Compras 21%']
+
+class invoice(osv.osv):
+    _inherit = "account.invoice"
+    _columns = {
+        'cae': fields.char(u'Código de Autorización Electrónico', size=24, readonly=True),
+    }
+invoice()
 
 class account_invoice_line(osv.osv):
     """

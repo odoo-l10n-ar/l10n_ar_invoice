@@ -34,12 +34,16 @@ Incluye:
   - Wizard para configurar los talonarios necesarios para facturar.
 """,
     'depends': [
-        'l10n_chart_ar_generic',
+        'l10n_ar_chart_generic',
+        'l10n_ar_wsafip',
     ],
     'init_xml': [],
     'demo_xml': [],
     'test': [
-        'test/wizard_installer.yml',
+        'test/wizard_monotributo.yml',
+        'test/wizard_respinsc.yml',
+        'test/wizard_norespinsc.yml',
+#        'test/invoice_line.yml',
     ],
     'update_xml': [
         'data/invoice_installer.xml',

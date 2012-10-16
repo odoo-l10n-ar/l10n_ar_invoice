@@ -18,9 +18,14 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from osv import fields, osv
 
-import account
-import invoice
-import installer
+class account_journal(osv.osv):
+    _inherit = "account.journal"
+    _columns = {
+        'code': fields.char('Code', size=10, required=True,
+                            help="The code will be used to generate the numbers of the journal entries of this journal."),
+    }
+account_journal()
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+

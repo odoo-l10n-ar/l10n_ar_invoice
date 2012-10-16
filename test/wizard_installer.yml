@@ -10,5 +10,29 @@
 
 - Create Sequences and Journals 
 - !python {model: account.invoice.ar.installer}: |
-    self.execute(cr, uid, [ref("invoice_config")], {})
+    self.generate_invoice_journals(cr, uid, [ref("invoice_config")], {})
+
+- Check if exists Nota de Crèdito para cliente
+- !assert {model: account.journal, search: "[('code','=','CCCA1')]", string: Check if exists Nota de Crèdito para cliente}:
+  - name==u'Nota de Crédito (0001-C-ARS)'
+
+- Check if exists Nota de Crèdito del proveedor
+- !assert {model: account.journal, search: "[('code','=','CPXA1')]", string: Check if exists Nota de Crèdito del proveedor}:
+  - name==u'Nota de Crédito de Compra (0001-X-ARS)'
+
+- Check if exists Nota de Débito para cliente
+- !assert {model: account.journal, search: "[('code','=','DCCA1')]", string: Check if exists Nota de Débito para cliente}:
+  - name==u'Nota de Débito (0001-C-ARS)'
+
+- Check if exists Nota de Débito del proveedor
+- !assert {model: account.journal, search: "[('code','=','DPXA1')]", string: Check if exists Nota de Débito del proveedor}:
+  - name==u'Nota de Débito de Compra (0001-X-ARS)'
+
+- Check if exists Factura (0001-C-ARS)
+- !assert {model: account.journal, search: "[('code','=','FCCA1')]", string: Check if exists Factura}:
+  - name==u'Factura (0001-C-ARS)'
+
+- Check if exists Factura de Compras (0001-X-ARS)
+- !assert {model: account.journal, search: "[('code','=','FPXA1')]", string: Check if exists Factura de Compras}:
+  - name==u'Factura de Compras (0001-X-ARS)'
 

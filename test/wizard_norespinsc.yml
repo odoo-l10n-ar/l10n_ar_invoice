@@ -1,0 +1,33 @@
+- Setup Invoice Wizard 
+- !record {model: account.invoice.ar.installer, id: invoice_nori_config}:
+    situation: 'noresponsableinscripto'
+    do_export: False
+    remove_old_journals: True
+    currency: base.ARS
+
+- Fill the Invoice Wizard
+- !python {model: account.invoice.ar.installer}: |
+    self.view_init(cr, uid, [ref("invoice_nori_config")], {})
+
+- Create Sequences and Journals 
+- !python {model: account.invoice.ar.installer}: |
+    self.generate_invoice_journals(cr, uid, [ref("invoice_nori_config")], {})
+    
+- Check if exists journals
+- !assert {model: account.journal, search: "[]", string: Check if exists journals}:
+  - name in [   u'Nota de Crédito (0001-A-ARS)',
+                u'Nota de Débito (0001-A-ARS)',
+                u'Factura (0001-A-ARS)',
+                u'Nota de Crédito (0001-B-ARS)',
+                u'Nota de Débito (0001-B-ARS)',
+                u'Factura (0001-B-ARS)',
+                u'Nota de Crédito (0001-M-ARS)',
+                u'Nota de Débito (0001-M-ARS)',
+                u'Factura (0001-M-ARS)',
+                u'Nota de Débito de Compra (0001-X-ARS)',
+                u'Nota de Crédito de Compra (0001-X-ARS)',
+                u'Factura de Compras (0001-X-ARS)',
+                u'Bank Journal - (test)',
+                u'Checks Journal - (test)',
+                u'Cash Journal - (test)' ]
+
