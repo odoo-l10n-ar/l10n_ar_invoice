@@ -43,7 +43,7 @@ Incluye:
         'test/wizard_monotributo.yml',
         'test/wizard_respinsc.yml',
         'test/wizard_norespinsc.yml',
-#        'test/invoice_line.yml',
+        'test/invoice_line.yml',
     ],
     'update_xml': [
         'data/invoice_installer.xml',
