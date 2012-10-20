@@ -24,31 +24,6 @@ import decimal_precision as dp
 _all_taxes = lambda x: True
 _all_except_vat = lambda x: x.name not in [u'IVA Ventas 21%', u'IVA Compras 21%']
 
-class invoice(osv.osv):
-    _inherit = "account.invoice"
-    _columns = {
-        'afip_status': fields.selection([
-            ('nocae', 'No CAE'),
-            ('valid', 'Valid'),
-            ('invalid', 'Invalid'),
-        ], 'Status', help='This status is asigned by the AFIP. If * No CAE * status mean you have no generate this invoice by '),
-        'cae': fields.char(u'Código de Autorización Electrónico', size=24, readonly=True),
-    }
-
-    def update_afip_status(self, cr, uid, ids):
-        """
-        Update invoice status from AFIP.
-        """
-        pass
-
-    def retrieve_cae(self, cr, uid, ids):
-        """
-        Set the CAE to the this invoice. This must be called when to validate invoice.
-        """
-        pass
-
-invoice()
-
 class account_invoice_line(osv.osv):
     """
     En argentina como no se diferencian los impuestos en las facturas, excepto el IVA
