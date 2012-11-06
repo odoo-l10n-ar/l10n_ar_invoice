@@ -61,4 +61,13 @@ class afip_journal_class(osv.osv):
     _sql_constraints = [('name','unique(name)', 'Not repeat name!')]
 afip_journal_class()
 
+class afip_document_type(osv.osv):
+    _name = 'afip.document_type'
+    _columns = {
+        'name': fields.char('Name', size=120),
+        'code': fields.char('Code', size=16),
+        'afip_code': fields.integer('AFIP Code'),
+    }
+afip_document_type()
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -34,12 +34,10 @@ Incluye:
   - Wizard para configurar los talonarios necesarios para facturar.
 """,
     'depends': [
+        'l10n_ar_base_vat',
         'l10n_ar_chart_generic',
     ],
     'init_xml': [
-        'data/responsability.xml',
-        'data/responsability_class.xml',
-        'data/journal_class.xml',
     ],
     'demo_xml': [],
     'test': [
@@ -49,6 +47,11 @@ Incluye:
         'test/wizard_norespinsc.yml',
     ],
     'update_xml': [
+        'data/responsability.xml',
+        'data/responsability_class.xml',
+        'data/journal_class.xml',
+        'data/document_type.xml',
+        'data/partner.xml',
         'data/invoice_installer.xml',
         'data/reports.xml',
     ],

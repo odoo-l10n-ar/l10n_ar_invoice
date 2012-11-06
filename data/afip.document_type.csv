@@ -1,0 +1,39 @@
+code,afip_code,name
+CPF,0,CI Policía Federal
+CBA,1,CI Buenos Aires
+CC,2,CI Catamarca
+CC,3,CI Córdoba
+CC,4,CI Corrientes
+CER,5,CI Entre Ríos
+CJ,6,CI Jujuy
+CM,7,CI Mendoza
+CLR,8,CI La Rioja
+CS,9,CI Salta
+CSJ,10,CI San Juan
+CSL,11,CI San Luis
+CSF,12,CI Santa Fe
+CSdE,13,CI Santiago del Estero
+CT,14,CI Tucumán
+CC,16,CI Chaco
+CC,17,CI Chubut
+CF,18,CI Formosa
+CM,19,CI Misiones
+CN,20,CI Neuquén
+CLP,21,CI La Pampa
+CRN,22,CI Río Negro
+CSC,23,CI Santa Cruz
+CTdF,24,CI Tierra del Fuego
+C,80,CUIT
+C,86,CUIL
+C,87,CDI
+L,89,LE
+L,90,LC
+Ce,91,CI extranjera
+et,92,en trámite
+An,93,Acta nacimiento
+P,94,Pasaporte
+CBAR,95,CI Bs. As. RNP
+D,96,DNI
+Sigd,99,Sin identificar/venta global diaria
+CdM,30,Certificado de Migración
+UpApP,88,Usado por Anses para Padrón

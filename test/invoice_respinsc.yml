@@ -1,3 +1,6 @@
+#
+#       Create an invoice from Resp Inscr to Consum Final.
+#
 - Install Generic Chart Argentina template
 - !record {model: wizard.multi.charts.accounts, id: ri_chart_wizard }:
     chart_template_id: l10n_ar_chart_generic.ri_a_root
@@ -28,7 +31,7 @@
         invoice_line_tax_id: !ref {model: account.tax, search: "[('name','=','IVA Ventas 21%')]"}
     journal_id: !ref {model: account.journal, search: "[('name','=','Factura [Venta A] (0001-FVA)')]"}
     partner_id: base.res_partner_3
-    reference_type: none        
+    reference_type: none
 
 - Check invoice state and values
 - !assert {model: account.invoice, id: invoice_ar_0, string: Check invoice state and values}:
@@ -59,7 +62,6 @@
 - Print invoice
 - !python {model: account.invoice}: |
     from tools.test_reports import try_report
-    import pdb; pdb.set_trace()
     try_report(cr, uid, 'report.account.invoice', [ref('invoice_ar_0')])
 
 - Delete invoice to delete journal

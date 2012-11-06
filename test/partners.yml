@@ -1,0 +1,47 @@
+- Consumidor final mas de 1000 $
+- !record{ model: res.partner, id: par_cf_gm }:
+  name: Cristian Sebastian Rocha
+  responsability_id: !ref{ model: 'afip.responsability', id: 'res_CF' }
+  document_type:  !ref{ model: 'afip.document_type', id: 'res_DNI' }
+  document_number: 25095454
+
+- IVA exento
+- !record{ model: res.partner, id: par_ivae }:
+  name: ASOCIACION DOCENTES DE LA UNIVERSIDAD NACIONAL DE BUENOS AIRES
+  responsability_id: !ref{ model: 'afip.responsability', id: 'res_IVAE' }
+  document_type: !ref{ model: 'afip.document_type', id: 'res_CUIT' }
+  document_number: 30681521077
+  vat: ar30681521077
+
+- IVA responsable inscripto
+- !record{ model: res.partner, id: par_ivari }:
+  name: Coop. Trab. Moldeo Interactive Lim.
+  responsability_id: !ref{ model: 'afip.responsability', id: 'res_IVARI' } 
+  document_type: !ref{ model: 'afip.document_type', id: 'res_CUIT' }
+  document_number: 30712007288
+  vat: ar30712007288
+
+- IVA responsable no inscripto
+- !record{ model: res.partner, id: par_ivarni }:
+  name: FUNDACION UNIVERSIDAD NACIONAL
+  responsability_id: !ref{ model: 'afip.responsability', id: 'res_IVARNI' } 
+  document_type: !ref{ model: 'afip.document_type', id: 'res_CUIT' }
+  document_number: 30642332771
+  vat: ar30642332771
+
+- IVA no responsable, no alcanzado
+- !record{ model: res.partner, id: par_ivanr }:
+  name: CONSORCIO DE PROPIETARIOS EDIFICIO UNIVERSIDAD
+  responsability_id: !ref{ model: 'afip.responsability', id: 'res_IVANR' } 
+  document_type: !ref{ model: 'afip.document_type', id: 'res_CUIT' }
+  document_number: 33707348629
+  vat: ar33707348629
+
+- Responsable monotributo
+- !record{ model: res.partner, id: par_rm }:
+  name: Cristian S. Rocha
+  responsability_id: !ref{ model: 'afip.responsability', id: 'res_RM' } 
+  document_type: !ref{ model: 'afip.document_type', id: 'res_CUIT' }
+  document_number: 23250954549
+  vat: ar23250954549
+

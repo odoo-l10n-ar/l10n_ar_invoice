@@ -19,9 +19,27 @@
 #
 ##############################################################################
 
-import afip
-import invoice
-import installer
-import partner
+from osv import fields, osv
+import re
+
+class res_partner(osv.osv):
+    _inherit = 'res.partner'
+
+    _columns = {
+        'responsability_id': fields.many2one('afip.responsability', 'Resposability'),
+        'document_type': fields.many2one('afip.document_type', 'Document type'),
+        'document_number': fields.char('Document number', size=64, select=1),
+    }
+
+    """
+    # TODO: Dont work.
+    _defaults = {
+        'responsability_id': lambda self, cr, uid, *a: self.pool.get('ir.model.data').get_object(cr, uid, 'afip.responsability', 'res_CF'),
+        'document_type': lambda self, cr, uid, *a: self.pool.get('ir.model.data').get_object(cr, uid, 'afip.document_type', 'dt_Sigd'),
+        'document_number': '0',
+    }
+    """
+
+res_partner()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
