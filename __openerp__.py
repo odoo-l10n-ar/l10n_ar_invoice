@@ -35,15 +35,18 @@ Incluye:
 """,
     'depends': [
         'l10n_ar_chart_generic',
-        'l10n_ar_wsafip',
     ],
-    'init_xml': [],
+    'init_xml': [
+        'data/responsability.xml',
+        'data/responsability_class.xml',
+        'data/journal_class.xml',
+    ],
     'demo_xml': [],
     'test': [
         'test/wizard_monotributo.yml',
         'test/wizard_respinsc.yml',
+        'test/invoice_respinsc.yml',
         'test/wizard_norespinsc.yml',
-        'test/invoice_line.yml',
     ],
     'update_xml': [
         'data/invoice_installer.xml',

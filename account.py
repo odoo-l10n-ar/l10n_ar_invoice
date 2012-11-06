@@ -25,7 +25,9 @@ class account_journal(osv.osv):
     _columns = {
         'code': fields.char('Code', size=10, required=True,
                             help="The code will be used to generate the numbers of the journal entries of this journal."),
+        'document_class_id': fields.many2one('afip.journal_class', 'Document class'),
+        'point_of_sale': fields.integer('Point of sale ID'),
     }
 account_journal()
 
-
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

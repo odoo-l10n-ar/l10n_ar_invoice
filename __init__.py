@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-import account
+import afip
 import invoice
 import installer
 

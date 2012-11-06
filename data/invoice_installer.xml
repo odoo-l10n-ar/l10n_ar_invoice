@@ -18,9 +18,52 @@
 -->
 <openerp>
     <data>
+
+        <record id="view_invoice_ar_del_journal_tree" model="ir.ui.view">
+            <field name="name">l10n_ar_invoice.del_journal.tree</field>
+            <field name="model">l10n_ar_invoice.del_journal</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+              <tree string="Journals to delete" editable="bottom" >
+			<field name="journal_id" widget="selection"/>
+              </tree>
+	    </field>
+	</record>
+ 
+        <record id="view_invoice_ar_new_journal_tree" model="ir.ui.view">
+            <field name="name">l10n_ar_invoice.new_journal.tree</field>
+            <field name="model">l10n_ar_invoice.new_journal</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+              <tree string="Journals to create" editable="bottom" >
+		    <field name="name"/>
+		    <field name="code"/>
+		    <field name="type"/>
+		    <field name="invoice_class_id" widget="selection"
+			    domain="[((type in ['sale', 'sale_refund'] and 'emisor_id') or (type in ['purchase', 'purchase_refund'] and 'receptor_id'),'=',parent.responsability_id)]"/>
+		    <field name="point_of_sale"/>
+              </tree>
+	    </field>
+	</record>
+ 
+        <record id="view_invoice_ar_new_journal_form" model="ir.ui.view">
+            <field name="name">l10n_ar_invoice.new_journal.form</field>
+            <field name="model">l10n_ar_invoice.new_journal</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+              <form string="Journals to create">
+		    <field name="name"/>
+		    <field name="code"/>
+		    <field name="type"/>
+		    <field name="invoice_class_id" widget="selection"/>
+		    <field name="point_of_sale"/>
+              </form>
+	    </field>
+	</record>
+
         <record id="view_invoice_ar_installer" model="ir.ui.view">
-            <field name="name">account.invoice.ar.installer.form</field>
-            <field name="model">account.invoice.ar.installer</field>
+            <field name="name">l10n_ar_invoice.installer.form</field>
+            <field name="model">l10n_ar_invoice.installer</field>
             <field name="type">form</field>
             <field name="inherit_id" ref="base.res_config_installer"/>
             <field name="arch" type="xml">
@@ -41,11 +84,26 @@
                         <attribute name='string'></attribute>
                     </xpath>
 		    <group colspan="8">
-			    <field name="situation"/><newline/>
-			    <field name="currency"/><newline/>
-			    <field name="do_export"/><newline/>
-			    <field name="remove_old_journals"/><newline/>
-			    <field name="point_of_sale"/>
+			    <field name="company_id" widget="selection"
+				    on_change="update_journals(company_id, responsability_id, do_export, remove_old_journals, point_of_sale, purchase_by_class)"
+				    /><newline/>
+			    <field name="responsability_id" widget="selection"
+				    on_change="update_journals(company_id, responsability_id, do_export, remove_old_journals, point_of_sale, purchase_by_class)"
+				    /><newline/>
+			    <field name="do_export"
+				    on_change="update_journals(company_id, responsability_id, do_export, remove_old_journals, point_of_sale, purchase_by_class)"
+				    /><newline/>
+			    <field name="remove_old_journals"
+				    on_change="update_journals(company_id, responsability_id, do_export, remove_old_journals, point_of_sale, purchase_by_class)"
+				    /><newline/>
+			    <field name="point_of_sale"
+				    on_change="update_journals(company_id, responsability_id, do_export, remove_old_journals, point_of_sale, purchase_by_class)"
+				    /><newline/>
+			    <field name="purchase_by_class"
+				    on_change="update_journals(company_id, responsability_id, do_export, remove_old_journals, point_of_sale, purchase_by_class)"
+				    /><newline/>
+			    <field name="journals_to_delete" colspan="4" nolabel="1"/><newline/>
+			    <field name="journals_to_create" colspan="4" nolabel="1"/><newline/>
 		    </group>
               </data>
             </field>
@@ -54,7 +112,7 @@
 	<record id="action_invoice_ar_installer" model="ir.actions.act_window">
 	  <field name="name">Configuración de Facturación</field>
 	  <field name="type">ir.actions.act_window</field>
-	  <field name="res_model">account.invoice.ar.installer</field>
+	  <field name="res_model">l10n_ar_invoice.installer</field>
 	  <field name="view_id" ref="view_invoice_ar_installer"/>
           <field name="view_type">form</field>
           <field name="view_mode">form</field>
@@ -66,5 +124,6 @@
 		<field name="sequence">12</field>
 		<field name="restart">always</field>
 	</record>
+
     </data>
 </openerp>

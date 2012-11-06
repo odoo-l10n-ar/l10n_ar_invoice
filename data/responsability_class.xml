@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data noupdate="True">
+        <record model='afip.responsability_class' id='0'>
+                <field name='document_class'>B</field>
+                <field name='name'>Responsable Inscripto A Consumidor Final</field>
+                <field name='emisor_id' ref='res_IVARI'/>
+                <field name='receptor_id' ref='res_CF'/>
+        </record> 
+        <record model='afip.responsability_class' id='1'>
+                <field name='document_class'>B</field>
+                <field name='name'>Responsable Inscripto A Iva Excento</field>
+                <field name='emisor_id' ref='res_IVARI'/>
+                <field name='receptor_id' ref='res_IVAE'/>
+        </record> 
+        <record model='afip.responsability_class' id='2'>
+                <field name='document_class'>A</field>
+                <field name='name'>Responsable Inscripto A Iva Responsable Inscripto</field>
+                <field name='emisor_id' ref='res_IVARI'/>
+                <field name='receptor_id' ref='res_IVARI'/>
+        </record> 
+        <record model='afip.responsability_class' id='3'>
+                <field name='document_class'>A</field>
+                <field name='name'>Responsable Inscripto A Iva Responsable No Inscripto</field>
+                <field name='emisor_id' ref='res_IVARI'/>
+                <field name='receptor_id' ref='res_IVARNI'/>
+        </record> 
+        <record model='afip.responsability_class' id='4'>
+                <field name='document_class'>M</field>
+                <field name='name'>Responsable Inscripto A Iva Responsable Inscripto (M)</field>
+                <field name='emisor_id' ref='res_IVARI'/>
+                <field name='receptor_id' ref='res_IVARI'/>
+        </record> 
+        <record model='afip.responsability_class' id='5'>
+                <field name='document_class'>M</field>
+                <field name='name'>Responsable Inscripto A Iva Responsable No Inscripto (M)</field>
+                <field name='emisor_id' ref='res_IVARI'/>
+                <field name='receptor_id' ref='res_IVARNI'/>
+        </record> 
+        <record model='afip.responsability_class' id='6'>
+                <field name='document_class'>B</field>
+                <field name='name'>Responsable Inscripto A Iva No Responsable</field>
+                <field name='emisor_id' ref='res_IVARI'/>
+                <field name='receptor_id' ref='res_IVANR'/>
+        </record> 
+        <record model='afip.responsability_class' id='7'>
+                <field name='document_class'>B</field>
+                <field name='name'>Responsable Inscripto A Responsable Monotributo</field>
+                <field name='emisor_id' ref='res_IVARI'/>
+                <field name='receptor_id' ref='res_RM'/>
+        </record> 
+        <record model='afip.responsability_class' id='8'>
+                <field name='document_class'>C</field>
+                <field name='name'>Responsable Monotributo A Consumidor Final</field>
+                <field name='emisor_id' ref='res_RM'/>
+                <field name='receptor_id' ref='res_CF'/>
+        </record> 
+        <record model='afip.responsability_class' id='9'>
+                <field name='document_class'>C</field>
+                <field name='name'>Responsable Monotributo A Iva Excento</field>
+                <field name='emisor_id' ref='res_RM'/>
+                <field name='receptor_id' ref='res_IVAE'/>
+        </record> 
+        <record model='afip.responsability_class' id='10'>
+                <field name='document_class'>C</field>
+                <field name='name'>Responsable Monotributo A Iva Responsable Inscripto</field>
+                <field name='emisor_id' ref='res_RM'/>
+                <field name='receptor_id' ref='res_IVARI'/>
+        </record> 
+        <record model='afip.responsability_class' id='11'>
+                <field name='document_class'>C</field>
+                <field name='name'>Responsable Monotributo A Iva Responsable No Inscripto</field>
+                <field name='emisor_id' ref='res_RM'/>
+                <field name='receptor_id' ref='res_IVARNI'/>
+        </record> 
+        <record model='afip.responsability_class' id='12'>
+                <field name='document_class'>C</field>
+                <field name='name'>Responsable Monotributo A Iva No Responsable</field>
+                <field name='emisor_id' ref='res_RM'/>
+                <field name='receptor_id' ref='res_IVANR'/>
+        </record> 
+        <record model='afip.responsability_class' id='13'>
+                <field name='document_class'>C</field>
+                <field name='name'>Responsable Monotributo A Responsable Monotributo</field>
+                <field name='emisor_id' ref='res_RM'/>
+                <field name='receptor_id' ref='res_RM'/>
+        </record> 
+        <record model='afip.responsability_class' id='14'>
+                <field name='document_class'>C</field>
+                <field name='name'>Iva Responsable No Inscripto A Consumidor Final</field>
+                <field name='emisor_id' ref='res_IVARNI'/>
+                <field name='receptor_id' ref='res_CF'/>
+        </record> 
+        <record model='afip.responsability_class' id='15'>
+                <field name='document_class'>C</field>
+                <field name='name'>Iva Responsable No Inscripto A Iva Excento</field>
+                <field name='emisor_id' ref='res_IVARNI'/>
+                <field name='receptor_id' ref='res_IVAE'/>
+        </record> 
+        <record model='afip.responsability_class' id='16'>
+                <field name='document_class'>C</field>
+                <field name='name'>Iva Responsable No Inscripto A Iva Responsable Inscripto</field>
+                <field name='emisor_id' ref='res_IVARNI'/>
+                <field name='receptor_id' ref='res_IVARI'/>
+        </record> 
+        <record model='afip.responsability_class' id='17'>
+                <field name='document_class'>C</field>
+                <field name='name'>Iva Responsable No Inscripto A Iva Responsable No Inscripto</field>
+                <field name='emisor_id' ref='res_IVARNI'/>
+                <field name='receptor_id' ref='res_IVARNI'/>
+        </record> 
+        <record model='afip.responsability_class' id='18'>
+                <field name='document_class'>C</field>
+                <field name='name'>Iva Responsable No Inscripto A Iva No Responsable</field>
+                <field name='emisor_id' ref='res_IVARNI'/>
+                <field name='receptor_id' ref='res_IVANR'/>
+        </record> 
+        <record model='afip.responsability_class' id='19'>
+                <field name='document_class'>C</field>
+                <field name='name'>Iva Responsable No Inscripto A Responsable Monotributo</field>
+                <field name='emisor_id' ref='res_IVARNI'/>
+                <field name='receptor_id' ref='res_RM'/>
+        </record> 
+        <record model='afip.responsability_class' id='20'>
+                <field name='document_class'>C</field>
+                <field name='name'>Iva Excento A Consumidor Final</field>
+                <field name='emisor_id' ref='res_IVAE'/>
+                <field name='receptor_id' ref='res_CF'/>
+        </record> 
+        <record model='afip.responsability_class' id='21'>
+                <field name='document_class'>C</field>
+                <field name='name'>Iva Excento A Iva Excento</field>
+                <field name='emisor_id' ref='res_IVAE'/>
+                <field name='receptor_id' ref='res_IVAE'/>
+        </record> 
+        <record model='afip.responsability_class' id='22'>
+                <field name='document_class'>C</field>
+                <field name='name'>Iva Excento A Iva Responsable Inscripto</field>
+                <field name='emisor_id' ref='res_IVAE'/>
+                <field name='receptor_id' ref='res_IVARI'/>
+        </record> 
+        <record model='afip.responsability_class' id='23'>
+                <field name='document_class'>C</field>
+                <field name='name'>Iva Excento A Iva Responsable No Inscripto</field>
+                <field name='emisor_id' ref='res_IVAE'/>
+                <field name='receptor_id' ref='res_IVARNI'/>
+        </record> 
+        <record model='afip.responsability_class' id='24'>
+                <field name='document_class'>C</field>
+                <field name='name'>Iva Excento A Iva No Responsable</field>
+                <field name='emisor_id' ref='res_IVAE'/>
+                <field name='receptor_id' ref='res_IVANR'/>
+        </record> 
+        <record model='afip.responsability_class' id='25'>
+                <field name='document_class'>C</field>
+                <field name='name'>Iva Excento A Responsable Monotributo</field>
+                <field name='emisor_id' ref='res_IVAE'/>
+                <field name='receptor_id' ref='res_RM'/>
+        </record> 
+        <record model='afip.responsability_class' id='26'>
+                <field name='document_class'>C</field>
+                <field name='name'>Iva No Responsable A Consumidor Final</field>
+                <field name='emisor_id' ref='res_IVANR'/>
+                <field name='receptor_id' ref='res_CF'/>
+        </record> 
+        <record model='afip.responsability_class' id='27'>
+                <field name='document_class'>C</field>
+                <field name='name'>Iva No Responsable A Iva Excento</field>
+                <field name='emisor_id' ref='res_IVANR'/>
+                <field name='receptor_id' ref='res_IVAE'/>
+        </record> 
+        <record model='afip.responsability_class' id='28'>
+                <field name='document_class'>C</field>
+                <field name='name'>Iva No Responsable A Iva Responsable Inscripto</field>
+                <field name='emisor_id' ref='res_IVANR'/>
+                <field name='receptor_id' ref='res_IVARI'/>
+        </record> 
+        <record model='afip.responsability_class' id='29'>
+                <field name='document_class'>C</field>
+                <field name='name'>Iva No Responsable A Iva Responsable No Inscripto</field>
+                <field name='emisor_id' ref='res_IVANR'/>
+                <field name='receptor_id' ref='res_IVARNI'/>
+        </record> 
+        <record model='afip.responsability_class' id='30'>
+                <field name='document_class'>C</field>
+                <field name='name'>Iva No Responsable A Iva No Responsable</field>
+                <field name='emisor_id' ref='res_IVANR'/>
+                <field name='receptor_id' ref='res_IVANR'/>
+        </record> 
+        <record model='afip.responsability_class' id='31'>
+                <field name='document_class'>C</field>
+                <field name='name'>Iva No Responsable A Responsable Monotributo</field>
+                <field name='emisor_id' ref='res_IVANR'/>
+                <field name='receptor_id' ref='res_RM'/>
+        </record> 
+    </data>
+</openerp>
+        

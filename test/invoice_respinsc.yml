@@ -26,7 +26,7 @@
         product_id: product.product_product_pc3
         uos_id: product.product_uom_unit
         invoice_line_tax_id: !ref {model: account.tax, search: "[('name','=','IVA Ventas 21%')]"}
-    journal_id: !ref {model: account.journal, search: "[('name','=','Factura (0001-A-ARS)')]"}
+    journal_id: !ref {model: account.journal, search: "[('name','=','Factura [Venta A] (0001-FVA)')]"}
     partner_id: base.res_partner_3
     reference_type: none        
 
@@ -55,4 +55,15 @@
     - price_subtotal_vat_included == 10890.0
     - price_unit_not_vat_included == 900.0
     - price_subtotal_not_vat_included == 9000.0
+
+- Print invoice
+- !python {model: account.invoice}: |
+    from tools.test_reports import try_report
+    import pdb; pdb.set_trace()
+    try_report(cr, uid, 'report.account.invoice', [ref('invoice_ar_0')])
+
+- Delete invoice to delete journal
+- !python {model: account.invoice}: |
+    self.unlink(cr, uid, [ref('invoice_ar_0')])
+
 
