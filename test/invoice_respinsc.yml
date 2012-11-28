@@ -13,6 +13,14 @@
 - !assert {model: account.tax, search: "[('name','=','IVA Ventas 21%')]", string: Check Account Exists}:
   - type == 'percent'
 
+- IVA responsable inscripto
+- !record {model: res.partner, id: par_ivari }:
+  name: Coop. Trab. Moldeo Interactive Lim.
+  responsability_id: !ref {model: 'afip.responsability', id: 'res_IVARI' } 
+  document_type: !ref {model: 'afip.document_type', id: 'res_CUIT' }
+  document_number: 30712007288
+  vat: ar30712007288
+
 - Create a simple invoice type A
 - !record {model: account.invoice, id: invoice_ar_0}:
     account_id: account.a_recv
@@ -30,7 +38,7 @@
         uos_id: product.product_uom_unit
         invoice_line_tax_id: !ref {model: account.tax, search: "[('name','=','IVA Ventas 21%')]"}
     journal_id: !ref {model: account.journal, search: "[('name','=','Factura [Venta A] (0001-FVA)')]"}
-    partner_id: base.res_partner_3
+    partner_id: par_ivari
     reference_type: none
 
 - Check invoice state and values
@@ -40,7 +48,7 @@
     - amount_tax == 0.0
     - amount_total == 9000.0
 
-- Check if exists an invoice
+- Compute amount
 - !python {model: account.invoice}: |
     self.button_compute(cr, uid, [ref('invoice_ar_0')])
 
@@ -59,6 +67,20 @@
     - price_unit_not_vat_included == 900.0
     - price_subtotal_not_vat_included == 9000.0
 
+- Validate invoice
+- !python {model: account.invoice}: |
+    self.afip_validation(cr, uid, [ref('invoice_ar_0')])
+    self.action_move_create(cr, uid, [ref('invoice_ar_0')])
+    self.action_number(cr, uid, [ref('invoice_ar_0')])
+    self.write(cr, uid, [ref('invoice_ar_0')], {'state': 'open'})
+
+- Check invoice state and values
+- !assert {model: account.invoice, id: invoice_ar_0, string: Check invoice state and values}:
+    - state == 'open'
+    - amount_untaxed == 9000.0
+    - amount_tax == 1890.0
+    - amount_total == 10890.0
+
 - Print invoice
 - !python {model: account.invoice}: |
     from tools.test_reports import try_report
@@ -66,6 +88,8 @@
 
 - Delete invoice to delete journal
 - !python {model: account.invoice}: |
+    self.action_cancel(cr, uid, [ref('invoice_ar_0')])
+    self.write(cr, uid, [ref('invoice_ar_0')], {'state': 'cancel'})
     self.unlink(cr, uid, [ref('invoice_ar_0')])
 
 

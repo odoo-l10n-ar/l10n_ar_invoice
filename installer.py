@@ -98,18 +98,20 @@ class l10n_ar_invoice_new_journal(osv.osv_memory):
         'type': fields.selection([('sale', 'Sale'),('sale_refund','Sale Refund'), ('purchase', 'Purchase'), ('purchase_refund','Purchase Refund')], 'Type', size=32, required=True,
                                  help="Select 'Sale' for Sale journal to be used at the time of making invoice."\
                                  " Select 'Purchase' for Purchase Journal to be used at the time of approving purchase order."),
-        'document_class_id': fields.many2one('afip.journal_class', 'Document class'),
+        'journal_class_id': fields.many2one('afip.journal_class', 'Document class'),
         'point_of_sale': fields.integer('Point of sale'),
         'sequence_name': fields.char('Sequence Name', size=64),
         'currency_id': fields.many2one('res.currency', 'Moneda'),
         'view_id': fields.many2one('account.journal_view', 'Journal view'),
-        'builder_id': fields.many2one('l10n_ar_invoice.installer', 'Builder Wizard')
+        'builder_id': fields.many2one('l10n_ar_invoice.installer', 'Builder Wizard'),
+        'update_posted': fields.boolean('Allow Cancelling Entries'),
     }
+
     def doit(self, cr, uid, ids, context=None):
         obj_journal = self.pool.get('account.journal')
         obj_sequence = self.pool.get('ir.sequence')
 
-        vals = self.read(cr, uid, ids, ['name', 'code', 'type', 'document_class_id', 'point_of_sale', 'sequence_name', 'currency_id', 'view_id'])
+        vals = self.read(cr, uid, ids, ['name', 'code', 'type', 'journal_class_id', 'point_of_sale', 'sequence_name', 'currency_id', 'view_id', 'update_posted'])
         names = [ v['name'] for v in vals ]
         for val in vals:
             val['sequence_id'] = obj_sequence.search(cr, uid, [('name','=',val['sequence_name'])]).pop()
@@ -205,7 +207,7 @@ class l10n_ar_invoice_installer(osv.osv_memory):
 
         return ret
 
-    def update_new_journals(self, cr, uid, ids, company_id, responsability_id, do_export, remove_old_journals, sequence_by, point_of_sale, purchase_by_class):
+    def update_new_journals(self, cr, uid, ids, company_id, responsability_id, do_export, remove_old_journals, sequence_by, point_of_sale, purchase_by_class, update_posted=False):
         """
         Create Journals for Argentinian Invoices.
         """
@@ -351,22 +353,23 @@ class l10n_ar_invoice_installer(osv.osv_memory):
                 journal = {
                     'name': u"%s (%04i-%s)" % (item['name'], point_of_sale, item['code']),
                     'code': u"%s%04i" % (item['code'], point_of_sale),
-                    'document_class_id': item['document_class_id'],
+                    'journal_class_id': item['document_class_id'],
                     'currency_id': currency_id,
                     'point_of_sale': point_of_sale,
                     'sequence_name': rel[item['row']],
                     'type': item['type'],
                     'view_id': view_id[item['type']],
+                    'update_posted': update_posted
                 }
                 ret.append(journal)
 
         return ret, seq
 
-    def update_journals(self, cr, uid, ids, company_id, responsability_id, do_export, remove_old_journals, sequence_by, point_of_sale, purchase_by_class):
+    def update_journals(self, cr, uid, ids, company_id, responsability_id, do_export, remove_old_journals, sequence_by, point_of_sale, purchase_by_class, update_posted=False):
         v = {
             'journals_to_delete': self.update_del_journals (cr, uid, ids, company_id, responsability_id, do_export, remove_old_journals, sequence_by, point_of_sale, purchase_by_class),
         }
-        j, s = self.update_new_journals (cr, uid, ids, company_id, responsability_id, do_export, remove_old_journals, sequence_by, point_of_sale, purchase_by_class)
+        j, s = self.update_new_journals (cr, uid, ids, company_id, responsability_id, do_export, remove_old_journals, sequence_by, point_of_sale, purchase_by_class, update_posted)
         v.update({
             'sequences_to_create': s,
             'journals_to_create': j,

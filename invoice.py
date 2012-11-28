@@ -19,6 +19,7 @@
 #
 ##############################################################################
 from osv import fields, osv
+from tools.translate import _
 import decimal_precision as dp
 
 _all_taxes = lambda x: True
@@ -75,9 +76,29 @@ class account_invoice_line(osv.osv):
                                                string='Subtotal without VAT', type="float",
                                                digits_compute= dp.get_precision('Account'), store=False),
     }
-
 account_invoice_line()
 
+class account_invoice(osv.osv):
+    _inherit = "account.invoice"
+
+    def afip_validation(self, cr, uid, ids, context={}):
+        obj_resp_class = self.pool.get('afip.responsability_class')
+
+        for invoice in self.browse(cr, uid, ids):
+            # Partner responsability ?
+            if isinstance(invoice.partner_id.responsability_id, osv.orm.browse_null):
+                raise osv.except_osv(_('Error'), _('Your partner have not afip responsability assigned. Assign one please.'))
+
+            # Who can receive this document?
+            invoice_class = invoice.journal_id.journal_class_id.document_class
+            resp_class_ids = obj_resp_class.search(cr, uid, [('document_class','=', invoice_class)])
+            resp_class = [ rc.receptor_id.code for rc in obj_resp_class.browse(cr, uid, resp_class_ids) ]
+
+            import pdb; pdb.set_trace()
+
+        pass
+
+account_invoice()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
 

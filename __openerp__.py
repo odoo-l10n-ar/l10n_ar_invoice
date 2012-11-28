@@ -41,6 +41,7 @@ Incluye:
     ],
     'demo_xml': [],
     'test': [
+        'test/partners.yml',
         'test/wizard_monotributo.yml',
         'test/wizard_respinsc.yml',
         'test/invoice_respinsc.yml',

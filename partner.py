@@ -40,6 +40,22 @@ class res_partner(osv.osv):
     }
     """
 
+    def afip_validation(sefl, cr, uid, ids, context={}):
+        """ Hay que validar si el partner no es de tipo 'consumidor final' tenga un CUIT asociado.
+            - Si el cuit es extrangero, hay que asignar a document_number y document_type los correspondientes
+            a la interpretación argentina del CUIT.
+            - Si es responsable monotributo hay que asegurarse que tenga vat asignado. El documento y
+            número de documento deberían ser DNI.
+            - Si es responsable inscripto y persona juridica indicar el cuit copia del VAT.
+            El objetivo es que en la generación de factura utilice la información de document_type y document_number.
+            
+            Otra opción es asignar a la argentina los prefijos: 'cuit' 'dni' 'ci', etc...
+            
+            Del prefijo se toma el número de documento. Que opinanará la comunidad?"""
+        
+        for part in self.read(cr, uid, ids, ['document_number', 'document_type', 'vat', 'is_vat_subject']):
+            pass
+
 res_partner()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
