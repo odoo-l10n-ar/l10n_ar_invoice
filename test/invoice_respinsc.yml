@@ -13,14 +13,6 @@
 - !assert {model: account.tax, search: "[('name','=','IVA Ventas 21%')]", string: Check Account Exists}:
   - type == 'percent'
 
-- IVA responsable inscripto
-- !record {model: res.partner, id: par_ivari }:
-  name: Coop. Trab. Moldeo Interactive Lim.
-  responsability_id: !ref {model: 'afip.responsability', id: 'res_IVARI' } 
-  document_type: !ref {model: 'afip.document_type', id: 'res_CUIT' }
-  document_number: 30712007288
-  vat: ar30712007288
-
 - Create a simple invoice type A
 - !record {model: account.invoice, id: invoice_ar_0}:
     account_id: account.a_recv
