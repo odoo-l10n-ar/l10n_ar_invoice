@@ -46,6 +46,7 @@ Incluye:
         'test/wizard_respinsc.yml',
         'test/invoice_respinsc.yml',
         'test/wizard_norespinsc.yml',
+        'test/invoice_norespinsc.yml',
     ],
     'update_xml': [
         'data/responsability.xml',

@@ -87,16 +87,30 @@ class account_invoice(osv.osv):
         for invoice in self.browse(cr, uid, ids):
             # Partner responsability ?
             if isinstance(invoice.partner_id.responsability_id, osv.orm.browse_null):
-                raise osv.except_osv(_('Error'), _('Your partner have not afip responsability assigned. Assign one please.'))
+                raise osv.except_osv(_('No responsability'),
+                                     _('Your partner have not afip responsability assigned. Assign one please.'))
 
-            # Who can receive this document?
+            # Take responsability classes for this journal
             invoice_class = invoice.journal_id.journal_class_id.document_class
             resp_class_ids = obj_resp_class.search(cr, uid, [('document_class','=', invoice_class)])
+
+            # You can emmit this document?
+            resp_class = [ rc.emisor_id.code for rc in obj_resp_class.browse(cr, uid, resp_class_ids) ]
+            if invoice.journal_id.company_id.partner_id.responsability_id.code not in resp_class:
+                raise osv.except_osv(_('Invalid emisor'),
+                                     _('Your responsability with AFIP dont let you generate this kind of document.'))
+
+            # Partner can receive this document?
             resp_class = [ rc.receptor_id.code for rc in obj_resp_class.browse(cr, uid, resp_class_ids) ]
+            if invoice.partner_id.responsability_id.code not in resp_class:
+                raise osv.except_osv(_('Invalid receptor'),
+                                     _('Your partner cant recive this document. Check AFIP responsability of the partner, or Journal Account of the invoice.'))
 
-            import pdb; pdb.set_trace()
-
-        pass
+            # If Final Consumer have pay more than 1000$, you need more information to generate document.
+            if invoice.partner_id.responsability_id.code == 'CF' and invoice.amount_total > 1000 and \
+               (invoice.partner_id.document_type.code in [ None, 'Sigd' ] or invoice.partner_id.document_number is None):
+                raise osv.except_osv(_('Partner without Identification for total invoices > $1000.-'),
+                                     _('You must define valid document type and number for this Final Consumer.'))
 
 account_invoice()
 

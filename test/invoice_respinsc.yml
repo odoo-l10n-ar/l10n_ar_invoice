@@ -1,6 +1,13 @@
 #
 #       Create an invoice from Resp Inscr to Consum Final.
 #
+- Set company as Resp Inscr
+- !python {model: res.company}: |
+    ids = self.search(cr, uid, [])
+    assert(len(ids) == 1)
+    partner_id = self.browse(cr, uid, ids)[0].partner_id.id
+    self.pool.get('res.partner').write(cr, uid, partner_id, { 'responsability_id': ref('res_IVARI') })
+
 - Install Generic Chart Argentina template
 - !record {model: wizard.multi.charts.accounts, id: ri_chart_wizard }:
     chart_template_id: l10n_ar_chart_generic.ri_a_root
@@ -29,8 +36,8 @@
         product_id: product.product_product_pc3
         uos_id: product.product_uom_unit
         invoice_line_tax_id: !ref {model: account.tax, search: "[('name','=','IVA Ventas 21%')]"}
-    journal_id: !ref {model: account.journal, search: "[('name','=','Factura [Venta A] (0001-FVA)')]"}
-    partner_id: par_ivari
+    journal_id: !ref {model: account.journal, search: "[('name','=','Factura [Venta B] (0001-FVB)')]"}
+    partner_id: par_cf_gm
     reference_type: none
 
 - Check invoice state and values
