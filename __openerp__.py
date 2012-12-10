@@ -56,6 +56,7 @@ Incluye:
         'data/partner.xml',
         'data/invoice_installer.xml',
         'data/reports.xml',
+        'partner_view.xml',
     ],
     'active': False,
     'installable': True,
