@@ -13,9 +13,9 @@
     del data['id']
     data['update_posted']=True
     res = self.update_journals(cr, uid, None, **data)
-    k = { 'journals_to_delete': [ (0, 0, v) for v in res['value']['journals_to_delete'] ],
-          'sequences_to_create': [ (0, 0, v) for v in res['value']['sequences_to_create'] ],
-          'journals_to_create': [ (0, 0, v) for v in res['value']['journals_to_create'] ] }
+    k = { 'journals_to_delete': [(5,)]+[ (0, 0, v) for v in res['value']['journals_to_delete'] ],
+          'sequences_to_create': [(5,)]+[ (0, 0, v) for v in res['value']['sequences_to_create'] ],
+          'journals_to_create': [(5,)]+[ (0, 0, v) for v in res['value']['journals_to_create'] ] }
     self.write(cr, uid, [ref("invoice_resin_config_1")], k)
 
 - Check if all new items are ok
