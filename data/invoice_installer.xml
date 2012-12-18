@@ -101,6 +101,7 @@
 			    <field name="company_id" widget="selection"
 				    on_change="update_journals(company_id, responsability_id, do_export, remove_old_journals, sequence_by, point_of_sale, purchase_by_class)"
 				    /><newline/>
+			    <field name="cuit" /><newline/>
 			    <field name="responsability_id" widget="selection"
 				    on_change="update_journals(company_id, responsability_id, do_export, remove_old_journals, sequence_by, point_of_sale, purchase_by_class)"
 				    /><newline/>
@@ -119,17 +120,19 @@
 			    <field name="sequence_by"
 				    on_change="update_journals(company_id, responsability_id, do_export, remove_old_journals, sequence_by, point_of_sale, purchase_by_class)"
 				    /><newline/>
-		    <notebook colspan="4">
-			    <page string='Journals to delete'>
-			    <field name="journals_to_delete" colspan="4" nolabel="1"/>
-			    </page>
-			    <page string='Sequences to create'>
-			    <field name="sequences_to_create" colspan="4" nolabel="1"/>
-			    </page>
-			    <page string='Journals to create'>
-			    <field name="journals_to_create" colspan="4" nolabel="1"/>
-			    </page>
-		    </notebook>
+			    <group colspan="4" groups="base.group_extended">
+				    <notebook >
+					    <page string='Journals to delete'>
+					    <field name="journals_to_delete" colspan="4" nolabel="1"/>
+					    </page>
+					    <page string='Sequences to create'>
+					    <field name="sequences_to_create" colspan="4" nolabel="1"/>
+					    </page>
+					    <page string='Journals to create'>
+					    <field name="journals_to_create" colspan="4" nolabel="1"/>
+					    </page>
+				    </notebook>
+			    </group>
 		    </group>
               </data>
             </field>

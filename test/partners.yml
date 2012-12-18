@@ -65,18 +65,21 @@
     rml_header3: CUIT - 
     currency_id: base.ARS
 
-- Set account company properties
+- Create account company
 - !record {model: ir.property, id: prop_paec_ivari}:
     company_id: com_ivari
     fields_id: account.field_res_partner_property_account_payable
     name: property_account_expense_categ
     value_reference: !eval "'account.account,'+str(ref('account.a_expense'))"
 
+- Create partner company
 - !record {model: ir.property, id: prop_paic_ivari}:
     company_id: com_ivari
     fields_id: account.field_res_partner_property_account_receivable
     name: property_account_income_categ
     value_reference: !eval "'account.account,'+str(ref('account.a_sale'))"
+
+
 
 #
 # IVA responsable no inscripto

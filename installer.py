@@ -108,6 +108,7 @@ class l10n_ar_invoice_new_journal(osv.osv_memory):
         'journal_class_id': fields.many2one('afip.journal_class', 'Document class'),
         'point_of_sale': fields.integer('Point of sale'),
         'sequence_name': fields.char('Sequence Name', size=64),
+        'company_id': fields.many2one('res.company', 'Compania'),
         'currency_id': fields.many2one('res.currency', 'Moneda'),
         'view_id': fields.many2one('account.journal_view', 'Journal view'),
         'builder_id': fields.many2one('l10n_ar_invoice.installer', 'Builder Wizard'),
@@ -118,7 +119,7 @@ class l10n_ar_invoice_new_journal(osv.osv_memory):
         obj_journal = self.pool.get('account.journal')
         obj_sequence = self.pool.get('ir.sequence')
 
-        vals = self.read(cr, uid, ids, ['name', 'code', 'type',
+        vals = self.read(cr, uid, ids, ['name', 'code', 'type', 'company_id',
                                         'journal_class_id', 'point_of_sale', 'sequence_name',
                                         'currency_id', 'view_id', 'update_posted'])
         names = [ v['name'] for v in vals ]
@@ -151,6 +152,7 @@ class l10n_ar_invoice_installer(osv.osv_memory):
     _inherit = 'res.config.installer'
     _columns = {
         'company_id': fields.many2one('res.company', 'Company', required=True),
+        'cuit': fields.char('CUIT', size=12, required=True),
         'responsability_id': fields.many2one('afip.responsability', 'Resposability', required=True, domain=[('code','!=','CF')]),
         'do_export': fields.boolean(u'Realiza o realizará operaciones de Exportación', required=True),
         'remove_old_journals': fields.boolean('Eliminar los diarios existentes', required=True,
@@ -396,6 +398,7 @@ class l10n_ar_invoice_installer(osv.osv_memory):
                     'name': u"%s (%04i-%s)" % (item['name'], point_of_sale, item['code']),
                     'code': u"%s%04i" % (item['code'], point_of_sale),
                     'journal_class_id': item['document_class_id'],
+                    'company_id': company_id,
                     'currency_id': currency_id,
                     'point_of_sale': point_of_sale,
                     'sequence_name': rel[item['row']],
@@ -457,6 +460,21 @@ class l10n_ar_invoice_installer(osv.osv_memory):
         """
         if context is None:
             context = {}
+
+        obj_partner = self.pool.get('res.partner')
+        obj_document_type = self.pool.get('afip.document_type')
+
+        document_type_cuit = obj_document_type.search(cr, uid, [('code','=','CUIT')])[0]
+
+        for wzd in self.browse(cr, uid, ids):
+            partner_id = wzd.company_id.partner_id.id
+            obj_partner.write(cr, uid, partner_id,
+                                               {'responsability_id': wzd.responsability_id.id,
+                                                'document_number': wzd.cuit,
+                                                'document_type': document_type_cuit,
+                                                'vat': 'ar%s' % wzd.cuit,
+                                               })
+            obj_partner.validate(cr, uid, partner_id)
 
         self.delete_journals(cr, uid, ids, context=context)
         self.create_sequences(cr, uid, ids, context=context)

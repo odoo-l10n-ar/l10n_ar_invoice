@@ -28,6 +28,10 @@
     - amount_untaxed == 9000.0
     - amount_tax == 0.0
     - amount_total == 9000.0
+    - journal_id.name == 'Factura [Venta A] (0001-FVA)'
+    - journal_id.company_id.partner_id.responsability_id.name == 'IVA Responsable Inscripto'
+    - company_id.partner_id.responsability_id.name == 'IVA Responsable Inscripto'
+    - company_id.name == journal_id.company_id.name
 
 - Compute amount
 - !python {model: account.invoice}: |
@@ -39,6 +43,8 @@
     - amount_untaxed == 9000.0
     - amount_tax == 1890.0
     - amount_total == 10890.0
+    - company_id.partner_id.responsability_id.name == 'IVA Responsable Inscripto'
+    - journal_id.name == 'Factura [Venta A] (0001-FVA)'
 
 - Check invoice lines
 - !assert {model: account.invoice.line, search: "[('invoice_id','=',ref('invoice_ar_0'))]", string: Check invoice lines}:

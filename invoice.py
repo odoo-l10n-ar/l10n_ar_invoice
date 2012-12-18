@@ -102,6 +102,7 @@ class account_invoice(osv.osv):
             # You can emmit this document?
             resp_class = [ rc.emisor_id.code for rc in obj_resp_class.browse(cr, uid, resp_class_ids) ]
             if invoice.journal_id.company_id.partner_id.responsability_id.code not in resp_class:
+                import pdb; pdb.set_trace()
                 raise osv.except_osv(_('Invalid emisor'),
                                      _('Your responsability with AFIP dont let you generate this kind of document.'))
 

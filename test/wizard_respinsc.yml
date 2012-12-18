@@ -86,13 +86,10 @@
 
 - Check if journals are ok
 - !python {model: account.journal}: |
-    ids = self.search(cr, uid, [])
+    ids = self.search(cr, uid, [('company_id','=',ref('com_ivari'))])
+
     test = set([ i.name for i in self.browse(cr, uid, ids) ])
     expected = set([
-        u'Checks Journal - (test)',
-        u'Bank Journal - (test)',
-        u'Cash Journal - (test)',
-
         u'Factura [Compra] (0001-FCX)',
         u'Nota de D\xe9bito [Compra] (0001-DCX)',
         u'Nota de Cr\xe9dito [Compra] (0001-CCX)',
