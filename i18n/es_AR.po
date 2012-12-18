@@ -2691,7 +2691,7 @@ msgstr "Vista"
 #: code:addons/account/installer.py:300
 #, python-format
 msgid "BNK"
-msgstr "BANCO"
+msgstr "BNC"
 
 #. module: account
 #: field:account.move.line,analytic_lines:0

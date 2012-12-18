@@ -36,17 +36,18 @@ Incluye:
     'depends': [
         'l10n_ar_base_vat',
         'l10n_ar_chart_generic',
+        'l10n_ar_states',
     ],
     'init_xml': [
     ],
     'demo_xml': [],
     'test': [
+        #'test/wizard_monotributo.yml',
         'test/partners.yml',
-        'test/wizard_monotributo.yml',
         'test/wizard_respinsc.yml',
         'test/invoice_respinsc.yml',
-        'test/wizard_norespinsc.yml',
-        'test/invoice_norespinsc.yml',
+        #'test/wizard_norespinsc.yml',
+        #'test/invoice_norespinsc.yml',
     ],
     'update_xml': [
         'data/responsability.xml',
@@ -56,7 +57,7 @@ Incluye:
         'data/partner.xml',
         'data/invoice_installer.xml',
         'data/reports.xml',
-        'partner_view.xml',
+        'view/partner_view.xml',
     ],
     'active': False,
     'installable': True,

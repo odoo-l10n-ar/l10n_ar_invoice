@@ -49,6 +49,10 @@ class l10n_ar_invoice_del_journal(osv.osv_memory):
 
 l10n_ar_invoice_del_journal()
 
+def _selection_code_get(self, cr, uid, context={}):
+    cr.execute('select code, name from ir_sequence_type')
+    return cr.fetchall()
+
 class l10n_ar_invoice_new_sequence(osv.osv_memory):
     # Class members to send messages to the logger system.
     _logger = netsvc.Logger()
@@ -60,17 +64,18 @@ class l10n_ar_invoice_new_sequence(osv.osv_memory):
     _description = 'Sequence to create'
     _columns = {
         'name': fields.char('Name', size=64, required=True),
-        'code': fields.many2one('ir.sequence.type', 'Sequence type'),
+        'code': fields.selection(_selection_code_get, 'Sequence type', size=64, required=True),
         'number_next': fields.integer('First number'),
         'prefix': fields.char('Prefix', size=64),
-        'suffix': fields.char('Prefix', size=64),
+        'suffix': fields.char('Suffix', size=64),
         'padding': fields.integer('Padding'),
+        'company_id': fields.many2one('res.company', 'Company'),
         'builder_id': fields.many2one('l10n_ar_invoice.installer', 'Builder Wizard'),
     }
 
     def doit(self, cr, uid, ids, context=None):
         """
-        Create sequnces.
+        Create sequences.
         """
         obj_sequence = self.pool.get('ir.sequence')
 
@@ -95,7 +100,9 @@ class l10n_ar_invoice_new_journal(osv.osv_memory):
     _columns = {
         'name': fields.char('Name', size=64, required=True),
         'code': fields.char('Code', size=10, required=True),
-        'type': fields.selection([('sale', 'Sale'),('sale_refund','Sale Refund'), ('purchase', 'Purchase'), ('purchase_refund','Purchase Refund')], 'Type', size=32, required=True,
+        'type': fields.selection([('sale', 'Sale'),('sale_refund','Sale Refund'),
+                                  ('purchase', 'Purchase'), ('purchase_refund','Purchase Refund')],
+                                 'Type', size=32, required=True,
                                  help="Select 'Sale' for Sale journal to be used at the time of making invoice."\
                                  " Select 'Purchase' for Purchase Journal to be used at the time of approving purchase order."),
         'journal_class_id': fields.many2one('afip.journal_class', 'Document class'),
@@ -111,7 +118,9 @@ class l10n_ar_invoice_new_journal(osv.osv_memory):
         obj_journal = self.pool.get('account.journal')
         obj_sequence = self.pool.get('ir.sequence')
 
-        vals = self.read(cr, uid, ids, ['name', 'code', 'type', 'journal_class_id', 'point_of_sale', 'sequence_name', 'currency_id', 'view_id', 'update_posted'])
+        vals = self.read(cr, uid, ids, ['name', 'code', 'type',
+                                        'journal_class_id', 'point_of_sale', 'sequence_name',
+                                        'currency_id', 'view_id', 'update_posted'])
         names = [ v['name'] for v in vals ]
         for val in vals:
             val['sequence_id'] = obj_sequence.search(cr, uid, [('name','=',val['sequence_name'])]).pop()
@@ -169,6 +178,21 @@ class l10n_ar_invoice_installer(osv.osv_memory):
         'sequence_by': 'type',
         'point_of_sale': 1,
         'purchase_by_class': False,
+        'journals_to_delete': lambda self, cr, uid, c, context=None: self.update_del_journals(
+            cr, uid, [],
+            self._default_company(cr, uid, c, context),
+            self._default_responsability(cr, uid, c, context),
+            False, True, 'type', 1, False, context=context),
+        'sequences_to_create': lambda self, cr, uid, c, context=None: self.update_new_journals(
+            cr, uid, [],
+            self._default_company(cr, uid, c, context),
+            self._default_responsability(cr, uid, c, context),
+            False, True, 'type', 1, False, context=context)[1],
+        'journals_to_create': lambda self, cr, uid, c, context=None: self.update_new_journals(
+            cr, uid, [],
+            self._default_company(cr, uid, c, context),
+            self._default_responsability(cr, uid, c, context),
+            False, True, 'type', 1, False, context=context)[0],
     }
 
     def _get_account_properties(self, cr, uid, company_id):
@@ -184,30 +208,35 @@ class l10n_ar_invoice_installer(osv.osv_memory):
         }
         property_ids = obj_property.search(cr, uid, [('name','in',properties.values()),
                                                      ('company_id','=',company_id)])
+
+
         prop = obj_property.read(cr, uid, property_ids, ['name', 'value_reference'])
         d = dict( (p['name'].encode('ascii'), int(p['value_reference'].split(',')[1])) for p in prop )
         r = dict( (k, d[v]) for k,v in properties.items() )
         return r
 
-    def update_del_journals(self, cr, uid, ids, company_id, responsability_id, do_export, remove_old_journals, sequence_by, point_of_sale, purchase_by_class):
+    def update_del_journals(self, cr, uid, ids, company_id, responsability_id, do_export, remove_old_journals, sequence_by, point_of_sale, purchase_by_class, context=None):
         """
         Remove Sale Journal, Purchase Journal, Sale Refund Journal, Purchase Refund Journal.
         """
         ret = []
+        djis = []
 
         if company_id and responsability_id and point_of_sale:
 
             obj_journal = self.pool.get('account.journal')
+            obj_del_journal = self.pool.get('l10n_ar_invoice.del_journal')
 
             if remove_old_journals:
                 jou_ids = obj_journal.search(cr, uid, [('type','in',['sale','purchase','sale_refund','purchase_refund'])])
                 jous = obj_journal.read(cr, uid, jou_ids, ['name'])
                 for jou in jous:
-                    ret.append({'name': jou['name'], 'journal_id': jou['id'] })
+                    dj = {'name': jou['name'], 'journal_id': jou['id'], 'builder_id': ids }
+                    ret.append(dj)
 
         return ret
 
-    def update_new_journals(self, cr, uid, ids, company_id, responsability_id, do_export, remove_old_journals, sequence_by, point_of_sale, purchase_by_class, update_posted=False):
+    def update_new_journals(self, cr, uid, ids, company_id, responsability_id, do_export, remove_old_journals, sequence_by, point_of_sale, purchase_by_class, update_posted=False, context=None):
         """
         Create Journals for Argentinian Invoices.
         """
@@ -220,9 +249,14 @@ class l10n_ar_invoice_installer(osv.osv_memory):
             account_ids = self._get_account_properties(cr, uid, company_id)
             
             obj_company = self.pool.get('res.company')
+            obj_seq_type = self.pool.get('ir.sequence.type')
+
             currency_id = obj_company.browse(cr, uid, company_id).currency_id.id
 
-            cr.execute("""select row_number() over () as row, JC.name as name, max(JC.code) as code, JC.type as type, JC.document_class as document_class, max(JC.id) as document_class_id
+            cr.execute("""select row_number() over () as row,
+                          JC.name as name, max(JC.code) as code,
+                          JC.type as type, JC.document_class as document_class,
+                          max(JC.id) as document_class_id
                        from afip_responsability_class as RC
                        left join afip_responsability as Re on (RC.emisor_id=Re.id)
                        left join afip_responsability as Rr on (RC.receptor_id = Rr.id)
@@ -246,6 +280,7 @@ class l10n_ar_invoice_installer(osv.osv_memory):
                     'purchase': 'account.invoice.in_invoice',
                     'purchase_refund': 'account.invoice.in_refund',
                 }
+                #_code_to_type = dict( (k, obj_seq_type.search(cr, uid, [('code','=',v)])[0] ) for k,v in _code_to_type.items() )
 
                 for item in items:
                     sequence = {
@@ -255,6 +290,7 @@ class l10n_ar_invoice_installer(osv.osv_memory):
                         'prefix': '%04i-' % (point_of_sale,),
                         'suffix': '',
                         'padding': 8,
+                        'company_id': company_id,
                     }
                     seq.append(sequence)
                     rel[item['row']]= sequence['name']
@@ -266,6 +302,7 @@ class l10n_ar_invoice_installer(osv.osv_memory):
                     'purchase': 'account.journal',
                     'purchase_refund': 'account.journal',
                 }
+                #_code_to_type = dict( (k, obj_seq_type.search(cr, uid, [('code','=',v)])[0] ) for k,v in _code_to_type.items() )
                 _name = lambda item: u"Document class %s (%04i)" % (item['document_class'], point_of_sale)
                 group = {}
                 for item in items:
@@ -280,6 +317,7 @@ class l10n_ar_invoice_installer(osv.osv_memory):
                         'prefix': '%04i-' % (point_of_sale,),
                         'suffix': '',
                         'padding': 8,
+                        'company_id': company_id,
                     }
                     seq.append(sequence)
 
@@ -290,6 +328,7 @@ class l10n_ar_invoice_installer(osv.osv_memory):
                     'purchase': 'account.invoice.in_invoice',
                     'purchase_refund': 'account.invoice.in_refund',
                 }
+                #_code_to_type = dict( (k, obj_seq_type.search(cr, uid, [('code','=',v)])[0] ) for k,v in _code_to_type.items() )
                 _name = lambda item: u"Document type %s (%04i)" % (item['type'], point_of_sale)
                 group = {}
                 for item in items:
@@ -304,6 +343,7 @@ class l10n_ar_invoice_installer(osv.osv_memory):
                         'prefix': '%04i-' % (point_of_sale,),
                         'suffix': '',
                         'padding': 8,
+                        'company_id': company_id,
                     }
                     seq.append(sequence)
 
@@ -314,6 +354,7 @@ class l10n_ar_invoice_installer(osv.osv_memory):
                     'purchase': 'account.journal',
                     'purchase_refund': 'account.journal',
                 }
+                #_code_to_type = dict( (k, obj_seq_type.search(cr, uid, [('code','=',v)])[0] ) for k,v in _code_to_type.items() )
                 _group_type = {
                     'sale': 'sale',
                     'sale_refund': 'sale',
@@ -334,6 +375,7 @@ class l10n_ar_invoice_installer(osv.osv_memory):
                         'prefix': '%04i-' % (point_of_sale,),
                         'suffix': '',
                         'padding': 8,
+                        'company_id': company_id,
                     }
                     seq.append(sequence)
 
@@ -365,11 +407,16 @@ class l10n_ar_invoice_installer(osv.osv_memory):
 
         return ret, seq
 
-    def update_journals(self, cr, uid, ids, company_id, responsability_id, do_export, remove_old_journals, sequence_by, point_of_sale, purchase_by_class, update_posted=False):
+    def update_journals(self, cr, uid, ids, company_id, responsability_id, do_export, remove_old_journals, sequence_by, point_of_sale, purchase_by_class, update_posted=False, context=None):
+
         v = {
             'journals_to_delete': self.update_del_journals (cr, uid, ids, company_id, responsability_id, do_export, remove_old_journals, sequence_by, point_of_sale, purchase_by_class),
         }
-        j, s = self.update_new_journals (cr, uid, ids, company_id, responsability_id, do_export, remove_old_journals, sequence_by, point_of_sale, purchase_by_class, update_posted)
+        j, s = self.update_new_journals (cr, uid, ids, company_id,
+                                         responsability_id, do_export,
+                                         remove_old_journals, sequence_by,
+                                         point_of_sale, purchase_by_class,
+                                         update_posted)
         v.update({
             'sequences_to_create': s,
             'journals_to_create': j,
@@ -405,12 +452,17 @@ class l10n_ar_invoice_installer(osv.osv_memory):
             obj_new_journal.doit(cr, uid, i['journals_to_create'])
 
     def execute(self, cr, uid, ids, context=None):
+        """
+        Execute Configure button
+        """
         if context is None:
             context = {}
-        r = super(l10n_ar_invoice_installer, self).execute(cr, uid, ids, context)
 
         self.delete_journals(cr, uid, ids, context=context)
+        self.create_sequences(cr, uid, ids, context=context)
         self.create_journals(cr, uid, ids, context=context)
+
+        super(l10n_ar_invoice_installer, self).execute(cr, uid, ids, context)
 
 l10n_ar_invoice_installer()
 

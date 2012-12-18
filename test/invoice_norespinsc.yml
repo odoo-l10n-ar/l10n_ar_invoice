@@ -1,13 +1,19 @@
 #
-#       Create an invoice from Resp Inscr to Resp Inscr.
-#       Total amount > 1000. 
+#       Create an invoice from No Resp Inscr to Consum Final.
 #
-- Create a simple invoice type A
-- !record {model: account.invoice, id: invoice_ar_0}:
+- Set company as Resp Inscr
+- !python {model: res.company}: |
+    ids = self.search(cr, uid, [])
+    assert(len(ids) == 1)
+    partner_id = self.browse(cr, uid, ids)[0].partner_id.id
+    self.pool.get('res.partner').write(cr, uid, partner_id, { 'responsability_id': ref('res_IVARNI') })
+
+- Create a simple invoice type B
+- !record {model: account.invoice, id: invoice_ar_1}:
     account_id: account.a_recv
     address_contact_id: base.res_partner_address_zen
     address_invoice_id: base.res_partner_address_zen
-    company_id: com_ivari
+    company_id: base.main_company
     currency_id: base.EUR
     date_invoice: !eval time.strftime('%Y-%m-%d')
     invoice_line:
@@ -17,10 +23,10 @@
         quantity: 10.0
         product_id: product.product_product_pc3
         uos_id: product.product_uom_unit
-        invoice_line_tax_id: !ref {model: account.tax, search: "[('name','=','IVA Ventas 21%'),('company_id.name','=','Coop. Trab. Moldeo Interactive Ltda.')]"}
-    journal_id: !ref {model: account.journal, search: "[('name','=','Factura [Venta A] (0001-FVA)')]"}
-    partner_id: par_ivari
-    reference_type: none
+        invoice_line_tax_id: !ref {model: account.tax, search: "[('name','=','IVA Ventas 21%')]"}
+    journal_id: !ref {model: account.journal, search: "[('name','=','Factura [Venta B] (0001-FVB)')]"}
+    partner_id: base.res_partner_3
+    reference_type: none        
 
 - Check invoice state and values
 - !assert {model: account.invoice, id: invoice_ar_0, string: Check invoice state and values}:
@@ -29,7 +35,7 @@
     - amount_tax == 0.0
     - amount_total == 9000.0
 
-- Compute amount
+- Check if exists an invoice
 - !python {model: account.invoice}: |
     self.button_compute(cr, uid, [ref('invoice_ar_0')])
 
@@ -48,20 +54,6 @@
     - price_unit_not_vat_included == 900.0
     - price_subtotal_not_vat_included == 9000.0
 
-- Validate invoice
-- !python {model: account.invoice}: |
-    self.action_date_assign(cr, uid, [ref('invoice_ar_0')])
-    self.action_move_create(cr, uid, [ref('invoice_ar_0')])
-    self.action_number(cr, uid, [ref('invoice_ar_0')])
-    self.write(cr, uid, [ref('invoice_ar_0')], {'state': 'open'})
-
-- Check invoice state and values
-- !assert {model: account.invoice, id: invoice_ar_0, string: Check invoice state and values}:
-    - state == 'open'
-    - amount_untaxed == 9000.0
-    - amount_tax == 1890.0
-    - amount_total == 10890.0
-
 - Print invoice
 - !python {model: account.invoice}: |
     from tools.test_reports import try_report
@@ -69,8 +61,6 @@
 
 - Delete invoice to delete journal
 - !python {model: account.invoice}: |
-    self.action_cancel(cr, uid, [ref('invoice_ar_0')])
-    self.write(cr, uid, [ref('invoice_ar_0')], {'state': 'cancel'})
     self.unlink(cr, uid, [ref('invoice_ar_0')])
 
 

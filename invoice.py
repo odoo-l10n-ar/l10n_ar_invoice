@@ -81,6 +81,11 @@ account_invoice_line()
 class account_invoice(osv.osv):
     _inherit = "account.invoice"
 
+    def action_date_assign(self, cr, uid, ids, context={}):
+        r = self.afip_validation(cr, uid, ids, context)
+        r = r and super(account_invoice, self).action_date_assign(cr, uid, ids, context)
+        return r
+
     def afip_validation(self, cr, uid, ids, context={}):
         obj_resp_class = self.pool.get('afip.responsability_class')
 
@@ -111,6 +116,7 @@ class account_invoice(osv.osv):
                (invoice.partner_id.document_type.code in [ None, 'Sigd' ] or invoice.partner_id.document_number is None):
                 raise osv.except_osv(_('Partner without Identification for total invoices > $1000.-'),
                                      _('You must define valid document type and number for this Final Consumer.'))
+        return True
 
 account_invoice()
 
