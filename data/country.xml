@@ -1,0 +1,1101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data noupdate="True">
+        <record model='res.country' id='ad'>
+                <field name='cuit_juridica'>55000004048</field>
+                <field name='cuit_fisica'>50000004046</field>
+                <field name='cuit_otro'>51600004046</field>
+        </record> 
+        <record model='res.country' id='ae'>
+                <field name='cuit_juridica'>55000003319</field>
+                <field name='cuit_fisica'>50000003317</field>
+                <field name='cuit_otro'>51600003317</field>
+        </record> 
+        <record model='res.country' id='af'>
+                <field name='cuit_juridica'>55000003017</field>
+                <field name='cuit_fisica'>50000003015</field>
+                <field name='cuit_otro'>51600003015</field>
+        </record> 
+        <record model='res.country' id='ag'>
+                <field name='cuit_juridica'>55000002258</field>
+                <field name='cuit_fisica'>50000002256</field>
+                <field name='cuit_otro'>51600002256</field>
+        </record> 
+        <record model='res.country' id='ai'>
+                <field name='cuit_juridica'>55000006520</field>
+                <field name='cuit_fisica'>50000006529</field>
+                <field name='cuit_otro'>51600006529</field>
+        </record> 
+        <record model='res.country' id='al'>
+                <field name='cuit_juridica'>55000004013</field>
+                <field name='cuit_fisica'>50000004011</field>
+                <field name='cuit_otro'>51600004011</field>
+        </record> 
+        <record model='res.country' id='am'>
+                <field name='cuit_juridica'>55000006024</field>
+                <field name='cuit_fisica'>50000006022</field>
+                <field name='cuit_otro'>51600006022</field>
+        </record> 
+        <record model='res.country' id='ao'>
+                <field name='cuit_juridica'>55000001499</field>
+                <field name='cuit_fisica'>50000001497</field>
+                <field name='cuit_otro'>51600001497</field>
+        </record> 
+        <record model='res.country' id='as'>
+                <field name='cuit_juridica'>55000006954</field>
+                <field name='cuit_fisica'>50000006952</field>
+                <field name='cuit_otro'>51600006952</field>
+        </record> 
+        <record model='res.country' id='at'>
+                <field name='cuit_juridica'>55000004056</field>
+                <field name='cuit_fisica'>50000004054</field>
+                <field name='cuit_otro'>51600004054</field>
+        </record> 
+        <record model='res.country' id='au'>
+                <field name='cuit_juridica'>55000004994</field>
+                <field name='cuit_fisica'>50000004992</field>
+                <field name='cuit_otro'>51600004992</field>
+        </record> 
+        <record model='res.country' id='aw'>
+                <field name='cuit_juridica'>55000006539</field>
+                <field name='cuit_fisica'>50000006537</field>
+                <field name='cuit_otro'>51600006537</field>
+        </record> 
+        <record model='res.country' id='az'>
+                <field name='cuit_juridica'>55000003904</field>
+                <field name='cuit_fisica'>50000003902</field>
+                <field name='cuit_otro'>51600003902</field>
+        </record> 
+        <record model='res.country' id='ba'>
+                <field name='cuit_juridica'>55000004463</field>
+                <field name='cuit_fisica'>50000004461</field>
+                <field name='cuit_otro'>51600004461</field>
+        </record> 
+        <record model='res.country' id='bb'>
+                <field name='cuit_juridica'>55000002010</field>
+                <field name='cuit_fisica'>50000002019</field>
+                <field name='cuit_otro'>51600002019</field>
+        </record> 
+        <record model='res.country' id='bd'>
+                <field name='cuit_juridica'>55000003459</field>
+                <field name='cuit_fisica'>50000003457</field>
+                <field name='cuit_otro'>51600003457</field>
+        </record> 
+        <record model='res.country' id='be'>
+                <field name='cuit_juridica'>55000004064</field>
+                <field name='cuit_fisica'>50000004062</field>
+                <field name='cuit_otro'>51600004062</field>
+        </record> 
+        <record model='res.country' id='bf'>
+                <field name='cuit_juridica'>55000001014</field>
+                <field name='cuit_fisica'>50000001012</field>
+                <field name='cuit_otro'>51600001012</field>
+        </record> 
+        <record model='res.country' id='bg'>
+                <field name='cuit_juridica'>55000004072</field>
+                <field name='cuit_fisica'>50000004070</field>
+                <field name='cuit_otro'>51600004070</field>
+        </record> 
+        <record model='res.country' id='bh'>
+                <field name='cuit_juridica'>55000003033</field>
+                <field name='cuit_fisica'>50000003031</field>
+                <field name='cuit_otro'>51600003031</field>
+        </record> 
+        <record model='res.country' id='bi'>
+                <field name='cuit_juridica'>55000001049</field>
+                <field name='cuit_fisica'>50000001047</field>
+                <field name='cuit_otro'>51600001047</field>
+        </record> 
+        <record model='res.country' id='bj'>
+                <field name='cuit_juridica'>55000001626</field>
+                <field name='cuit_fisica'>50000001624</field>
+                <field name='cuit_otro'>51600001624</field>
+        </record> 
+        <record model='res.country' id='bm'>
+                <field name='cuit_juridica'>55000006636</field>
+                <field name='cuit_fisica'>50000006634</field>
+                <field name='cuit_otro'>51600006634</field>
+        </record> 
+        <record model='res.country' id='bn'>
+                <field name='cuit_juridica'>55000003912</field>
+                <field name='cuit_fisica'>50000003910</field>
+                <field name='cuit_otro'>51600003910</field>
+        </record> 
+        <record model='res.country' id='bo'>
+                <field name='cuit_juridica'>55000000042</field>
+                <field name='cuit_fisica'>50000000040</field>
+                <field name='cuit_otro'>51600000040</field>
+        </record> 
+        <record model='res.country' id='br'>
+                <field name='cuit_juridica'>55000000050</field>
+                <field name='cuit_fisica'>50000000059</field>
+                <field name='cuit_otro'>51600000059</field>
+        </record> 
+        <record model='res.country' id='bs'>
+                <field name='cuit_juridica'>55000002908</field>
+                <field name='cuit_fisica'>50000002906</field>
+                <field name='cuit_otro'>51600002906</field>
+        </record> 
+        <record model='res.country' id='bt'>
+                <field name='cuit_juridica'>55000002827</field>
+                <field name='cuit_fisica'>50000002825</field>
+                <field name='cuit_otro'>51600002825</field>
+        </record> 
+        <record model='res.country' id='bw'>
+                <field name='cuit_juridica'>55000001030</field>
+                <field name='cuit_fisica'>50000001039</field>
+                <field name='cuit_otro'>51600001039</field>
+        </record> 
+        <record model='res.country' id='by'>
+                <field name='cuit_juridica'>55000004390</field>
+                <field name='cuit_fisica'>50000004399</field>
+                <field name='cuit_otro'>51600004399</field>
+        </record> 
+        <record model='res.country' id='bz'>
+                <field name='cuit_juridica'>55000002363</field>
+                <field name='cuit_fisica'>50000002361</field>
+                <field name='cuit_otro'>51600002361</field>
+        </record> 
+        <record model='res.country' id='ca'>
+                <field name='cuit_juridica'>55000002045</field>
+                <field name='cuit_fisica'>50000002043</field>
+                <field name='cuit_otro'>51600002043</field>
+        </record> 
+        <record model='res.country' id='cc'>
+                <field name='cuit_juridica'>55000006733</field>
+                <field name='cuit_fisica'>50000006731</field>
+                <field name='cuit_otro'>51600006731</field>
+        </record> 
+        <record model='res.country' id='cf'>
+                <field name='cuit_juridica'>55000001073</field>
+                <field name='cuit_fisica'>50000001071</field>
+                <field name='cuit_otro'>51600001071</field>
+        </record> 
+        <record model='res.country' id='cg'>
+                <field name='cuit_juridica'>55000001529</field>
+                <field name='cuit_fisica'>50000001527</field>
+                <field name='cuit_otro'>51600001527</field>
+        </record> 
+        <record model='res.country' id='ch'>
+                <field name='cuit_juridica'>55000004307</field>
+                <field name='cuit_fisica'>50000004305</field>
+                <field name='cuit_otro'>51600004305</field>
+        </record> 
+        <record model='res.country' id='ci'>
+                <field name='cuit_juridica'>55000001103</field>
+                <field name='cuit_fisica'>50000001101</field>
+                <field name='cuit_otro'>51600001101</field>
+        </record> 
+        <record model='res.country' id='ck'>
+                <field name='cuit_juridica'>55000006547</field>
+                <field name='cuit_fisica'>50000006545</field>
+                <field name='cuit_otro'>51600006545</field>
+        </record> 
+        <record model='res.country' id='cl'>
+                <field name='cuit_juridica'>55000000034</field>
+                <field name='cuit_fisica'>50000000032</field>
+                <field name='cuit_otro'>51600000032</field>
+        </record> 
+        <record model='res.country' id='cm'>
+                <field name='cuit_juridica'>55000001057</field>
+                <field name='cuit_fisica'>50000001055</field>
+                <field name='cuit_otro'>51600001055</field>
+        </record> 
+        <record model='res.country' id='cn'>
+                <field name='cuit_juridica'>55000003106</field>
+                <field name='cuit_fisica'>50000003104</field>
+                <field name='cuit_otro'>51600003104</field>
+        </record> 
+        <record model='res.country' id='co'>
+                <field name='cuit_juridica'>55000002053</field>
+                <field name='cuit_fisica'>50000002051</field>
+                <field name='cuit_otro'>51600002051</field>
+        </record> 
+        <record model='res.country' id='cr'>
+                <field name='cuit_juridica'>55000001588</field>
+                <field name='cuit_fisica'>50000001586</field>
+                <field name='cuit_otro'>51600001586</field>
+        </record> 
+        <record model='res.country' id='cu'>
+                <field name='cuit_juridica'>55000002398</field>
+                <field name='cuit_fisica'>50000002396</field>
+                <field name='cuit_otro'>51600002396</field>
+        </record> 
+        <record model='res.country' id='cv'>
+                <field name='cuit_juridica'>55000001502</field>
+                <field name='cuit_fisica'>50000001500</field>
+                <field name='cuit_otro'>51600001500</field>
+        </record> 
+        <record model='res.country' id='cx'>
+                <field name='cuit_juridica'>55000006725</field>
+                <field name='cuit_fisica'>50000006723</field>
+                <field name='cuit_otro'>51600006723</field>
+        </record> 
+        <record model='res.country' id='cy'>
+                <field name='cuit_juridica'>55000003114</field>
+                <field name='cuit_fisica'>50000003112</field>
+                <field name='cuit_otro'>51600003112</field>
+        </record> 
+        <record model='res.country' id='cz'>
+                <field name='cuit_juridica'>55000006059</field>
+                <field name='cuit_fisica'>50000006057</field>
+                <field name='cuit_otro'>51600006057</field>
+        </record> 
+        <record model='res.country' id='de'>
+                <field name='cuit_juridica'>55000004382</field>
+                <field name='cuit_fisica'>50000004380</field>
+                <field name='cuit_otro'>51600004380</field>
+        </record> 
+        <record model='res.country' id='dj'>
+                <field name='cuit_juridica'>55000001863</field>
+                <field name='cuit_fisica'>50000001861</field>
+                <field name='cuit_otro'>51600001861</field>
+        </record> 
+        <record model='res.country' id='dk'>
+                <field name='cuit_juridica'>55000004099</field>
+                <field name='cuit_fisica'>50000004097</field>
+                <field name='cuit_otro'>51600004097</field>
+        </record> 
+        <record model='res.country' id='dm'>
+                <field name='cuit_juridica'>55000002339</field>
+                <field name='cuit_fisica'>50000002337</field>
+                <field name='cuit_otro'>51600002337</field>
+        </record> 
+        <record model='res.country' id='do'>
+                <field name='cuit_juridica'>55000002096</field>
+                <field name='cuit_fisica'>50000002094</field>
+                <field name='cuit_otro'>51600002094</field>
+        </record> 
+        <record model='res.country' id='dz'>
+                <field name='cuit_juridica'>55000001022</field>
+                <field name='cuit_fisica'>50000001020</field>
+                <field name='cuit_otro'>51600001020</field>
+        </record> 
+        <record model='res.country' id='ec'>
+                <field name='cuit_juridica'>55000002428</field>
+                <field name='cuit_fisica'>50000002426</field>
+                <field name='cuit_otro'>51600002426</field>
+        </record> 
+        <record model='res.country' id='ee'>
+                <field name='cuit_juridica'>55000004404</field>
+                <field name='cuit_fisica'>50000004402</field>
+                <field name='cuit_otro'>51600004402</field>
+        </record> 
+        <record model='res.country' id='eg'>
+                <field name='cuit_juridica'>55000001138</field>
+                <field name='cuit_fisica'>50000001136</field>
+                <field name='cuit_otro'>51600001136</field>
+        </record> 
+        <record model='res.country' id='er'>
+                <field name='cuit_juridica'>55000001855</field>
+                <field name='cuit_fisica'>50000001853</field>
+                <field name='cuit_otro'>51600001853</field>
+        </record> 
+        <record model='res.country' id='es'>
+                <field name='cuit_juridica'>55000004102</field>
+                <field name='cuit_fisica'>50000004100</field>
+                <field name='cuit_otro'>51600004100</field>
+        </record> 
+        <record model='res.country' id='et'>
+                <field name='cuit_juridica'>55000001146</field>
+                <field name='cuit_fisica'>50000001144</field>
+                <field name='cuit_otro'>51600001144</field>
+        </record> 
+        <record model='res.country' id='fi'>
+                <field name='cuit_juridica'>55000004110</field>
+                <field name='cuit_fisica'>50000004119</field>
+                <field name='cuit_otro'>51600004119</field>
+        </record> 
+        <record model='res.country' id='fj'>
+                <field name='cuit_juridica'>55000005125</field>
+                <field name='cuit_fisica'>50000005123</field>
+                <field name='cuit_otro'>51600005123</field>
+        </record> 
+        <record model='res.country' id='fm'>
+                <field name='cuit_juridica'>55000005907</field>
+                <field name='cuit_fisica'>50000005905</field>
+                <field name='cuit_otro'>51600005905</field>
+        </record> 
+        <record model='res.country' id='fo'>
+                <field name='cuit_juridica'>55000006067</field>
+                <field name='cuit_fisica'>50000006065</field>
+                <field name='cuit_otro'>51600006065</field>
+        </record> 
+        <record model='res.country' id='fr'>
+                <field name='cuit_juridica'>55000004129</field>
+                <field name='cuit_fisica'>50000004127</field>
+                <field name='cuit_otro'>51600004127</field>
+        </record> 
+        <record model='res.country' id='ga'>
+                <field name='cuit_juridica'>55000001154</field>
+                <field name='cuit_fisica'>50000001152</field>
+                <field name='cuit_otro'>51600001152</field>
+        </record> 
+        <record model='res.country' id='gb'>
+                <field name='cuit_juridica'>55000004269</field>
+                <field name='cuit_fisica'>50000004267</field>
+                <field name='cuit_otro'>51600004267</field>
+        </record> 
+        <record model='res.country' id='gd'>
+                <field name='cuit_juridica'>55000002884</field>
+                <field name='cuit_fisica'>50000002882</field>
+                <field name='cuit_otro'>51600002884</field>
+        </record> 
+        <record model='res.country' id='ge'>
+                <field name='cuit_juridica'>55000003882</field>
+                <field name='cuit_fisica'>50000003880</field>
+                <field name='cuit_otro'>51600003880</field>
+        </record> 
+        <record model='res.country' id='gh'>
+                <field name='cuit_juridica'>55000001170</field>
+                <field name='cuit_fisica'>50000001179</field>
+                <field name='cuit_otro'>51600001179</field>
+        </record> 
+        <record model='res.country' id='gi'>
+                <field name='cuit_juridica'>55000006652</field>
+                <field name='cuit_fisica'>50000006650</field>
+                <field name='cuit_otro'>51600006650</field>
+        </record> 
+        <record model='res.country' id='gl'>
+                <field name='cuit_juridica'>55000006660</field>
+                <field name='cuit_fisica'>50000006669</field>
+                <field name='cuit_otro'>51600006669</field>
+        </record> 
+        <record model='res.country' id='gm'>
+                <field name='cuit_juridica'>55000001162</field>
+                <field name='cuit_fisica'>50000001160</field>
+                <field name='cuit_otro'>51600001160</field>
+        </record> 
+        <record model='res.country' id='gn'>
+                <field name='cuit_juridica'>55000001189</field>
+                <field name='cuit_fisica'>50000001187</field>
+                <field name='cuit_otro'>51600001187</field>
+        </record> 
+        <record model='res.country' id='gq'>
+                <field name='cuit_juridica'>55000001197</field>
+                <field name='cuit_fisica'>50000001195</field>
+                <field name='cuit_otro'>51600001195</field>
+        </record> 
+        <record model='res.country' id='gr'>
+                <field name='cuit_juridica'>55000004137</field>
+                <field name='cuit_fisica'>50000004135</field>
+                <field name='cuit_otro'>51600004135</field>
+        </record> 
+        <record model='res.country' id='gt'>
+                <field name='cuit_juridica'>55000002134</field>
+                <field name='cuit_fisica'>50000002132</field>
+                <field name='cuit_otro'>51600002132</field>
+        </record> 
+        <record model='res.country' id='gu'>
+                <field name='cuit_juridica'>55000006679</field>
+                <field name='cuit_fisica'>50000006677</field>
+                <field name='cuit_otro'>51600006677</field>
+        </record> 
+        <record model='res.country' id='gw'>
+                <field name='cuit_juridica'>55000001847</field>
+                <field name='cuit_fisica'>50000001845</field>
+                <field name='cuit_otro'>51600001845</field>
+        </record> 
+        <record model='res.country' id='gy'>
+                <field name='cuit_juridica'>55000002142</field>
+                <field name='cuit_fisica'>50000002140</field>
+                <field name='cuit_otro'>51600002140</field>
+        </record> 
+        <record model='res.country' id='hk'>
+                <field name='cuit_juridica'>55000003416</field>
+                <field name='cuit_fisica'>50000003414</field>
+                <field name='cuit_otro'>51600003414</field>
+        </record> 
+        <record model='res.country' id='hk'>
+                <field name='cuit_juridica'>55000006687</field>
+                <field name='cuit_fisica'>50000006685</field>
+                <field name='cuit_otro'>51600006685</field>
+        </record> 
+        <record model='res.country' id='hn'>
+                <field name='cuit_juridica'>55000002169</field>
+                <field name='cuit_fisica'>50000002167</field>
+                <field name='cuit_otro'>51600002167</field>
+        </record> 
+        <record model='res.country' id='hr'>
+                <field name='cuit_juridica'>55000006032</field>
+                <field name='cuit_fisica'>50000006030</field>
+                <field name='cuit_otro'>51600006030</field>
+        </record> 
+        <record model='res.country' id='ht'>
+                <field name='cuit_juridica'>55000002150</field>
+                <field name='cuit_fisica'>50000002159</field>
+                <field name='cuit_otro'>51600002159</field>
+        </record> 
+        <record model='res.country' id='hu'>
+                <field name='cuit_juridica'>55000004145</field>
+                <field name='cuit_fisica'>50000004143</field>
+                <field name='cuit_otro'>51600004143</field>
+        </record> 
+        <record model='res.country' id='id'>
+                <field name='cuit_juridica'>55000003165</field>
+                <field name='cuit_fisica'>50000003163</field>
+                <field name='cuit_otro'>51600003163</field>
+        </record> 
+        <record model='res.country' id='ie'>
+                <field name='cuit_juridica'>55000004153</field>
+                <field name='cuit_fisica'>50000004151</field>
+                <field name='cuit_otro'>51600004151</field>
+        </record> 
+        <record model='res.country' id='il'>
+                <field name='cuit_juridica'>55000002878</field>
+                <field name='cuit_fisica'>50000002876</field>
+                <field name='cuit_otro'>51600002876</field>
+        </record> 
+        <record model='res.country' id='im'>
+                <field name='cuit_juridica'>55000006768</field>
+                <field name='cuit_fisica'>50000006766</field>
+                <field name='cuit_otro'>51600006766</field>
+        </record> 
+        <record model='res.country' id='in'>
+                <field name='cuit_juridica'>55000003157</field>
+                <field name='cuit_fisica'>50000003155</field>
+                <field name='cuit_otro'>51600003155</field>
+        </record> 
+        <record model='res.country' id='ir'>
+                <field name='cuit_juridica'>55000002932</field>
+                <field name='cuit_fisica'>50000002930</field>
+                <field name='cuit_otro'>51600002930</field>
+        </record> 
+        <record model='res.country' id='is'>
+                <field name='cuit_juridica'>55000003815</field>
+                <field name='cuit_fisica'>50000003813</field>
+                <field name='cuit_otro'>51600003813</field>
+        </record> 
+        <record model='res.country' id='it'>
+                <field name='cuit_juridica'>55000003548</field>
+                <field name='cuit_fisica'>50000003546</field>
+                <field name='cuit_otro'>51600003546</field>
+        </record> 
+        <record model='res.country' id='jm'>
+                <field name='cuit_juridica'>55000002177</field>
+                <field name='cuit_fisica'>50000002175</field>
+                <field name='cuit_otro'>51600002175</field>
+        </record> 
+        <record model='res.country' id='jo'>
+                <field name='cuit_juridica'>55000003009</field>
+                <field name='cuit_fisica'>50000003007</field>
+                <field name='cuit_otro'>51600003007</field>
+        </record> 
+        <record model='res.country' id='jp'>
+                <field name='cuit_juridica'>55000003203</field>
+                <field name='cuit_fisica'>50000003201</field>
+                <field name='cuit_otro'>51600003201</field>
+        </record> 
+        <record model='res.country' id='ke'>
+                <field name='cuit_juridica'>55000001200</field>
+                <field name='cuit_fisica'>50000001209</field>
+                <field name='cuit_otro'>51600001209</field>
+        </record> 
+        <record model='res.country' id='kg'>
+                <field name='cuit_juridica'>55000003939</field>
+                <field name='cuit_fisica'>50000003937</field>
+                <field name='cuit_otro'>51600003937</field>
+        </record> 
+        <record model='res.country' id='kh'>
+                <field name='cuit_juridica'>55000003068</field>
+                <field name='cuit_fisica'>50000003066</field>
+                <field name='cuit_otro'>51600003066</field>
+        </record> 
+        <record model='res.country' id='ki'>
+                <field name='cuit_juridica'>55000005168</field>
+                <field name='cuit_fisica'>50000005166</field>
+                <field name='cuit_otro'>51600005166</field>
+        </record> 
+        <record model='res.country' id='km'>
+                <field name='cuit_juridica'>55000001898</field>
+                <field name='cuit_fisica'>50000001896</field>
+                <field name='cuit_otro'>51600001896</field>
+        </record> 
+        <record model='res.country' id='kn'>
+                <field name='cuit_juridica'>55000002894</field>
+                <field name='cuit_fisica'>50000002892</field>
+                <field name='cuit_otro'>51600002892</field>
+        </record> 
+        <record model='res.country' id='kp'>
+                <field name='cuit_juridica'>55000003084</field>
+                <field name='cuit_fisica'>50000003082</field>
+                <field name='cuit_otro'>51600003082</field>
+        </record> 
+        <record model='res.country' id='kr'>
+                <field name='cuit_juridica'>55000003092</field>
+                <field name='cuit_fisica'>50000003090</field>
+                <field name='cuit_otro'>51600003090</field>
+        </record> 
+        <record model='res.country' id='kw'>
+                <field name='cuit_juridica'>55000003238</field>
+                <field name='cuit_fisica'>50000003236</field>
+                <field name='cuit_otro'>51600003236</field>
+        </record> 
+        <record model='res.country' id='ky'>
+                <field name='cuit_juridica'>55000006717</field>
+                <field name='cuit_fisica'>50000006715</field>
+                <field name='cuit_otro'>51600006715</field>
+        </record> 
+        <record model='res.country' id='kz'>
+                <field name='cuit_juridica'>55000003920</field>
+                <field name='cuit_fisica'>50000003929</field>
+                <field name='cuit_otro'>51600003929</field>
+        </record> 
+        <record model='res.country' id='la'>
+                <field name='cuit_juridica'>55000003246</field>
+                <field name='cuit_fisica'>50000003244</field>
+                <field name='cuit_otro'>51600003244</field>
+        </record> 
+        <record model='res.country' id='lb'>
+                <field name='cuit_juridica'>55000003254</field>
+                <field name='cuit_fisica'>50000003252</field>
+                <field name='cuit_otro'>51600003252</field>
+        </record> 
+        <record model='res.country' id='lc'>
+                <field name='cuit_juridica'>55000002347</field>
+                <field name='cuit_fisica'>50000002345</field>
+                <field name='cuit_otro'>51600002345</field>
+        </record> 
+        <record model='res.country' id='li'>
+                <field name='cuit_juridica'>55000004188</field>
+                <field name='cuit_fisica'>50000004186</field>
+                <field name='cuit_otro'>51600004186</field>
+        </record> 
+        <record model='res.country' id='lk'>
+                <field name='cuit_juridica'>55000003076</field>
+                <field name='cuit_fisica'>50000003074</field>
+                <field name='cuit_otro'>51600003074</field>
+        </record> 
+        <record model='res.country' id='lr'>
+                <field name='cuit_juridica'>55000001227</field>
+                <field name='cuit_fisica'>50000001225</field>
+                <field name='cuit_otro'>51600001225</field>
+        </record> 
+        <record model='res.country' id='ls'>
+                <field name='cuit_juridica'>55000001219</field>
+                <field name='cuit_fisica'>50000001217</field>
+                <field name='cuit_otro'>51600001217</field>
+        </record> 
+        <record model='res.country' id='lt'>
+                <field name='cuit_juridica'>55000004420</field>
+                <field name='cuit_fisica'>50000004429</field>
+                <field name='cuit_otro'>51600004429</field>
+        </record> 
+        <record model='res.country' id='lu'>
+                <field name='cuit_juridica'>55000004196</field>
+                <field name='cuit_fisica'>50000004194</field>
+                <field name='cuit_otro'>51600004194</field>
+        </record> 
+        <record model='res.country' id='lv'>
+                <field name='cuit_juridica'>55000004412</field>
+                <field name='cuit_fisica'>50000004410</field>
+                <field name='cuit_otro'>51600004410</field>
+        </record> 
+        <record model='res.country' id='ly'>
+                <field name='cuit_juridica'>55000001235</field>
+                <field name='cuit_fisica'>50000001233</field>
+                <field name='cuit_otro'>51600001233</field>
+        </record> 
+        <record model='res.country' id='ma'>
+                <field name='cuit_juridica'>55000001278</field>
+                <field name='cuit_fisica'>50000001276</field>
+                <field name='cuit_otro'>51600001276</field>
+        </record> 
+        <record model='res.country' id='mc'>
+                <field name='cuit_juridica'>55000004218</field>
+                <field name='cuit_fisica'>50000004216</field>
+                <field name='cuit_otro'>51600004216</field>
+        </record> 
+        <record model='res.country' id='md'>
+                <field name='cuit_juridica'>55000004439</field>
+                <field name='cuit_fisica'>50000004437</field>
+                <field name='cuit_otro'>51600004437</field>
+        </record> 
+        <record model='res.country' id='mg'>
+                <field name='cuit_juridica'>55000001243</field>
+                <field name='cuit_fisica'>50000001241</field>
+                <field name='cuit_otro'>51600001241</field>
+        </record> 
+        <record model='res.country' id='mh'>
+                <field name='cuit_juridica'>55000005206</field>
+                <field name='cuit_fisica'>50000005204</field>
+                <field name='cuit_otro'>51600005204</field>
+        </record> 
+        <record model='res.country' id='mk'>
+                <field name='cuit_juridica'>55000004323</field>
+                <field name='cuit_fisica'>50000004321</field>
+                <field name='cuit_otro'>51600004321</field>
+        </record> 
+        <record model='res.country' id='mk'>
+                <field name='cuit_juridica'>55000004900</field>
+                <field name='cuit_fisica'>50000004909</field>
+                <field name='cuit_otro'>51600004909</field>
+        </record> 
+        <record model='res.country' id='ml'>
+                <field name='cuit_juridica'>55000001634</field>
+                <field name='cuit_fisica'>50000001632</field>
+                <field name='cuit_otro'>51600001632</field>
+        </record> 
+        <record model='res.country' id='mm'>
+                <field name='cuit_juridica'>55000002843</field>
+                <field name='cuit_fisica'>50000002841</field>
+                <field name='cuit_otro'>51600002841</field>
+        </record> 
+        <record model='res.country' id='mn'>
+                <field name='cuit_juridica'>55000003297</field>
+                <field name='cuit_fisica'>50000003295</field>
+                <field name='cuit_otro'>51600003295</field>
+        </record> 
+        <record model='res.country' id='mo'>
+                <field name='cuit_juridica'>55000003440</field>
+                <field name='cuit_fisica'>50000003449</field>
+                <field name='cuit_otro'>51600003449</field>
+        </record> 
+        <record model='res.country' id='mp'>
+                <field name='cuit_juridica'>55000005214</field>
+                <field name='cuit_fisica'>50000005212</field>
+                <field name='cuit_otro'>51600005212</field>
+        </record> 
+        <record model='res.country' id='mr'>
+                <field name='cuit_juridica'>55000001294</field>
+                <field name='cuit_fisica'>50000001292</field>
+                <field name='cuit_otro'>51600001292</field>
+        </record> 
+        <record model='res.country' id='ms'>
+                <field name='cuit_juridica'>55000006865</field>
+                <field name='cuit_fisica'>50000006863</field>
+                <field name='cuit_otro'>51600006863</field>
+        </record> 
+        <record model='res.country' id='mt'>
+                <field name='cuit_juridica'>55000004366</field>
+                <field name='cuit_fisica'>50000004364</field>
+                <field name='cuit_otro'>51600004364</field>
+        </record> 
+        <record model='res.country' id='mu'>
+                <field name='cuit_juridica'>55000001286</field>
+                <field name='cuit_fisica'>50000001284</field>
+                <field name='cuit_otro'>51600001284</field>
+        </record> 
+        <record model='res.country' id='mv'>
+                <field name='cuit_juridica'>55000003270</field>
+                <field name='cuit_fisica'>50000003279</field>
+                <field name='cuit_otro'>51600003279</field>
+        </record> 
+        <record model='res.country' id='mw'>
+                <field name='cuit_juridica'>55000001545</field>
+                <field name='cuit_fisica'>50000001543</field>
+                <field name='cuit_otro'>51600001543</field>
+        </record> 
+        <record model='res.country' id='mx'>
+                <field name='cuit_juridica'>55000002185</field>
+                <field name='cuit_fisica'>50000002183</field>
+                <field name='cuit_otro'>51600002183</field>
+        </record> 
+        <record model='res.country' id='my'>
+                <field name='cuit_juridica'>55000003262</field>
+                <field name='cuit_fisica'>50000003260</field>
+                <field name='cuit_otro'>51600003260</field>
+        </record> 
+        <record model='res.country' id='mz'>
+                <field name='cuit_juridica'>55000001510</field>
+                <field name='cuit_fisica'>50000001519</field>
+                <field name='cuit_otro'>51600001519</field>
+        </record> 
+        <record model='res.country' id='na'>
+                <field name='cuit_juridica'>55000001839</field>
+                <field name='cuit_fisica'>50000001837</field>
+                <field name='cuit_otro'>51600001837</field>
+        </record> 
+        <record model='res.country' id='ne'>
+                <field name='cuit_juridica'>55000001308</field>
+                <field name='cuit_fisica'>50000001306</field>
+                <field name='cuit_otro'>51600001306</field>
+        </record> 
+        <record model='res.country' id='ng'>
+                <field name='cuit_juridica'>55000001316</field>
+                <field name='cuit_fisica'>50000001314</field>
+                <field name='cuit_otro'>51600001314</field>
+        </record> 
+        <record model='res.country' id='ni'>
+                <field name='cuit_juridica'>55000002193</field>
+                <field name='cuit_fisica'>50000002191</field>
+                <field name='cuit_otro'>51600002191</field>
+        </record> 
+        <record model='res.country' id='nk'>
+                <field name='cuit_juridica'>55000006776</field>
+                <field name='cuit_fisica'>50000006774</field>
+                <field name='cuit_otro'>51600006774</field>
+        </record> 
+        <record model='res.country' id='nl'>
+                <field name='cuit_juridica'>55000004234</field>
+                <field name='cuit_fisica'>50000004232</field>
+                <field name='cuit_otro'>51600004232</field>
+        </record> 
+        <record model='res.country' id='no'>
+                <field name='cuit_juridica'>55000004226</field>
+                <field name='cuit_fisica'>50000004224</field>
+                <field name='cuit_otro'>51600004224</field>
+        </record> 
+        <record model='res.country' id='np'>
+                <field name='cuit_juridica'>55000003300</field>
+                <field name='cuit_fisica'>50000003309</field>
+                <field name='cuit_otro'>51600003309</field>
+        </record> 
+        <record model='res.country' id='nr'>
+                <field name='cuit_juridica'>55000005036</field>
+                <field name='cuit_fisica'>50000005034</field>
+                <field name='cuit_otro'>51600005034</field>
+        </record> 
+        <record model='res.country' id='nu'>
+                <field name='cuit_juridica'>55000006873</field>
+                <field name='cuit_fisica'>50000006871</field>
+                <field name='cuit_otro'>51600006871</field>
+        </record> 
+        <record model='res.country' id='nz'>
+                <field name='cuit_juridica'>55000005044</field>
+                <field name='cuit_fisica'>50000005042</field>
+                <field name='cuit_otro'>51600005042</field>
+        </record> 
+        <record model='res.country' id='om'>
+                <field name='cuit_juridica'>55000003289</field>
+                <field name='cuit_fisica'>50000003287</field>
+                <field name='cuit_otro'>51600003287</field>
+        </record> 
+        <record model='res.country' id='pa'>
+                <field name='cuit_juridica'>55000002207</field>
+                <field name='cuit_fisica'>50000002205</field>
+                <field name='cuit_otro'>51600002205</field>
+        </record> 
+        <record model='res.country' id='pe'>
+                <field name='cuit_juridica'>55000002223</field>
+                <field name='cuit_fisica'>50000002221</field>
+                <field name='cuit_otro'>51600002221</field>
+        </record> 
+        <record model='res.country' id='pf'>
+                <field name='cuit_juridica'>55000006563</field>
+                <field name='cuit_fisica'>50000006561</field>
+                <field name='cuit_otro'>51600006561</field>
+        </record> 
+        <record model='res.country' id='pg'>
+                <field name='cuit_juridica'>55000005133</field>
+                <field name='cuit_fisica'>50000005131</field>
+                <field name='cuit_otro'>51600005131</field>
+        </record> 
+        <record model='res.country' id='ph'>
+                <field name='cuit_juridica'>55000003122</field>
+                <field name='cuit_fisica'>50000003120</field>
+                <field name='cuit_otro'>51600003120</field>
+        </record> 
+        <record model='res.country' id='pk'>
+                <field name='cuit_juridica'>55000003327</field>
+                <field name='cuit_fisica'>50000003325</field>
+                <field name='cuit_otro'>51600003325</field>
+        </record> 
+        <record model='res.country' id='pl'>
+                <field name='cuit_juridica'>55000004242</field>
+                <field name='cuit_fisica'>50000004240</field>
+                <field name='cuit_otro'>51600004240</field>
+        </record> 
+        <record model='res.country' id='pn'>
+                <field name='cuit_juridica'>55000006903</field>
+                <field name='cuit_fisica'>50000006901</field>
+                <field name='cuit_otro'>51600006901</field>
+        </record> 
+        <record model='res.country' id='pr'>
+                <field name='cuit_juridica'>55000002215</field>
+                <field name='cuit_fisica'>50000002213</field>
+                <field name='cuit_otro'>51600002213</field>
+        </record> 
+        <record model='res.country' id='ps'>
+                <field name='cuit_juridica'>55000003149</field>
+                <field name='cuit_fisica'>50000003147</field>
+                <field name='cuit_otro'>51600003147</field>
+        </record> 
+        <record model='res.country' id='ps'>
+                <field name='cuit_juridica'>55000003572</field>
+                <field name='cuit_fisica'>50000003570</field>
+                <field name='cuit_otro'>51600003570</field>
+        </record> 
+        <record model='res.country' id='pt'>
+                <field name='cuit_juridica'>55000004250</field>
+                <field name='cuit_fisica'>50000004259</field>
+                <field name='cuit_otro'>51600004259</field>
+        </record> 
+        <record model='res.country' id='pw'>
+                <field name='cuit_juridica'>55000005915</field>
+                <field name='cuit_fisica'>50000005913</field>
+                <field name='cuit_otro'>51600005913</field>
+        </record> 
+        <record model='res.country' id='py'>
+                <field name='cuit_juridica'>55000000026</field>
+                <field name='cuit_fisica'>50000000024</field>
+                <field name='cuit_otro'>51600000024</field>
+        </record> 
+        <record model='res.country' id='qa'>
+                <field name='cuit_juridica'>55000002983</field>
+                <field name='cuit_fisica'>50000002981</field>
+                <field name='cuit_otro'>51600002981</field>
+        </record> 
+        <record model='res.country' id='ro'>
+                <field name='cuit_juridica'>55000004277</field>
+                <field name='cuit_fisica'>50000004275</field>
+                <field name='cuit_otro'>51600004275</field>
+        </record> 
+        <record model='res.country' id='ru'>
+                <field name='cuit_juridica'>55000006016</field>
+                <field name='cuit_fisica'>50000006014</field>
+                <field name='cuit_otro'>51600006014</field>
+        </record> 
+        <record model='res.country' id='rw'>
+                <field name='cuit_juridica'>55000001332</field>
+                <field name='cuit_fisica'>50000001330</field>
+                <field name='cuit_otro'>51600001330</field>
+        </record> 
+        <record model='res.country' id='sa'>
+                <field name='cuit_juridica'>55000003025</field>
+                <field name='cuit_fisica'>50000003023</field>
+                <field name='cuit_otro'>51600003023</field>
+        </record> 
+        <record model='res.country' id='sb'>
+                <field name='cuit_juridica'>55000005184</field>
+                <field name='cuit_fisica'>50000005182</field>
+                <field name='cuit_otro'>51600005182</field>
+        </record> 
+        <record model='res.country' id='sc'>
+                <field name='cuit_juridica'>55000001812</field>
+                <field name='cuit_fisica'>50000001810</field>
+                <field name='cuit_otro'>51600001810</field>
+        </record> 
+        <record model='res.country' id='sd'>
+                <field name='cuit_juridica'>55000001383</field>
+                <field name='cuit_fisica'>50000001381</field>
+                <field name='cuit_otro'>51600001381</field>
+        </record> 
+        <record model='res.country' id='se'>
+                <field name='cuit_juridica'>55000004293</field>
+                <field name='cuit_fisica'>50000004291</field>
+                <field name='cuit_otro'>51600004291</field>
+        </record> 
+        <record model='res.country' id='sg'>
+                <field name='cuit_juridica'>55000003335</field>
+                <field name='cuit_fisica'>50000003333</field>
+                <field name='cuit_otro'>51600003333</field>
+        </record> 
+        <record model='res.country' id='sh'>
+                <field name='cuit_juridica'>55000006628</field>
+                <field name='cuit_fisica'>50000006626</field>
+                <field name='cuit_otro'>51600006626</field>
+        </record> 
+        <record model='res.country' id='sh'>
+                <field name='cuit_juridica'>55000006946</field>
+                <field name='cuit_fisica'>50000006944</field>
+                <field name='cuit_otro'>51600006944</field>
+        </record> 
+        <record model='res.country' id='sh'>
+                <field name='cuit_juridica'>55000006970</field>
+                <field name='cuit_fisica'>50000006979</field>
+                <field name='cuit_otro'>51600006979</field>
+        </record> 
+        <record model='res.country' id='si'>
+                <field name='cuit_juridica'>55000004498</field>
+                <field name='cuit_fisica'>50000004496</field>
+                <field name='cuit_otro'>51600004496</field>
+        </record> 
+        <record model='res.country' id='sl'>
+                <field name='cuit_juridica'>55000001359</field>
+                <field name='cuit_fisica'>50000001357</field>
+                <field name='cuit_otro'>51600001357</field>
+        </record> 
+        <record model='res.country' id='sm'>
+                <field name='cuit_juridica'>55000004285</field>
+                <field name='cuit_fisica'>50000004283</field>
+                <field name='cuit_otro'>51600004283</field>
+        </record> 
+        <record model='res.country' id='sn'>
+                <field name='cuit_juridica'>55000001340</field>
+                <field name='cuit_fisica'>50000001349</field>
+                <field name='cuit_otro'>51600001349</field>
+        </record> 
+        <record model='res.country' id='so'>
+                <field name='cuit_juridica'>55000001367</field>
+                <field name='cuit_fisica'>50000001365</field>
+                <field name='cuit_otro'>51600001365</field>
+        </record> 
+        <record model='res.country' id='sr'>
+                <field name='cuit_juridica'>55000002320</field>
+                <field name='cuit_fisica'>50000002329</field>
+                <field name='cuit_otro'>51600002329</field>
+        </record> 
+        <record model='res.country' id='st'>
+                <field name='cuit_juridica'>55000001820</field>
+                <field name='cuit_fisica'>50000001829</field>
+                <field name='cuit_otro'>51600001829</field>
+        </record> 
+        <record model='res.country' id='sv'>
+                <field name='cuit_juridica'>55000002118</field>
+                <field name='cuit_fisica'>50000002116</field>
+                <field name='cuit_otro'>51600002116</field>
+        </record> 
+        <record model='res.country' id='sy'>
+                <field name='cuit_juridica'>55000003343</field>
+                <field name='cuit_fisica'>50000003341</field>
+                <field name='cuit_otro'>51600003341</field>
+        </record> 
+        <record model='res.country' id='sz'>
+                <field name='cuit_juridica'>55000001375</field>
+                <field name='cuit_fisica'>50000001373</field>
+                <field name='cuit_otro'>51600001373</field>
+        </record> 
+        <record model='res.country' id='tc'>
+                <field name='cuit_juridica'>55000006784</field>
+                <field name='cuit_fisica'>50000006782</field>
+                <field name='cuit_otro'>51600006782</field>
+        </record> 
+        <record model='res.country' id='td'>
+                <field name='cuit_juridica'>55000001537</field>
+                <field name='cuit_fisica'>50000001535</field>
+                <field name='cuit_otro'>51600001535</field>
+        </record> 
+        <record model='res.country' id='tg'>
+                <field name='cuit_juridica'>55000001405</field>
+                <field name='cuit_fisica'>50000001403</field>
+                <field name='cuit_otro'>51600001403</field>
+        </record> 
+        <record model='res.country' id='th'>
+                <field name='cuit_juridica'>55000002916</field>
+                <field name='cuit_fisica'>50000002914</field>
+                <field name='cuit_otro'>51600002914</field>
+        </record> 
+        <record model='res.country' id='tj'>
+                <field name='cuit_juridica'>55000003890</field>
+                <field name='cuit_fisica'>50000003899</field>
+                <field name='cuit_otro'>51600003899</field>
+        </record> 
+        <record model='res.country' id='tk'>
+                <field name='cuit_juridica'>55000006997</field>
+                <field name='cuit_fisica'>50000006995</field>
+                <field name='cuit_otro'>51600006995</field>
+        </record> 
+        <record model='res.country' id='tm'>
+                <field name='cuit_juridica'>55000003556</field>
+                <field name='cuit_fisica'>50000003554</field>
+                <field name='cuit_otro'>51600003554</field>
+        </record> 
+        <record model='res.country' id='tn'>
+                <field name='cuit_juridica'>55000001413</field>
+                <field name='cuit_fisica'>50000001411</field>
+                <field name='cuit_otro'>51600001411</field>
+        </record> 
+        <record model='res.country' id='to'>
+                <field name='cuit_juridica'>55000005192</field>
+                <field name='cuit_fisica'>50000005190</field>
+                <field name='cuit_otro'>51600005190</field>
+        </record> 
+        <record model='res.country' id='tr'>
+                <field name='cuit_juridica'>55000003505</field>
+                <field name='cuit_fisica'>50000003503</field>
+                <field name='cuit_otro'>51600003503</field>
+        </record> 
+        <record model='res.country' id='tt'>
+                <field name='cuit_juridica'>55000002436</field>
+                <field name='cuit_fisica'>50000002434</field>
+                <field name='cuit_otro'>51600002434</field>
+        </record> 
+        <record model='res.country' id='tv'>
+                <field name='cuit_juridica'>55000005176</field>
+                <field name='cuit_fisica'>50000005174</field>
+                <field name='cuit_otro'>51600005174</field>
+        </record> 
+        <record model='res.country' id='tw'>
+                <field name='cuit_juridica'>55000003130</field>
+                <field name='cuit_fisica'>50000003139</field>
+                <field name='cuit_otro'>51600003139</field>
+        </record> 
+        <record model='res.country' id='tz'>
+                <field name='cuit_juridica'>55000001553</field>
+                <field name='cuit_fisica'>50000001551</field>
+                <field name='cuit_otro'>51600001551</field>
+        </record> 
+        <record model='res.country' id='ua'>
+                <field name='cuit_juridica'>55000006040</field>
+                <field name='cuit_fisica'>50000006049</field>
+                <field name='cuit_otro'>51600006049</field>
+        </record> 
+        <record model='res.country' id='ug'>
+                <field name='cuit_juridica'>55000001707</field>
+                <field name='cuit_fisica'>50000001705</field>
+                <field name='cuit_otro'>51600001705</field>
+        </record> 
+        <record model='res.country' id='us'>
+                <field name='cuit_juridica'>55000002126</field>
+                <field name='cuit_fisica'>50000002124</field>
+                <field name='cuit_otro'>51600002124</field>
+        </record> 
+        <record model='res.country' id='uy'>
+                <field name='cuit_juridica'>55000000018</field>
+                <field name='cuit_fisica'></field>
+                <field name='cuit_otro'>51600000016</field>
+        </record> 
+        <record model='res.country' id='uz'>
+                <field name='cuit_juridica'>55000003564</field>
+                <field name='cuit_fisica'>50000003562</field>
+                <field name='cuit_otro'>51600003562</field>
+        </record> 
+        <record model='res.country' id='va'>
+                <field name='cuit_juridica'>55000004315</field>
+                <field name='cuit_fisica'>50000004313</field>
+                <field name='cuit_otro'>51600004313</field>
+        </record> 
+        <record model='res.country' id='vc'>
+                <field name='cuit_juridica'>55000002355</field>
+                <field name='cuit_fisica'>50000002353</field>
+                <field name='cuit_otro'>51600002353</field>
+        </record> 
+        <record model='res.country' id='ve'>
+                <field name='cuit_juridica'>55000002266</field>
+                <field name='cuit_fisica'>50000002264</field>
+                <field name='cuit_otro'>51600002264</field>
+        </record> 
+        <record model='res.country' id='vg'>
+                <field name='cuit_juridica'>55000006822</field>
+                <field name='cuit_fisica'>50000006820</field>
+                <field name='cuit_otro'>51600006820</field>
+        </record> 
+        <record model='res.country' id='vn'>
+                <field name='cuit_juridica'>55000003378</field>
+                <field name='cuit_fisica'>50000003376</field>
+                <field name='cuit_otro'>51600003376</field>
+        </record> 
+        <record model='res.country' id='vu'>
+                <field name='cuit_juridica'>55000005052</field>
+                <field name='cuit_fisica'>50000005050</field>
+                <field name='cuit_otro'>51600005050</field>
+        </record> 
+        <record model='res.country' id='ws'>
+                <field name='cuit_juridica'>55000005069</field>
+                <field name='cuit_fisica'>50000005069</field>
+                <field name='cuit_otro'>51600005069</field>
+        </record> 
+        <record model='res.country' id='ye'>
+                <field name='cuit_juridica'>55000003394</field>
+                <field name='cuit_fisica'>50000003392</field>
+                <field name='cuit_otro'>51600003392</field>
+        </record> 
+        <record model='res.country' id='za'>
+                <field name='cuit_juridica'>55000001715</field>
+                <field name='cuit_fisica'>50000001713</field>
+                <field name='cuit_otro'>51600001713</field>
+        </record> 
+        <record model='res.country' id='zm'>
+                <field name='cuit_juridica'>55000001448</field>
+                <field name='cuit_fisica'>50000001446</field>
+                <field name='cuit_otro'>51600001446</field>
+        </record> 
+        <record model='res.country' id='zw'>
+                <field name='cuit_juridica'>55000001324</field>
+                <field name='cuit_fisica'>50000001322</field>
+                <field name='cuit_otro'>51600001322</field>
+        </record> 
+    </data>
+</openerp>
+        

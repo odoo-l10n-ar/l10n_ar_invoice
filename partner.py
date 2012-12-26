@@ -31,14 +31,17 @@ class res_partner(osv.osv):
         'document_number': fields.char('Document number', size=64, select=1),
     }
 
-    """
-    # TODO: Dont work.
-    _defaults = {
-        'responsability_id': lambda self, cr, uid, *a: self.pool.get('ir.model.data').get_object(cr, uid, 'afip.responsability', 'res_CF'),
-        'document_type': lambda self, cr, uid, *a: self.pool.get('ir.model.data').get_object(cr, uid, 'afip.document_type', 'dt_Sigd'),
-        'document_number': '0',
-    }
-    """
+    def onchange_vat(self, cr, uid, ids, vat, document_type, document_number, context={}):
+        obj_doc_type = self.pool.get('afip.document_type')
+
+        cuit_document_type = obj_doc_type.search(cr, uid, [('code','=','CUIT')])
+
+        if vat[:2]=='ar' and document_type==False and document_number==False:
+            document_type = cuit_document_type
+            document_number = vat[2:]
+        elif document_type==False and document_number==False:
+            country = vat[:2]
+
 
     def afip_validation(sefl, cr, uid, ids, context={}):
         """ Hay que validar si el partner no es de tipo 'consumidor final' tenga un CUIT asociado.
