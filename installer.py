@@ -274,6 +274,12 @@ class l10n_ar_invoice_installer(osv.osv_memory):
             fetch_items = list(cr.fetchall())
             items = [ dict(zip([c.name for c in cr.description], item)) for item in fetch_items ]
 
+            if do_export:
+                cr.execute("""select code, name, document_class, %i + (row_number() over ()) as row, type, id as document_class_id
+                           from afip_journal_class where document_class = 'E'""" % len(items))
+                fetch_items = list(cr.fetchall())
+                items.extend([ dict(zip([c.name for c in cr.description], item)) for item in fetch_items ])
+
             # Create sequence
             if sequence_by == 'journal':
                 _code_to_type = {
@@ -474,7 +480,7 @@ class l10n_ar_invoice_installer(osv.osv_memory):
                                                 'document_type': document_type_cuit,
                                                 'vat': 'ar%s' % wzd.cuit,
                                                })
-            obj_partner.validate(cr, uid, partner_id)
+            obj_partner.check_vat(cr, uid, [partner_id])
 
         self.delete_journals(cr, uid, ids, context=context)
         self.create_sequences(cr, uid, ids, context=context)
