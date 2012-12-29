@@ -18,12 +18,18 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from osv import fields, osv
 
-import afip
-import invoice
-import installer
-import partner
-import account
-import country
+class afip_country(osv.osv):
+    _inherit = 'res.country'
+
+    _name = 'res.country'
+
+    _columns = {
+        'cuit_fisica': fields.char('CUIT persona fisica', size=11),
+        'cuit_juridica': fields.char('CUIT persona juridica', size=11),
+        'cuit_otro': fields.char('CUIT otro', size=11),
+    }
+afip_country()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
