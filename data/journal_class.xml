@@ -6,18 +6,21 @@
             <field name='type'>sale</field>
             <field name='name'>Factura [Venta A]</field>
             <field name='document_class'>A</field>
+	    <field name='afip_code'>001</field>
         </record> 
         <record model='afip.journal_class' id='jc_DVA'>
             <field name='code'>DVA</field>
             <field name='type'>sale</field>
             <field name='name'>Nota de Débito [Venta A]</field>
             <field name='document_class'>A</field>
+	    <field name='afip_code'>002</field>
         </record> 
         <record model='afip.journal_class' id='jc_CVA'>
             <field name='code'>CVA</field>
             <field name='type'>sale_refund</field>
             <field name='name'>Nota de Crédito [Venta A]</field>
             <field name='document_class'>A</field>
+	    <field name='afip_code'>003</field>
         </record> 
 
         <record model='afip.journal_class' id='jc_FVB'>
@@ -25,18 +28,21 @@
             <field name='type'>sale</field>
             <field name='name'>Factura [Venta B]</field>
             <field name='document_class'>B</field>
+	    <field name='afip_code'>006</field>
         </record> 
         <record model='afip.journal_class' id='jc_DVB'>
             <field name='code'>DVB</field>
             <field name='type'>sale</field>
             <field name='name'>Nota de Débito [Venta B]</field>
             <field name='document_class'>B</field>
+	    <field name='afip_code'>007</field>
         </record> 
         <record model='afip.journal_class' id='jc_CVB'>
             <field name='code'>CVB</field>
             <field name='type'>sale_refund</field>
             <field name='name'>Nota de Crédito [Venta B]</field>
             <field name='document_class'>B</field>
+	    <field name='afip_code'>008</field>
         </record> 
 
         <record model='afip.journal_class' id='jc_FVC'>
@@ -44,18 +50,21 @@
             <field name='type'>sale</field>
             <field name='name'>Factura [Venta C]</field>
             <field name='document_class'>C</field>
+	    <field name='afip_code'>011</field>
         </record> 
         <record model='afip.journal_class' id='jc_DVC'>
             <field name='code'>DVC</field>
             <field name='type'>sale</field>
             <field name='name'>Nota de Débito [Venta C]</field>
             <field name='document_class'>C</field>
+	    <field name='afip_code'>012</field>
         </record> 
         <record model='afip.journal_class' id='jc_CVC'>
             <field name='code'>CVC</field>
             <field name='type'>sale_refund</field>
             <field name='name'>Nota de Crédito [Venta C]</field>
             <field name='document_class'>C</field>
+	    <field name='afip_code'>013</field>
         </record> 
 
         <record model='afip.journal_class' id='jc_FVM'>
@@ -63,18 +72,21 @@
             <field name='type'>sale</field>
             <field name='name'>Factura [Venta M]</field>
             <field name='document_class'>M</field>
+	    <field name='afip_code'>051</field>
         </record> 
         <record model='afip.journal_class' id='jc_DVM'>
             <field name='code'>DVM</field>
             <field name='type'>sale</field>
             <field name='name'>Nota de Débito [Venta M]</field>
             <field name='document_class'>M</field>
+	    <field name='afip_code'>052</field>
         </record> 
         <record model='afip.journal_class' id='jc_CVM'>
             <field name='code'>CVM</field>
             <field name='type'>sale_refund</field>
             <field name='name'>Nota de Crédito [Venta M]</field>
             <field name='document_class'>M</field>
+	    <field name='afip_code'>053</field>
         </record> 
 
         <record model='afip.journal_class' id='jc_FVE'>
@@ -82,18 +94,21 @@
             <field name='type'>sale</field>
             <field name='name'>Factura [Venta E]</field>
             <field name='document_class'>E</field>
+	    <field name='afip_code'>019</field>
         </record> 
         <record model='afip.journal_class' id='jc_DVE'>
             <field name='code'>DVE</field>
             <field name='type'>sale</field>
             <field name='name'>Nota de Débito [Venta E]</field>
             <field name='document_class'>E</field>
+	    <field name='afip_code'>020</field>
         </record> 
         <record model='afip.journal_class' id='jc_CVE'>
             <field name='code'>CVE</field>
             <field name='type'>sale_refund</field>
             <field name='name'>Nota de Crédito [Venta E]</field>
             <field name='document_class'>E</field>
+	    <field name='afip_code'>021</field>
         </record> 
 
         <record model='afip.journal_class' id='jc_FCA'>

@@ -22,7 +22,8 @@
 
 - !python {model: res.company }: |
     company_ids = self.search(cr, uid, [('name','=','Coop. Trab. Moldeo Interactive Ltda.')])
-    assert(len(company_ids) == 1)
+    if (len(company_ids) != 1):
+        raise AssertionError, 'Cant create company'
 
 #
 # Wizard que selecciona la contabilidad argentina
@@ -38,14 +39,6 @@
     self.execute(cr, uid, [ref("acc_wiz_ivari")], {})
 
 #
-# Limpiamos los journals
-#
-#- !python {model: account.journal }: |
-#    journal_ids = self.search(cr, uid, [('company_id.name','=','Coop. Trab. Moldeo Interactive Ltda.')])
-#    import pdb; pdb.set_trace()
-#    self.unlink(cr, uid, journal_ids)
-
-#
 # Wizard que selecciona el plan contable
 #
 - !record {model: wizard.multi.charts.accounts, id: cha_wiz_ivari }:
@@ -55,7 +48,6 @@
 
 - !python {model: wizard.multi.charts.accounts }: |
     self.is_test = True
-    #vals = self.browse(cr, uid, ref("cha_wiz_ivari"))
     self.execute(cr, uid, [ref("cha_wiz_ivari")], {})
 
 #
@@ -84,7 +76,9 @@
 
 - !python {model: account.journal }: |
     journal_ids = self.search(cr, uid, [('company_id.name','=','Coop. Trab. Moldeo Interactive Ltda.')])
-    assert(len(journal_ids)==15)
+    if (len(journal_ids)!=15):
+        print [ a.name for a in self.browse(cr, uid, journal_ids) ]
+        raise AssertionError, 'Error in journals creation for Resp. Insc.. Expected 15, exists %i.' % len(journal_ids)
 
 #
 # El responsable inscripto esta listo para facturar !!!

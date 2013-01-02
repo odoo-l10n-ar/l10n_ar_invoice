@@ -23,7 +23,8 @@
 
 - !python {model: res.company }: |
     company_ids = self.search(cr, uid, [('name','=','Melanoma SA.')])
-    assert(len(company_ids) == 1)
+    if (len(company_ids) != 1):
+        raise AssertionError, 'Cant create company'
 
 #
 # Wizard que selecciona la contabilidad argentina
@@ -75,9 +76,14 @@
 
 - !python {model: account.journal }: |
     journal_ids = self.search(cr, uid, [('company_id.name','=','Coop. Trab. Moldeo Interactive Ltda.')])
-    assert(len(journal_ids)==15)
+    if (len(journal_ids)!=15):
+        print [ a.name for a in self.browse(cr, uid, journal_ids) ]
+        raise AssertionError, 'Error in journals creation for Resp. Insc.. Expected 15, exists %i.' % len(journal_ids)
+
     journal_ids = self.search(cr, uid, [('company_id.name','=','Melanoma SA.')])
-    assert(len(journal_ids)==18)
+    if (len(journal_ids)!=18):
+        print [ a.name for a in self.browse(cr, uid, journal_ids) ]
+        raise AssertionError, 'Error in journals creation for Resp. Insc. with Export. Expected 18, exists %i.' % len(journal_ids)
 
 #
 # El responsable inscripto esta listo para facturar !!!

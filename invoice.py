@@ -90,6 +90,10 @@ class account_invoice(osv.osv):
         obj_resp_class = self.pool.get('afip.responsability_class')
 
         for invoice in self.browse(cr, uid, ids):
+            # If parter is not in Argentina, ignore it.
+            if invoice.partner_id.country.name != 'Argentina':
+                continue
+
             # Partner responsability ?
             if isinstance(invoice.partner_id.responsability_id, osv.orm.browse_null):
                 raise osv.except_osv(_('No responsability'),

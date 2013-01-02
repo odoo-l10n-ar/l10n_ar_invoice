@@ -57,6 +57,7 @@ class afip_journal_class(osv.osv):
                                  " Select 'Cash' to be used at the time of making payment."\
                                  " Select 'General' for miscellaneous operations."\
                                  " Select 'Opening/Closing Situation' to be used at the time of new fiscal year creation or end of year entries generation."),
+        'afip_code': fields.integer('AFIP Code'),
     }
     _sql_constraints = [('name','unique(name)', 'Not repeat name!')]
 afip_journal_class()

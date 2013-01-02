@@ -1,6 +1,19 @@
 #
 # Este test crea una nueva compania utilizando el wizard de creación de companias.
 #
+# AVISO!!!! Cuidado al ejecutar este test!!! v6.0
+#
+# Testear los wizard de configuración no es trivial. El problema radica en que estos
+# actualizan la lista de módulos e instalan otros. Al hacer eso reinician los módulos
+# ejecutando nuevamente los test ya realizados, probocando un loop infinito. Para
+# prevenir esto hay que tocar el código del servidor de la siguiente manera:
+#
+# Al archivo server/bin/addons/res/res_config.py , en la clase res_config_installer
+#
+#     def execute(self, cr, uid, ids, context=None):
+#+      if hasattr(self, 'is_test'): return
+#       modules = self.pool.get('ir.module.module')
+#        
 - !record {model: base.setup.company, id: com_wiz_rm }:
         company_id: com_rm
         name: Cristian S. Rocha 
@@ -23,7 +36,8 @@
 
 - !python {model: res.company }: |
     company_ids = self.search(cr, uid, [('name','=','Cristian S. Rocha')])
-    assert(len(company_ids) == 1)
+    if (len(company_ids) != 1):
+        raise AssertionError, 'Cant create company'
 
 #
 # Wizard que selecciona la contabilidad argentina
@@ -76,7 +90,9 @@
 
 - !python {model: account.journal }: |
     journal_ids = self.search(cr, uid, [('company_id.name','=','Cristian S. Rocha')])
-    assert(len(journal_ids)==9)
+    if (len(journal_ids)!=9):
+        print [ a.name for a in self.browse(cr, uid, journal_ids) ]
+        raise AssertionError, 'Error in journals creation for Monotributo. Expected 9, exists %i.' % len(journal_ids)
 
 #
 # El responsable monotribustita esta listo para facturar !!!
