@@ -79,7 +79,45 @@
     name: property_account_income_categ
     value_reference: !eval "'account.account,'+str(ref('account.a_sale'))"
 
+#
+#
+# IVA responsable inscripto
+#
+- Create company
+- !record {model: res.company, id: com_ivari2 }:
+    name: Melanoma SA.
+    rml_header1: .
+    rml_header2: Web - Tel -
+    rml_header3: CUIT - 
+    currency_id: base.ARS
 
+- Create account company
+- !record {model: ir.property, id: prop_paec_ivari2}:
+    company_id: com_ivari2
+    fields_id: account.field_res_partner_property_account_payable
+    name: property_account_expense_categ
+    value_reference: !eval "'account.account,'+str(ref('account.a_expense'))"
+
+- Create partner company
+- !record {model: ir.property, id: prop_paic_ivari2}:
+    company_id: com_ivari2
+    fields_id: account.field_res_partner_property_account_receivable
+    name: property_account_income_categ
+    value_reference: !eval "'account.account,'+str(ref('account.a_sale'))"
+
+- Property
+- !record {model: ir.property, id: prop_paec_ivari2}:
+    company_id: com_ivari2
+    fields_id: account.field_res_partner_property_account_payable
+    name: property_account_expense_categ
+    value_reference: !eval "'account.account,'+str(ref('account.a_expense'))"
+
+- Property
+- !record {model: ir.property, id: prop_paic_ivari2}:
+    company_id: com_ivari2
+    fields_id: account.field_res_partner_property_account_receivable
+    name: property_account_income_categ
+    value_reference: !eval "'account.account,'+str(ref('account.a_sale'))"
 
 #
 # IVA responsable no inscripto

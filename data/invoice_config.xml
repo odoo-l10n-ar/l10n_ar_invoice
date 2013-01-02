@@ -76,8 +76,8 @@
 	</record>
 
         <record id="view_invoice_ar_installer" model="ir.ui.view">
-            <field name="name">l10n_ar_invoice.installer.form</field>
-            <field name="model">l10n_ar_invoice.installer</field>
+            <field name="name">l10n_ar_invoice.config.form</field>
+            <field name="model">l10n_ar_invoice.config</field>
             <field name="type">form</field>
             <field name="inherit_id" ref="base.res_config_installer"/>
             <field name="arch" type="xml">
@@ -141,7 +141,7 @@
 	<record id="action_invoice_ar_installer" model="ir.actions.act_window">
 	  <field name="name">Configuración de Facturación</field>
 	  <field name="type">ir.actions.act_window</field>
-	  <field name="res_model">l10n_ar_invoice.installer</field>
+	  <field name="res_model">l10n_ar_invoice.config</field>
 	  <field name="view_id" ref="view_invoice_ar_installer"/>
           <field name="view_type">form</field>
           <field name="view_mode">form</field>

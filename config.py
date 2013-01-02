@@ -132,7 +132,7 @@ class l10n_ar_invoice_new_journal(osv.osv_memory):
 
 l10n_ar_invoice_new_journal()
 
-class l10n_ar_invoice_installer(osv.osv_memory):
+class l10n_ar_invoice_config(osv.osv_memory):
     # Class members to send messages to the logger system.
     _logger = netsvc.Logger()
 
@@ -148,8 +148,8 @@ class l10n_ar_invoice_installer(osv.osv_memory):
         ids = resp_obj.search(cr, uid, [('name','=','Responsable Monotributo')])
         return ids.pop()
 
-    _name = 'l10n_ar_invoice.installer'
-    _inherit = 'res.config.installer'
+    _name = 'l10n_ar_invoice.config'
+    _inherit = 'res.config'
     _columns = {
         'company_id': fields.many2one('res.company', 'Company', required=True),
         'cuit': fields.char('CUIT', size=12, required=True),
@@ -230,7 +230,10 @@ class l10n_ar_invoice_installer(osv.osv_memory):
             obj_del_journal = self.pool.get('l10n_ar_invoice.del_journal')
 
             if remove_old_journals:
-                jou_ids = obj_journal.search(cr, uid, [('type','in',['sale','purchase','sale_refund','purchase_refund'])])
+                jou_ids = obj_journal.search(cr, uid, [
+                    ('type','in',['sale','purchase','sale_refund','purchase_refund']),
+                    ('company_id','=',company_id)]
+                )
                 jous = obj_journal.read(cr, uid, jou_ids, ['name'])
                 for jou in jous:
                     dj = {'name': jou['name'], 'journal_id': jou['id'], 'builder_id': ids }
@@ -486,8 +489,9 @@ class l10n_ar_invoice_installer(osv.osv_memory):
         self.create_sequences(cr, uid, ids, context=context)
         self.create_journals(cr, uid, ids, context=context)
 
-        super(l10n_ar_invoice_installer, self).execute(cr, uid, ids, context)
+        # We dont need install any addon at this point.
+        #super(l10n_ar_invoice_config, self).execute(cr, uid, ids, context)
 
-l10n_ar_invoice_installer()
+l10n_ar_invoice_config()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

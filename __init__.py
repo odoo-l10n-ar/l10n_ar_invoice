@@ -19,9 +19,10 @@
 #
 ##############################################################################
 
+import test
 import afip
 import invoice
-import installer
+import config
 import partner
 import account
 import country

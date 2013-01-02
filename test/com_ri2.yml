@@ -1,0 +1,85 @@
+#
+# Este test crea una nueva compania utilizando el wizard de creación de companias.
+#
+- !record {model: base.setup.company, id: com_wiz_ivari2 }:
+        company_id: com_ivari2
+        name: Melanoma SA.
+        account_no: 12357
+        city: Cordoba
+        country_id: !ref {model: res.country, search: "[('name','=','Argentina')]"}
+        currency: base.ARS
+        email: info@moldeo.coop
+        phone: (+54.11).4771.4164
+        state_id: !ref {model: res.country, search: "[('name','=','Córdoba')]"}
+        street: Av. San Martin 1336
+        street2: 9B
+        website: melanoma.com.ar
+        zip: 1212
+
+- !python {model: base.setup.company }: |
+    self.is_test = True
+    self.view_init(cr, uid, [ref("com_wiz_ivari2")], {})
+    self.execute(cr, uid, [ref("com_wiz_ivari2")], {})
+
+- !python {model: res.company }: |
+    company_ids = self.search(cr, uid, [('name','=','Melanoma SA.')])
+    assert(len(company_ids) == 1)
+
+#
+# Wizard que selecciona la contabilidad argentina
+#
+- !record {model: account.installer, id: acc_wiz_ivari2 }:
+        company_id: com_ivari2
+        charts: l10n_ar_chart_generic
+
+- !python {model: account.installer }: |
+    self.is_test = True
+    self.view_init(cr, uid, [ref("acc_wiz_ivari2")], {})
+    self.execute(cr, uid, [ref("acc_wiz_ivari2")], {})
+
+#
+# Wizard que selecciona el plan contable
+#
+- !record {model: wizard.multi.charts.accounts, id: cha_wiz_ivari2 }:
+        chart_template_id: !ref {model: account.chart.template, search: "[('name','=','Plan Contable Genérico de Argentina para Responsables Inscriptos')]"}
+        company_id: com_ivari2
+        bank_accounts_id: []
+
+- !python {model: wizard.multi.charts.accounts }: |
+    self.is_test = True
+    self.execute(cr, uid, [ref("cha_wiz_ivari2")], {})
+
+#
+# Wizard que crea los journals para un responsable inscripto
+#
+- !record {model: l10n_ar_invoice.config, id: inv_wiz_ivari2 }:
+        company_id: com_ivari2
+        cuit: 20111111112
+        do_export: True
+        remove_old_journals: True
+        purchase_by_class: False
+        responsability_id: !ref {model: afip.responsability, search: "[('name','=','IVA Responsable Inscripto')]"}
+        sequence_by: type
+
+- !python {model: l10n_ar_invoice.config }: |
+    self.is_test = True
+    #self.view_init(cr, uid, [ref("inv_wiz_ivari2")], {})
+    data = self.read(cr, uid, ref("inv_wiz_ivari2"), ['company_id', 'responsability_id', 'do_export', 'remove_old_journals', 'sequence_by', 'point_of_sale', 'purchase_by_class'])
+    del data['id']
+    res = self.update_journals(cr, uid, None, **data)
+    k = { 'journals_to_delete': [(5,)]+[ (0, 0, v) for v in res['value']['journals_to_delete'] ],
+          'sequences_to_create': [(5,)]+[ (0, 0, v) for v in res['value']['sequences_to_create'] ],
+          'journals_to_create': [(5,)]+[ (0, 0, v) for v in res['value']['journals_to_create'] ] }
+    self.write(cr, uid, [ref("inv_wiz_ivari2")], k)
+    self.execute(cr, uid, [ref("inv_wiz_ivari2")], {})
+
+- !python {model: account.journal }: |
+    journal_ids = self.search(cr, uid, [('company_id.name','=','Coop. Trab. Moldeo Interactive Ltda.')])
+    assert(len(journal_ids)==15)
+    journal_ids = self.search(cr, uid, [('company_id.name','=','Melanoma SA.')])
+    assert(len(journal_ids)==18)
+
+#
+# El responsable inscripto esta listo para facturar !!!
+#
+
