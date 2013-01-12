@@ -39,7 +39,7 @@
 
         <record id="view_afip_responsability_class_tree" model="ir.ui.view">
             <field name="name">afip.responsability_class.tree</field>
-            <field name="model">afip.responsability_classorization</field>
+            <field name="model">afip.responsability_class</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
                 <tree string="AFIP Resposability class">

@@ -71,6 +71,7 @@ Incluye:
         'view/afip_journal_class_view.xml',
         'view/afip_responsability_view.xml',
         'view/afip_responsability_class_view.xml',
+        'view/journal_view.xml',
         'security/l10n_ar_invoice_security.xml',
         'security/ir.model.access.csv',
     ],

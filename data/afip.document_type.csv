@@ -1,39 +1,39 @@
-code,afip_code,name
-CPF,0,CI Policía Federal
-CBA,1,CI Buenos Aires
-CC,2,CI Catamarca
-CC,3,CI Córdoba
-CC,4,CI Corrientes
-CER,5,CI Entre Ríos
-CJ,6,CI Jujuy
-CM,7,CI Mendoza
-CLR,8,CI La Rioja
-CS,9,CI Salta
-CSJ,10,CI San Juan
-CSL,11,CI San Luis
-CSF,12,CI Santa Fe
-CSdE,13,CI Santiago del Estero
-CT,14,CI Tucumán
-CC,16,CI Chaco
-CC,17,CI Chubut
-CF,18,CI Formosa
-CM,19,CI Misiones
-CN,20,CI Neuquén
-CLP,21,CI La Pampa
-CRN,22,CI Río Negro
-CSC,23,CI Santa Cruz
-CTdF,24,CI Tierra del Fuego
-C,80,CUIT
-C,86,CUIL
-C,87,CDI
-L,89,LE
-L,90,LC
-Ce,91,CI extranjera
-et,92,en trámite
-An,93,Acta nacimiento
-P,94,Pasaporte
-CBAR,95,CI Bs. As. RNP
-D,96,DNI
-Sigd,99,Sin identificar/venta global diaria
-CdM,30,Certificado de Migración
-UpApP,88,Usado por Anses para Padrón
+"id","code","afip_code","name"
+"doc_cpf","CPF",0,"CI Policía Federal"
+"doc_cib","CIB",1,"CI Buenos Aires"
+"doc_cik","CIK",2,"CI Catamarca"
+"doc_cix","CIX",3,"CI Córdoba"
+"doc_ciw","CIW",4,"CI Corrientes"
+"doc_cie","CIE",5,"CI Entre Ríos"
+"doc_ciy","CIY",6,"CI Jujuy"
+"doc_cim","CIM",7,"CI Mendoza"
+"doc_cif","CIF",8,"CI La Rioja"
+"doc_cia","CIA",9,"CI Salta"
+"doc_cij","CIJ",10,"CI San Juan"
+"doc_cid","CID",11,"CI San Luis"
+"doc_cis","CIS",12,"CI Santa Fe"
+"doc_cig","CIG",13,"CI Santiago del Estero"
+"doc_cit","CIT",14,"CI Tucumán"
+"doc_cih","CIH",16,"CI Chaco"
+"doc_ciu","CIU",17,"CI Chubut"
+"doc_cip","CIP",18,"CI Formosa"
+"doc_cin","CIN",19,"CI Misiones"
+"doc_ciq","CIQ",20,"CI Neuquén"
+"doc_cil","CIL",21,"CI La Pampa"
+"doc_cir","CIR",22,"CI Río Negro"
+"doc_ciz","CIZ",23,"CI Santa Cruz"
+"doc_civ","CIV",24,"CI Tierra del Fuego"
+"doc_cuit","CUIT",80,"CUIT"
+"doc_cuil","CUIL",86,"CUIL"
+"doc_cdi","CDI",87,"CDI"
+"doc_le","LE",89,"LE"
+"doc_lc","LC",90,"LC"
+"doc_ciex","CIEX",91,"CI extranjera"
+"doc_et","ET",92,"en trámite"
+"doc_an","AN",93,"Acta nacimiento"
+"doc_pass","PASS",94,"Pasaporte"
+"doc_cibar","CIBAR",95,"CI Bs. As. RNP"
+"doc_dni","DNI",96,"DNI"
+"doc_sinivg","SINIVG",99,"Sin identificar/venta global diaria"
+"doc_cdm","CDM",30,"Certificado de Migración"
+"doc_anses","ANSES",88,"Usado por Anses para Padrón"

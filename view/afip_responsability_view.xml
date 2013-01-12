@@ -37,7 +37,7 @@
 
         <record id="view_afip_responsability_tree" model="ir.ui.view">
             <field name="name">afip.responsability.tree</field>
-            <field name="model">afip.responsabilityorization</field>
+            <field name="model">afip.responsability</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
                 <tree string="AFIP Responsability">
