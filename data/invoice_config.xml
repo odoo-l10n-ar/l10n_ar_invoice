@@ -102,6 +102,8 @@
 				    on_change="update_journals(company_id, responsability_id, do_export, remove_old_journals, sequence_by, point_of_sale, purchase_by_class)"
 				    /><newline/>
 			    <field name="cuit" /><newline/>
+			    <field name="iibb" /><newline/>
+			    <field name="start_date" /><newline/>
 			    <field name="responsability_id" widget="selection"
 				    on_change="update_journals(company_id, responsability_id, do_export, remove_old_journals, sequence_by, point_of_sale, purchase_by_class)"
 				    /><newline/>

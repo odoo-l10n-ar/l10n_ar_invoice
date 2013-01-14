@@ -153,6 +153,8 @@ class l10n_ar_invoice_config(osv.osv_memory):
     _columns = {
         'company_id': fields.many2one('res.company', 'Company', required=True),
         'cuit': fields.char('CUIT', size=12, required=True),
+        'iibb': fields.char('IIBB', size=12, required=True),
+        'start_date': fields.date('Inicio de Actividades', required=True),
         'responsability_id': fields.many2one('afip.responsability', 'Resposability', required=True, domain=[('code','!=','CF')]),
         'do_export': fields.boolean(u'Realiza o realizará operaciones de Exportación', required=True),
         'remove_old_journals': fields.boolean('Eliminar los diarios existentes', required=True,
@@ -481,6 +483,8 @@ class l10n_ar_invoice_config(osv.osv_memory):
                                                {'responsability_id': wzd.responsability_id.id,
                                                 'document_number': wzd.cuit,
                                                 'document_type': document_type_cuit,
+                                                'iibb': wzd.iibb,
+                                                'start_date': wzd.start_date,
                                                 'vat': 'ar%s' % wzd.cuit,
                                                })
             obj_partner.check_vat(cr, uid, [partner_id])

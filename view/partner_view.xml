@@ -33,6 +33,8 @@
                     <field name="responsability_id" widget="selection" colspan="6"/>
                     <field name="document_number" colspan="4"/>
                     <field name="document_type" widget="selection"/>
+                    <field name="iibb"/>
+                    <field name="start_date"/>
                 </field>
             </field>
         </record>

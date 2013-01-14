@@ -29,6 +29,8 @@ class res_partner(osv.osv):
         'responsability_id': fields.many2one('afip.responsability', 'Resposability'),
         'document_type': fields.many2one('afip.document_type', 'Document type'),
         'document_number': fields.char('Document number', size=64, select=1),
+        'iibb': fields.char('Ingresos Brutos', size=64),
+        'start_date': fields.date('Inicio de actividades'),
     }
 
     def onchange_vat(self, cr, uid, ids, vat, document_type, document_number, context={}):
