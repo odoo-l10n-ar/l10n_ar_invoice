@@ -58,6 +58,7 @@ Incluye:
         'data/document_type.xml',
         'data/partner.xml',
         'data/invoice_config.xml',
+        'data/invoice_workflow.xml',
         'data/reports.xml',
         'data/country.xml',
         'view/partner_view.xml',

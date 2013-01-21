@@ -29,17 +29,36 @@ class account_invoice_line(osv.osv):
     """
     En argentina como no se diferencian los impuestos en las facturas, excepto el IVA
     agrego funciones que ignoran el iva solamenta a la hora de imprimir los valores.
+
+    En esta nueva versión se cambia las tres variables a una única función 'price_calc'
+    que se reemplaza de la siguiente manera:
+
+        'price_unit_vat_included'         -> price_calc(use_vat=True, quantity=1, discount=True)[id]
+        'price_subtotal_vat_included'     -> price_calc(use_vat=True, discount=True)[id]
+        'price_unit_not_vat_included'     -> price_calc(use_vat=False, quantity=1, discount=True)[id]
+        'price_subtotal_not_vat_included' -> price_calc(use_vat=False, discount=True)[id]
+
+    Y ahora puede imprimir sin descuento:
+
+        price_calc(use_vat=True, quantity=1, discount=False)
     """
-    def _amount_calc_taxes(self, cr, uid, ids, tax_filter, default_quantity):
+
+    _inherit = "account.invoice.line"
+
+    def price_calc(self, cr, uid, ids, use_vat=True, tax_filter=None, quantity=None, discount=None):
         res = {}
         tax_obj = self.pool.get('account.tax')
         cur_obj = self.pool.get('res.currency')
+        _tax_filter = tax_filter or ( use_vat and _all_taxes ) or _all_except_vat
+        if discount and quantity is None:
+            import pdb; pdb.set_trace()
         for line in self.browse(cr, uid, ids):
-            price = line.price_unit * (1-(line.discount or 0.0)/100.0)
-            tax_ids = filter(tax_filter, line.invoice_line_tax_id)
-            quantity = default_quantity if default_quantity is not None else line.quantity
+            _quantity = quantity if quantity is not None else line.quantity
+            _discount = discount if discount is not None else line.discount
+            _price = line.price_unit * (1-(_discount or 0.0)/100.0)
+            _tax_ids = filter(_tax_filter, line.invoice_line_tax_id)
             taxes = tax_obj.compute_all(cr, uid,
-                                        tax_ids, price, quantity,
+                                        _tax_ids, _price, _quantity,
                                         product=line.product_id,
                                         address_id=line.invoice_id.address_invoice_id,
                                         partner=line.invoice_id.partner_id)
@@ -49,42 +68,10 @@ class account_invoice_line(osv.osv):
                 res[line.id] = cur_obj.round(cr, uid, cur, res[line.id])
         return res
 
-    def _amount_unit_vat_included(self, cr, uid, ids, prop, unknow_none, unknow_dict):
-        return self._amount_calc_taxes(cr, uid, ids, _all_taxes, 1)
-
-    def _amount_subtotal_vat_included(self, cr, uid, ids, prop, unknow_none, unknow_dict):
-        return self._amount_calc_taxes(cr, uid, ids, _all_taxes, None)
-
-    def _amount_unit_not_vat_included(self, cr, uid, ids, prop, unknow_none, unknow_dict):
-        return self._amount_calc_taxes(cr, uid, ids, _all_except_vat, 1)
-
-    def _amount_subtotal_not_vat_included(self, cr, uid, ids, prop, unknow_none, unknow_dict):
-        return self._amount_calc_taxes(cr, uid, ids, _all_except_vat, None)
-
-    _inherit = "account.invoice.line"
-    _columns = {
-        'price_unit_vat_included': fields.function(_amount_unit_vat_included, method=True,
-                                               string='Unit Price with VAT', type="float",
-                                               digits_compute= dp.get_precision('Account'), store=False),
-        'price_subtotal_vat_included': fields.function(_amount_subtotal_vat_included, method=True,
-                                               string='Subtotal with VAT', type="float",
-                                               digits_compute= dp.get_precision('Account'), store=False),
-        'price_unit_not_vat_included': fields.function(_amount_unit_not_vat_included, method=True,
-                                               string='Unit Price without VAT', type="float",
-                                               digits_compute= dp.get_precision('Account'), store=False),
-        'price_subtotal_not_vat_included': fields.function(_amount_subtotal_not_vat_included, method=True,
-                                               string='Subtotal without VAT', type="float",
-                                               digits_compute= dp.get_precision('Account'), store=False),
-    }
 account_invoice_line()
 
 class account_invoice(osv.osv):
     _inherit = "account.invoice"
-
-    def action_date_assign(self, cr, uid, ids, context={}):
-        r = self.afip_validation(cr, uid, ids, context)
-        r = r and super(account_invoice, self).action_date_assign(cr, uid, ids, context)
-        return r
 
     def afip_validation(self, cr, uid, ids, context={}):
         obj_resp_class = self.pool.get('afip.responsability_class')
