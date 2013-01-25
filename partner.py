@@ -44,7 +44,6 @@ class res_partner(osv.osv):
         elif document_type==False and document_number==False:
             country = vat[:2]
 
-
     def afip_validation(sefl, cr, uid, ids, context={}):
         """ Hay que validar si el partner no es de tipo 'consumidor final' tenga un CUIT asociado.
             - Si el cuit es extrangero, hay que asignar a document_number y document_type los correspondientes

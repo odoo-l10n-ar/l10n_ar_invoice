@@ -20,20 +20,18 @@
 ##############################################################################
 from osv import fields, osv
 import netsvc
+import logging
+
+_logger = logging.getLogger(__name__)
+_schema = logging.getLogger(__name__ + '.schema')
 
 class l10n_ar_invoice_del_journal(osv.osv_memory):
-    # Class members to send messages to the logger system.
-    _logger = netsvc.Logger()
-
-    def logger(self, log, msg):
-        self._logger.notifyChannel('addons.'+self._name, log, msg)
-
     _name = 'l10n_ar_invoice.del_journal'
     _description = 'Journal to delete'
     _columns = {
         'name': fields.char('Name', size=64, required=True),
         'journal_id': fields.many2one('account.journal', 'Journal', required=True),
-        'builder_id': fields.many2one('l10n_ar_invoice.installer', 'Builder Wizard')
+        'builder_id': fields.many2one('l10n_ar_invoice.config', 'Builder Wizard')
     }
 
     def doit(self, cr, uid, ids, context=None):
@@ -42,10 +40,10 @@ class l10n_ar_invoice_del_journal(osv.osv_memory):
         """
         obj_journal = self.pool.get('account.journal')
         to_delete = self.read(cr, uid, ids, ['name', 'journal_id'])
-        jids = [ j['journal_id'] for j in to_delete ]
+        jids = [ j['journal_id'][0] for j in to_delete ]
         names = [ j['name'] for j in to_delete ]
         obj_journal.unlink(cr, uid, jids)
-        self.logger(netsvc.LOG_INFO, 'Deleted journal %s' % ','.join(names))
+        _logger.info('Deleted journal %s' % ','.join(names))
 
 l10n_ar_invoice_del_journal()
 
@@ -54,12 +52,6 @@ def _selection_code_get(self, cr, uid, context={}):
     return cr.fetchall()
 
 class l10n_ar_invoice_new_sequence(osv.osv_memory):
-    # Class members to send messages to the logger system.
-    _logger = netsvc.Logger()
-
-    def logger(self, log, msg):
-        self._logger.notifyChannel('addons.'+self._name, log, msg)
-
     _name = 'l10n_ar_invoice.new_sequence'
     _description = 'Sequence to create'
     _columns = {
@@ -70,7 +62,7 @@ class l10n_ar_invoice_new_sequence(osv.osv_memory):
         'suffix': fields.char('Suffix', size=64),
         'padding': fields.integer('Padding'),
         'company_id': fields.many2one('res.company', 'Company'),
-        'builder_id': fields.many2one('l10n_ar_invoice.installer', 'Builder Wizard'),
+        'builder_id': fields.many2one('l10n_ar_invoice.config', 'Builder Wizard'),
     }
 
     def doit(self, cr, uid, ids, context=None):
@@ -84,17 +76,11 @@ class l10n_ar_invoice_new_sequence(osv.osv_memory):
         for val in vals:
             del val['id']
             sid = obj_sequence.create(cr, uid, val)
-        self.logger(netsvc.LOG_INFO, 'Sequences created %s' % ','.join(names))
+        _logger.info('Sequences created %s' % ','.join(names))
 
 l10n_ar_invoice_new_sequence()
 
 class l10n_ar_invoice_new_journal(osv.osv_memory):
-    # Class members to send messages to the logger system.
-    _logger = netsvc.Logger()
-
-    def logger(self, log, msg):
-        self._logger.notifyChannel('addons.'+self._name, log, msg)
-
     _name = 'l10n_ar_invoice.new_journal'
     _description = 'Journal to create'
     _columns = {
@@ -110,8 +96,7 @@ class l10n_ar_invoice_new_journal(osv.osv_memory):
         'sequence_name': fields.char('Sequence Name', size=64),
         'company_id': fields.many2one('res.company', 'Compania'),
         'currency_id': fields.many2one('res.currency', 'Moneda'),
-        'view_id': fields.many2one('account.journal_view', 'Journal view'),
-        'builder_id': fields.many2one('l10n_ar_invoice.installer', 'Builder Wizard'),
+        'builder_id': fields.many2one('l10n_ar_invoice.config', 'Builder Wizard'),
         'update_posted': fields.boolean('Allow Cancelling Entries'),
     }
 
@@ -121,25 +106,19 @@ class l10n_ar_invoice_new_journal(osv.osv_memory):
 
         vals = self.read(cr, uid, ids, ['name', 'code', 'type', 'company_id',
                                         'journal_class_id', 'point_of_sale', 'sequence_name',
-                                        'currency_id', 'view_id', 'update_posted'])
+                                        'currency_id', 'update_posted'])
         names = [ v['name'] for v in vals ]
         for val in vals:
             val['sequence_id'] = obj_sequence.search(cr, uid, [('name','=',val['sequence_name'])]).pop()
             del val['id']
             del val['sequence_name']
+            val = dict( (k, v[0]) if type(v) is tuple else (k, v) for k,v in val.items() )
             sid = obj_journal.create(cr, uid, val)
-        self.logger(netsvc.LOG_INFO, 'Journals created %s' % ','.join(names))
+        _logger.info('Journals created %s' % ','.join(names))
 
 l10n_ar_invoice_new_journal()
 
 class l10n_ar_invoice_config(osv.osv_memory):
-    # Class members to send messages to the logger system.
-    _logger = netsvc.Logger()
-
-    def logger(self, log, msg):
-        self._logger.notifyChannel('addons.'+self._name, log, msg)
-
-
     def _default_company(self, cr, uid, c, context=None):
         return self.pool.get('res.users').browse(cr, uid, uid, c).company_id.id
 
@@ -156,8 +135,8 @@ class l10n_ar_invoice_config(osv.osv_memory):
         'iibb': fields.char('IIBB', size=12, required=True),
         'start_date': fields.date('Inicio de Actividades', required=True),
         'responsability_id': fields.many2one('afip.responsability', 'Resposability', required=True, domain=[('code','!=','CF')]),
-        'do_export': fields.boolean(u'Realiza o realizará operaciones de Exportación', required=True),
-        'remove_old_journals': fields.boolean('Eliminar los diarios existentes', required=True,
+        'do_export': fields.boolean(u'Realiza o realizará operaciones de Exportación'),
+        'remove_old_journals': fields.boolean('Eliminar los diarios existentes',
             help=u'Si es su primera instalación indique que necesita borrar los diarios existentes. Si agrega un nuevo punto de ventas indique que no va a eliminar los journals. Igual, puede indicar cuales borra y cuales no en el próximo paso.'),
         'point_of_sale': fields.integer(u'Número de Punto de Venta',
             help=u'Este es el número que aparecerá como prefijo del número de la factura. Si solo tiene un solo talonario ese número es 1. Si necesita agregar un nuevo punto de venta debe acceder a opciones Administración/Configuración/Wizards de Configuración/Wizards de Configuración y ejecutar nuevamente el wizard de "Configuración de Facturación".'),
@@ -310,10 +289,10 @@ class l10n_ar_invoice_config(osv.osv_memory):
 
             elif sequence_by == 'class':
                 _code_to_type = {
-                    'sale': 'account.journal',
-                    'sale_refund': 'account.journal',
-                    'purchase': 'account.journal',
-                    'purchase_refund': 'account.journal',
+                    'sale': 'journal_sale_vou',
+                    'sale_refund': 'journal_sale_vou',
+                    'purchase': 'journal_pur_vou',
+                    'purchase_refund': 'journal_pur_vou',
                 }
                 #_code_to_type = dict( (k, obj_seq_type.search(cr, uid, [('code','=',v)])[0] ) for k,v in _code_to_type.items() )
                 _name = lambda item: u"Document class %s (%04i)" % (item['document_class'], point_of_sale)
@@ -362,10 +341,10 @@ class l10n_ar_invoice_config(osv.osv_memory):
 
             elif sequence_by == 'type':
                 _code_to_type = {
-                    'sale': 'account.journal',
-                    'sale_refund': 'account.journal',
-                    'purchase': 'account.journal',
-                    'purchase_refund': 'account.journal',
+                    'sale': 'journal_sale_vou',
+                    'sale_refund': 'journal_sale_vou',
+                    'purchase': 'journal_pur_vou',
+                    'purchase_refund': 'journal_pur_vou',
                 }
                 #_code_to_type = dict( (k, obj_seq_type.search(cr, uid, [('code','=',v)])[0] ) for k,v in _code_to_type.items() )
                 _group_type = {
@@ -392,17 +371,6 @@ class l10n_ar_invoice_config(osv.osv_memory):
                     }
                     seq.append(sequence)
 
-            # Setup view
-            obj_acc_journal_view = self.pool.get('account.journal.view')
-            view_id_invoice = obj_acc_journal_view.search(cr, uid, [('name', '=', 'Sale/Purchase Journal View')]).pop()
-            view_id_refund = obj_acc_journal_view.search(cr, uid, [('name', '=', 'Sale/Purchase Refund Journal View')]).pop()
-            view_id = {
-                'sale': view_id_invoice, 
-                'purchase': view_id_invoice, 
-                'sale_refund': view_id_refund, 
-                'purchase_refund': view_id_refund, 
-            }
-
             # Create journal
             for item in items:
                 journal = {
@@ -414,7 +382,6 @@ class l10n_ar_invoice_config(osv.osv_memory):
                     'point_of_sale': point_of_sale,
                     'sequence_name': rel[item['row']],
                     'type': item['type'],
-                    'view_id': view_id[item['type']],
                     'update_posted': update_posted
                 }
                 ret.append(journal)

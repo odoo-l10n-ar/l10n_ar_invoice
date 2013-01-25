@@ -22,7 +22,7 @@ from osv import fields, osv
 
 class afip_responsability(osv.osv):
     _name='afip.responsability'
-    _description='Responsabilidad frente al IVA'
+    _description='VAT Responsability'
     _columns={
         'name': fields.char('Name', size=64, required=True),
         'code': fields.char('Code', size=8, required=True),
@@ -33,7 +33,7 @@ afip_responsability()
 
 class afip_responsability_class(osv.osv):
     _name='afip.responsability_class'
-    _description='Interacción entre Responsabilidades'
+    _description='Responsability Interaction'
     _columns={
         'name': fields.char('Name', size=64),
         'emisor_id': fields.many2one('afip.responsability', 'Emisor', required=True),
@@ -46,7 +46,7 @@ afip_responsability_class()
 
 class afip_journal_class(osv.osv):
     _name='afip.journal_class'
-    _description='Tipo de Diario'
+    _description='AFIP Journal types'
     _columns={
         'name': fields.char('Name', size=64, required=True),
         'code': fields.char('Code', size=8, required=True),
@@ -64,6 +64,7 @@ afip_journal_class()
 
 class afip_document_type(osv.osv):
     _name = 'afip.document_type'
+    _description='AFIP document types'
     _columns = {
         'name': fields.char('Name', size=120),
         'code': fields.char('Code', size=16),

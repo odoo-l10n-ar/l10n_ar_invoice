@@ -29,9 +29,9 @@
             <field name="type">form</field>
             <field name="inherit_id" ref="account.view_account_journal_form"/>
             <field name="arch" type="xml">
-	      <page string="General Information" position="inside">
+	      <page string="Advanced Settings" position="inside">
                   <group colspan="2" col="2">
-		  <separator string="AFIP" colspan="4"/>
+                  <separator string="AFIP" colspan="4"/>
                   <field name="journal_class_id"/>
                   <field name="point_of_sale"/>
                   </group>

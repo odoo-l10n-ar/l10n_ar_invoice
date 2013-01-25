@@ -22,7 +22,6 @@
         <record id="view_invoice_ar_del_journal_tree" model="ir.ui.view">
             <field name="name">l10n_ar_invoice.del_journal.tree</field>
             <field name="model">l10n_ar_invoice.del_journal</field>
-            <field name="type">tree</field>
             <field name="arch" type="xml">
               <tree string="Journals to delete" editable="bottom" >
 			<field name="journal_id" widget="selection"/>
@@ -33,7 +32,6 @@
         <record id="view_invoice_ar_new_sequence_tree" model="ir.ui.view">
             <field name="name">l10n_ar_invoice.new_sequence.tree</field>
             <field name="model">l10n_ar_invoice.new_sequence</field>
-            <field name="type">tree</field>
             <field name="arch" type="xml">
               <tree string="Sequences to create" editable="bottom" >
 			<field name="name"/>
@@ -50,7 +48,6 @@
         <record id="view_invoice_ar_new_journal_tree" model="ir.ui.view">
             <field name="name">l10n_ar_invoice.new_journal.tree</field>
             <field name="model">l10n_ar_invoice.new_journal</field>
-            <field name="type">tree</field>
             <field name="arch" type="xml">
               <tree string="Journals to create" editable="bottom" >
 		    <field name="name"/>
@@ -64,7 +61,6 @@
         <record id="view_invoice_ar_new_journal_form" model="ir.ui.view">
             <field name="name">l10n_ar_invoice.new_journal.form</field>
             <field name="model">l10n_ar_invoice.new_journal</field>
-            <field name="type">form</field>
             <field name="arch" type="xml">
               <form string="Journals to create">
 		    <field name="name"/>
@@ -78,25 +74,13 @@
         <record id="view_invoice_ar_installer" model="ir.ui.view">
             <field name="name">l10n_ar_invoice.config.form</field>
             <field name="model">l10n_ar_invoice.config</field>
-            <field name="type">form</field>
-            <field name="inherit_id" ref="base.res_config_installer"/>
+            <field name="inherit_id" ref="base.res_config_view_base"/>
             <field name="arch" type="xml">
               <data>
-                    <form position="attributes">
-                        <attribute name="string">Invoice Configuration for Argentina</attribute>
-                    </form>
-                    <separator string="title" position="attributes">
-                         <attribute name="string">Invoice Configuration for Argentina</attribute>
-                    </separator>
-                    <xpath expr="//label[@string='description']" position="attributes">
-                        <attribute name="string">In this section you will configure all low level elements and journals nescesary for manage argentinian invoices types</attribute>
-                    </xpath>
-                    <xpath expr="//button[@string='Install Modules']" position="attributes">
-                        <attribute name="string">Configure</attribute>
-                    </xpath>
-                    <xpath expr='//separator[@string="vsep"]' position='attributes'>
-                        <attribute name='string'></attribute>
-                    </xpath>
+                <form position="attributes" version="7.0">
+                    <attribute name="string">Invoice Configuration for Argentina</attribute>
+                </form>
+                <group string="res_config_contents" position="replace">
 		    <group colspan="8">
 			    <field name="company_id" widget="selection"
 				    on_change="update_journals(company_id, responsability_id, do_export, remove_old_journals, sequence_by, point_of_sale, purchase_by_class)"
@@ -136,6 +120,7 @@
 				    </notebook>
 			    </group>
 		    </group>
+		    </group>
               </data>
             </field>
         </record>
@@ -158,3 +143,6 @@
 
     </data>
 </openerp>
+<!--
+     vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+-->
