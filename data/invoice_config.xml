@@ -83,7 +83,7 @@
                 <group string="res_config_contents" position="replace">
 		    <group colspan="8">
 			    <field name="company_id" widget="selection"
-				    on_change="update_journals(company_id, responsability_id, do_export, remove_old_journals, sequence_by, point_of_sale, purchase_by_class)"
+				    on_change="update_company_id(company_id)"
 				    /><newline/>
 			    <field name="cuit" /><newline/>
 			    <field name="iibb" /><newline/>
@@ -130,15 +130,16 @@
 	  <field name="type">ir.actions.act_window</field>
 	  <field name="res_model">l10n_ar_invoice.config</field>
 	  <field name="view_id" ref="view_invoice_ar_installer"/>
-          <field name="view_type">form</field>
-          <field name="view_mode">form</field>
-          <field name="target">new</field>
+      <field name="view_type">form</field>
+      <field name="view_mode">form</field>
+      <field name="target">new</field>
 	</record>
 
 	<record id="invoice_installer_todo" model="ir.actions.todo">
+        <field name="name">Argentina Invoices/Journals Configuration</field>
 		<field name="action_id" ref="action_invoice_ar_installer"/>
-		<field name="sequence">12</field>
-		<field name="restart">always</field>
+		<field name="sequence">20</field>
+		<field name="type">automatic</field>
 	</record>
 
     </data>

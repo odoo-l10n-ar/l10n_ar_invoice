@@ -39,9 +39,17 @@ class l10n_ar_invoice_del_journal(osv.osv_memory):
         Delete journals.
         """
         obj_journal = self.pool.get('account.journal')
+        obj_cb_line = self.pool.get('account.journal.cashbox.line')
+
         to_delete = self.read(cr, uid, ids, ['name', 'journal_id'])
         jids = [ j['journal_id'][0] for j in to_delete ]
         names = [ j['name'] for j in to_delete ]
+
+        # Remove dependencies
+        cb_line_ids = obj_cb_line.search(cr, uid, [('journal_id','in',jids)])
+        obj_cb_line.unlink(cr, uid, cb_line_ids)
+
+        # Remove journals
         obj_journal.unlink(cr, uid, jids)
         _logger.info('Deleted journal %s' % ','.join(names))
 
@@ -95,7 +103,7 @@ class l10n_ar_invoice_new_journal(osv.osv_memory):
         'point_of_sale': fields.integer('Point of sale'),
         'sequence_name': fields.char('Sequence Name', size=64),
         'company_id': fields.many2one('res.company', 'Compania'),
-        'currency_id': fields.many2one('res.currency', 'Moneda'),
+        'currency': fields.many2one('res.currency', 'Moneda'),
         'builder_id': fields.many2one('l10n_ar_invoice.config', 'Builder Wizard'),
         'update_posted': fields.boolean('Allow Cancelling Entries'),
     }
@@ -106,7 +114,7 @@ class l10n_ar_invoice_new_journal(osv.osv_memory):
 
         vals = self.read(cr, uid, ids, ['name', 'code', 'type', 'company_id',
                                         'journal_class_id', 'point_of_sale', 'sequence_name',
-                                        'currency_id', 'update_posted'])
+                                        'currency', 'update_posted'])
         names = [ v['name'] for v in vals ]
         for val in vals:
             val['sequence_id'] = obj_sequence.search(cr, uid, [('name','=',val['sequence_name'])]).pop()
@@ -155,7 +163,6 @@ class l10n_ar_invoice_config(osv.osv_memory):
 
     _defaults= {
         'company_id': _default_company,
-        'responsability_id': _default_responsability,
         'do_export': False,
         'remove_old_journals': True,
         'sequence_by': 'type',
@@ -197,6 +204,22 @@ class l10n_ar_invoice_config(osv.osv_memory):
         d = dict( (p['name'].encode('ascii'), int(p['value_reference'].split(',')[1])) for p in prop )
         r = dict( (k, d[v]) for k,v in properties.items() )
         return r
+
+    def update_company_id(self, cr, uid, ids, company_id, context=None):
+        """
+        Set cuit & iibb
+        """
+        v = {}
+        if company_id:
+            company_obj = self.pool.get('res.company')
+            company = company_obj.browse(cr, uid, company_id)
+            v = {
+                'cuit': company.partner_id.document_number,
+                'iibb': company.partner_id.iibb,
+                'start_date': company.partner_id.start_date,
+                'responsability_id': company.partner_id.responsability_id.id,
+            }
+        return { 'value': v }
 
     def update_del_journals(self, cr, uid, ids, company_id, responsability_id, do_export, remove_old_journals, sequence_by, point_of_sale, purchase_by_class, context=None):
         """
@@ -267,10 +290,10 @@ class l10n_ar_invoice_config(osv.osv_memory):
             # Create sequence
             if sequence_by == 'journal':
                 _code_to_type = {
-                    'sale': 'account.invoice.out_invoice',
-                    'sale_refund': 'account.invoice.out_refund',
-                    'purchase': 'account.invoice.in_invoice',
-                    'purchase_refund': 'account.invoice.in_refund',
+                    'sale': 'journal_sale_vou',
+                    'sale_refund': 'journal_sale_vou',
+                    'purchase': 'journal_pur_vou',
+                    'purchase_refund': 'journal_pur_vou',
                 }
                 #_code_to_type = dict( (k, obj_seq_type.search(cr, uid, [('code','=',v)])[0] ) for k,v in _code_to_type.items() )
 
@@ -378,7 +401,7 @@ class l10n_ar_invoice_config(osv.osv_memory):
                     'code': u"%s%04i" % (item['code'], point_of_sale),
                     'journal_class_id': item['document_class_id'],
                     'company_id': company_id,
-                    'currency_id': currency_id,
+                    'currency': currency_id,
                     'point_of_sale': point_of_sale,
                     'sequence_name': rel[item['row']],
                     'type': item['type'],
