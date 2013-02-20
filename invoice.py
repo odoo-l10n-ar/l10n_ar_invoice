@@ -20,7 +20,6 @@
 ##############################################################################
 from openerp.osv import fields, osv
 from openerp.tools.translate import _
-import decimal_precision as dp
 
 _all_taxes = lambda x: True
 _all_except_vat = lambda x: x.name not in [u'IVA Ventas 21%', u'IVA Compras 21%']
