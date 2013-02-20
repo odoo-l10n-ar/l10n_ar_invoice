@@ -20,7 +20,7 @@
 ##############################################################################
 
 import time, re
-from report import report_sxw
+from openerp.report import report_sxw
 
 _re_ar_vat = re.compile('ar(\d\d)(\d*)(\d)')
 
