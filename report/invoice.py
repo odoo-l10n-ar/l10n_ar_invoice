@@ -49,7 +49,7 @@ class ar_account_invoice(report_sxw.rml_parse):
             'copies': ['ORIGINAL','DUPLICADO','TRIPLICADO'],
         })
 
-from netsvc import Service
+from openerp.netsvc import Service
 del Service._services['report.account.invoice']
 
 report_sxw.report_sxw(

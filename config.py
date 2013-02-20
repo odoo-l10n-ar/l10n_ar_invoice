@@ -19,7 +19,6 @@
 #
 ##############################################################################
 from openerp.osv import fields, osv
-import netsvc
 import logging
 
 _logger = logging.getLogger(__name__)
