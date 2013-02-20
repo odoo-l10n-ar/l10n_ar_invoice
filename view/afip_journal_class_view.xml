@@ -40,7 +40,6 @@
         <record id="view_afip_journal_class_tree" model="ir.ui.view">
             <field name="name">afip.journal_class.tree</field>
             <field name="model">afip.journal_class</field>
-            <field name="type">tree</field>
             <field name="arch" type="xml">
                 <tree string="AFIP Journal class">
                     <field name="name"/>
