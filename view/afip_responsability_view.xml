@@ -26,7 +26,6 @@
         <record id="view_afip_responsability_form" model="ir.ui.view">
             <field name="name">afip.responsability.form</field>
             <field name="model">afip.responsability</field>
-            <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="AFIP Responsability">
                     <field name="name"/>

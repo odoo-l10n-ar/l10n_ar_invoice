@@ -26,7 +26,6 @@
         <record id="view_afip_journal_class_form" model="ir.ui.view">
             <field name="name">afip.journal_class.form</field>
             <field name="model">afip.journal_class</field>
-            <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="AFIP Journal class">
                     <field name="name"/>
