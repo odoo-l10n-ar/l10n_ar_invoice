@@ -57,7 +57,7 @@
 
 - Print invoice
 - !python {model: account.invoice}: |
-    from tools.test_reports import try_report
+    from openerp.tools.test_reports import try_report
     try_report(cr, uid, 'report.account.invoice', [ref('inv_ri2ri')])
 
 

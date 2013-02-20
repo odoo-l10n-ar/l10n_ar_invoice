@@ -19,7 +19,7 @@
 #
 ##############################################################################
 from openerp.osv import fields, osv
-from tools.translate import _
+from openerp.tools.translate import _
 import decimal_precision as dp
 
 _all_taxes = lambda x: True
