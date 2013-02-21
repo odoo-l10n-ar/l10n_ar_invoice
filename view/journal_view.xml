@@ -28,13 +28,15 @@
             <field name="name">account.journal.ar.form</field>
             <field name="inherit_id" ref="account.view_account_journal_form"/>
             <field name="arch" type="xml">
-	      <page string="Advanced Settings" position="inside">
-                  <group colspan="2" col="2">
-                  <separator string="AFIP" colspan="4"/>
-                  <field name="journal_class_id"/>
-                  <field name="point_of_sale"/>
-                  </group>
-              </page>
+                <notebook position="inside">
+                    <page string="AFIP">
+                        <group colspan="2" col="2">
+                            <separator string="AFIP" colspan="4"/>
+                            <field name="journal_class_id"/>
+                            <field name="point_of_sale"/>
+                        </group>
+                    </page>
+                </notebook>
             </field>
         </record>
 
