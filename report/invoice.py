@@ -21,6 +21,7 @@
 
 import time, re
 from openerp.report import report_sxw
+import openerp.report.interface
 
 _re_ar_vat = re.compile('ar(\d\d)(\d*)(\d)')
 
@@ -49,15 +50,15 @@ class ar_account_invoice(report_sxw.rml_parse):
             'copies': ['ORIGINAL','DUPLICADO','TRIPLICADO'],
         })
 
-import openerp.report.interface
-del openerp.report.interface.report_int['report.account.invoice']
+def publish_account_invoice():
+    del openerp.report.interface.report_int['report.account.invoice']
 
-report_sxw.report_sxw(
-    'report.account.invoice',
-    'account.invoice',
-    'addons/l10n_ar_wsafip/report/invoice.rml',
-    parser=ar_account_invoice,
-    header=False
-)
+    report_sxw.report_sxw(
+        'report.account.invoice',
+        'account.invoice',
+        'addons/l10n_ar_wsafip/report/invoice.rml',
+        parser=ar_account_invoice,
+        header=False
+    )
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
