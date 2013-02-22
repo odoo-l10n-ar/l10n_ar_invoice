@@ -115,8 +115,8 @@
       <nextFrame/>
       <para style='body'>[[ o.partner_id.printed_vat or removeParentNode('para') ]]</para>
       <para style='body'>[[ o.partner_id.title.name or '' ]] [[ o.partner_id.name ]]</para>
-      <para style='body'>[[ o.address_invoice_id.street ]], ( [[ o.address_invoice_id.zip or '----' ]] )</para>
-      <para style='body'>[[ o.address_invoice_id.city or '']], [[ o.address_invoice_id.state_id.name or '' ]], [[ o.address_invoice_id.country_id.name or '' ]].</para>
+      <para style='body'>[[ o.partner_id_id.street ]], ( [[ o.partner_id_id.zip or '----' ]] )</para>
+      <para style='body'>[[ o.partner_id_id.city or '']], [[ o.partner_id_id.state_id.name or '' ]], [[ o.partner_id_id.country_id.name or '' ]].</para>
       <para style='body'>Responsable [[ (not o.partner_id.vat_subjected) and removeParentNode('para') ]] [[ o.partner_id.property_account_position.name or '' ]]</para>
       <para style='body'>No Responsable [[ o.partner_id.vat_subjected and removeParentNode('para') ]] [[ o.partner_id.property_account_position.name or '' ]]</para>
       <para style='body'>[[ o.payment_term.name or 'Sin definir' ]]</para>

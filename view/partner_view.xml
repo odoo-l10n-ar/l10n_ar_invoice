@@ -28,13 +28,20 @@
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
-		        <field name="vat_subjected" position="after">
-                    <field name="responsability_id" widget="selection" colspan="6"/>
-                    <field name="document_number" colspan="4"/>
-                    <field name="document_type" widget="selection"/>
-                    <field name="iibb"/>
-                    <field name="start_date"/>
-                </field>
+                <data>
+                    <field name="parent_id" position="before">
+                        <group col="3">
+                            <field name="document_type" nolabel="1" colspan="1"/>
+                            <field name="document_number" nolabel="1" colspan="1"/>
+                            <div/>
+                        </group>
+                    </field>
+                    <field name="property_account_position" position="before">
+                        <field name="responsability_id" widget="selection"/>
+                        <field name="iibb"/>
+                        <field name="start_date"/>
+                    </field>
+                </data>
             </field>
         </record>
 

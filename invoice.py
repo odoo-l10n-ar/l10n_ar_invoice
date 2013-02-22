@@ -44,13 +44,11 @@ class account_invoice_line(osv.osv):
 
     _inherit = "account.invoice.line"
 
-    def price_calc(self, cr, uid, ids, use_vat=True, tax_filter=None, quantity=None, discount=None):
+    def price_calc(self, cr, uid, ids, use_vat=True, tax_filter=None, quantity=None, discount=None, context=None):
         res = {}
         tax_obj = self.pool.get('account.tax')
         cur_obj = self.pool.get('res.currency')
         _tax_filter = tax_filter or ( use_vat and _all_taxes ) or _all_except_vat
-        if discount and quantity is None:
-            import pdb; pdb.set_trace()
         for line in self.browse(cr, uid, ids):
             _quantity = quantity if quantity is not None else line.quantity
             _discount = discount if discount is not None else line.discount
@@ -59,7 +57,6 @@ class account_invoice_line(osv.osv):
             taxes = tax_obj.compute_all(cr, uid,
                                         _tax_ids, _price, _quantity,
                                         product=line.product_id,
-                                        address_id=line.invoice_id.address_invoice_id,
                                         partner=line.invoice_id.partner_id)
             res[line.id] = taxes['total_included']
             if line.invoice_id:
