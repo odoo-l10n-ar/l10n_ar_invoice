@@ -18,7 +18,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp.osv import fields, osv
+from openerp.osv import fields, osv, orm
 from openerp.tools.translate import _
 
 _all_taxes = lambda x: True
@@ -78,7 +78,7 @@ class account_invoice(osv.osv):
                 continue
 
             # Partner responsability ?
-            if isinstance(invoice.partner_id.responsability_id, osv.orm.browse_null):
+            if isinstance(invoice.partner_id.responsability_id, orm.browse_null):
                 raise osv.except_osv(_('No responsability'),
                                      _('Your partner have not afip responsability assigned. Assign one please.'))
 
@@ -89,7 +89,6 @@ class account_invoice(osv.osv):
             # You can emmit this document?
             resp_class = [ rc.emisor_id.code for rc in obj_resp_class.browse(cr, uid, resp_class_ids) ]
             if invoice.journal_id.company_id.partner_id.responsability_id.code not in resp_class:
-                import pdb; pdb.set_trace()
                 raise osv.except_osv(_('Invalid emisor'),
                                      _('Your responsability with AFIP dont let you generate this kind of document.'))
 
