@@ -82,6 +82,7 @@ class l10n_ar_invoice_new_sequence(osv.osv_memory):
         names = [ v['name'] for v in vals ]
         for val in vals:
             del val['id']
+            val['implementation'] = 'no_gap'
             sid = obj_sequence.create(cr, uid, val)
         _logger.info('Sequences created %s' % ','.join(names))
 
