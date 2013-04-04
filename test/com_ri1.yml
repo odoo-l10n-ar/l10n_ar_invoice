@@ -1,31 +1,4 @@
 #
-# Este test crea una nueva compania utilizando el wizard de creación de companias.
-#
-- !record {model: base.setup.company, id: com_wiz_ivari }:
-        company_id: com_ivari
-        name: Coop. Trab. Moldeo Interactive Ltda.
-        account_no: None
-        city: Buenos Aires
-        country_id: !ref {model: res.country, search: "[('name','=','Argentina')]"}
-        currency: base.ARS
-        email: info@moldeo.coop
-        phone: (+54.11).4771.4164
-        state_id: !ref {model: res.country, search: "[('name','=','Capital Federal')]"}
-        street: Castillo 1336
-        street2: 12A
-        website: interactive.moldeo.coop
-        zip: 1414
-
-- !python {model: base.setup.company }: |
-    self.view_init(cr, uid, [ref("com_wiz_ivari")], {})
-    self.execute(cr, uid, [ref("com_wiz_ivari")], {})
-
-- !python {model: res.company }: |
-    company_ids = self.search(cr, uid, [('name','=','Coop. Trab. Moldeo Interactive Ltda.')])
-    if (len(company_ids) != 1):
-        raise AssertionError, 'Cant create company'
-
-#
 # Wizard que selecciona la contabilidad argentina
 #
 - !record {model: account.installer, id: acc_wiz_ivari }:

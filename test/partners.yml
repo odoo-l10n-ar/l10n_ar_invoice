@@ -6,12 +6,11 @@
     responsability_id: res_CF
     document_type: dt_DNI
     document_number: 25095454
-    address:
-        - street: Av. Rivadavia
-          city: Capital Federal
-          state_id: l10n_ar_states.C
-          country_id: base.ar
-          zip: 1407
+    street: Av. Rivadavia
+    city: Capital Federal
+    state_id: l10n_ar_states.C
+    country_id: base.ar
+    zip: 1407
 
 #
 # IVA exento
@@ -23,12 +22,11 @@
     document_type: dt_CUIT
     document_number: 30681521077
     vat: ar30681521077
-    address:
-        - street: Azcuenaga 770
-          city: Capital Federal
-          state_id: l10n_ar_states.C
-          country_id: base.ar
-          zip: 1029
+    street: Azcuenaga 770
+    city: Capital Federal
+    state_id: l10n_ar_states.C
+    country_id: base.ar
+    zip: 1029
 
 - Create company
 - !record {model: res.company, id: com_ivae }:
@@ -49,12 +47,11 @@
     document_type: dt_CUIT
     document_number: 30712007288
     vat: ar30712007288
-    address:
-        - street: Castillo 1336 12A 
-          city: Capital Federal
-          state_id: l10n_ar_states.C
-          country_id: base.ar
-          zip: 1414
+    street: Castillo 1336 12A 
+    city: Capital Federal
+    state_id: l10n_ar_states.C
+    country_id: base.ar
+    zip: 1414
 
 - Create company
 - !record {model: res.company, id: com_ivari }:
@@ -129,12 +126,11 @@
     document_type: dt_CUIT
     document_number: 30642332771
     vat: ar30642332771
-    address:
-        - street: Roca Julio A. Pte. Av. 733, 5
-          city: Capital Federal
-          state_id: l10n_ar_states.C
-          country_id: base.ar
-          zip: 1067
+    street: Roca Julio A. Pte. Av. 733, 5
+    city: Capital Federal
+    state_id: l10n_ar_states.C
+    country_id: base.ar
+    zip: 1067
 
 - Create company
 - !record {model: res.company, id: com_ivarni }:
@@ -168,12 +164,11 @@
     document_type: dt_CUIT
     document_number: 33707348629
     vat: ar33707348629
-    address:
-        - street: Urquiza 494
-          city: Parana
-          state_id: l10n_ar_states.E
-          country_id: base.ar
-          zip: 3100
+    street: Urquiza 494
+    city: Parana
+    state_id: l10n_ar_states.E
+    country_id: base.ar
+    zip: 3100
 
 - Create company
 - !record {model: res.company, id: com_ivanr }:
@@ -207,12 +202,11 @@
     document_type: dt_CUIT
     document_number: 23250954549
     vat: ar23250954549
-    address:
-        - street: Av. Rivadavia
-          city: Capital Federal
-          state_id: l10n_ar_states.C
-          country_id: base.ar
-          zip: 1407
+    street: Av. Rivadavia
+    city: Capital Federal
+    state_id: l10n_ar_states.C
+    country_id: base.ar
+    zip: 1407
 
 - Create company
 - !record {model: res.company, id: com_rm }:

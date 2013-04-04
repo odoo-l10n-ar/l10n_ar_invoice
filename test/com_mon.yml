@@ -14,31 +14,6 @@
 #+      if hasattr(self, 'is_test'): return
 #       modules = self.pool.get('ir.module.module')
 #        
-- !record {model: base.setup.company, id: com_wiz_rm }:
-        company_id: com_rm
-        name: Cristian S. Rocha 
-        account_no: 57321
-        city: Buenos Aires
-        country_id: !ref {model: res.country, search: "[('name','=','Argentina')]"}
-        currency: base.ARS
-        email: cristian.rocha@moldeo.coop
-        phone: (+54.11).4771.4164
-        state_id: !ref {model: res.country, search: "[('name','=','Capital Federal')]"}
-        street: Av. Rivadavia 9588
-        street2: 16E
-        website: moldeo.coop
-        zip: 1407
-
-- !python {model: base.setup.company }: |
-    self.is_test = True
-    self.view_init(cr, uid, [ref("com_wiz_rm")], {})
-    self.execute(cr, uid, [ref("com_wiz_rm")], {})
-
-- !python {model: res.company }: |
-    company_ids = self.search(cr, uid, [('name','=','Cristian S. Rocha')])
-    if (len(company_ids) != 1):
-        raise AssertionError, 'Cant create company'
-
 #
 # Wizard que selecciona la contabilidad argentina
 #

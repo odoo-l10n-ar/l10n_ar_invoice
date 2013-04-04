@@ -45,11 +45,11 @@ Incluye:
     'test': [
         'test/partners.yml',
         'test/com_ri1.yml',
-        'test/com_ri2.yml',
-        'test/com_mon.yml',
-        'test/inv_ri2ri.yml',
-        'test/inv_rm2ri.yml',
-        'test/inv_ri2rm.yml',
+        #'test/com_ri2.yml',
+        #'test/com_mon.yml',
+        #'test/inv_ri2ri.yml',
+        #'test/inv_rm2ri.yml',
+        #'test/inv_ri2rm.yml',
         #'test/bug_1042944.yml',
     ],
     'update_xml': [
