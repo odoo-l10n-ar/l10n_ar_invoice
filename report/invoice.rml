@@ -137,7 +137,7 @@
         <tr>
 	  <td><para><b>[[ l.name ]]</b></para></td>
           <td>[[ formatLang(l.quantity) ]]</td>
-          <td>[[ formatLang(l.uos_id.name) ]]</td>
+          <td>[[ l.uos_id.name ]]</td>
 	  <td><para>[[ formatLang(l.price_calc(use_vat=not is_class(o, 'A'), quantity=1)[l.id]) ]] $</para></td>
 	  <td><para>[[ formatLang(l.price_calc(use_vat=not is_class(o, 'A'))[l.id]) ]] $</para></td>
         </tr>
