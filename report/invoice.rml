@@ -135,7 +135,7 @@
           <td>Importe</td>
         </tr>
         <tr>
-	  <td><para><b>[[ l.name ]]</b></para><para>[[ l.comment ]]</para></td>
+	  <td><para><b>[[ l.name ]]</b></para></td>
           <td>[[ formatLang(l.quantity) ]]</td>
           <td>[[ formatLang(l.uos_id.name) ]]</td>
 	  <td><para>[[ formatLang(l.price_calc(use_vat=not is_class(o, 'A'), quantity=1)[l.id]) ]] $</para></td>
