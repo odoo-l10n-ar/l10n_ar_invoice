@@ -189,6 +189,7 @@ class l10n_ar_invoice_config(osv.osv_memory):
         """
         Return id of accounts from properties
         """
+        import pdb; pdb.set_trace()
         obj_property = self.pool.get('ir.property')
         properties = {
             'sale': 'property_account_income_categ',
