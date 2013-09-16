@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
-    <data noupdate="True">
+    <data noupdate="False">
         <record model='afip.journal_class' id='jc_FVA'>
             <field name='code'>FVA</field>
             <field name='type'>sale</field>
             <field name='name'>Factura [Venta A]</field>
             <field name='document_class'>A</field>
 	    <field name='afip_code'>001</field>
+	    <field name='active' eval="True"/>
         </record> 
         <record model='afip.journal_class' id='jc_DVA'>
             <field name='code'>DVA</field>
@@ -14,6 +15,7 @@
             <field name='name'>Nota de Débito [Venta A]</field>
             <field name='document_class'>A</field>
 	    <field name='afip_code'>002</field>
+	    <field name='active' eval="True"/>
         </record> 
         <record model='afip.journal_class' id='jc_CVA'>
             <field name='code'>CVA</field>
@@ -21,6 +23,7 @@
             <field name='name'>Nota de Crédito [Venta A]</field>
             <field name='document_class'>A</field>
 	    <field name='afip_code'>003</field>
+	    <field name='active' eval="True"/>
         </record> 
 
         <record model='afip.journal_class' id='jc_FVB'>
@@ -29,6 +32,7 @@
             <field name='name'>Factura [Venta B]</field>
             <field name='document_class'>B</field>
 	    <field name='afip_code'>006</field>
+	    <field name='active' eval="True"/>
         </record> 
         <record model='afip.journal_class' id='jc_DVB'>
             <field name='code'>DVB</field>
@@ -36,6 +40,7 @@
             <field name='name'>Nota de Débito [Venta B]</field>
             <field name='document_class'>B</field>
 	    <field name='afip_code'>007</field>
+	    <field name='active' eval="True"/>
         </record> 
         <record model='afip.journal_class' id='jc_CVB'>
             <field name='code'>CVB</field>
@@ -43,6 +48,7 @@
             <field name='name'>Nota de Crédito [Venta B]</field>
             <field name='document_class'>B</field>
 	    <field name='afip_code'>008</field>
+	    <field name='active' eval="True"/>
         </record> 
 
         <record model='afip.journal_class' id='jc_FVC'>
@@ -51,6 +57,7 @@
             <field name='name'>Factura [Venta C]</field>
             <field name='document_class'>C</field>
 	    <field name='afip_code'>011</field>
+	    <field name='active' eval="True"/>
         </record> 
         <record model='afip.journal_class' id='jc_DVC'>
             <field name='code'>DVC</field>
@@ -58,6 +65,7 @@
             <field name='name'>Nota de Débito [Venta C]</field>
             <field name='document_class'>C</field>
 	    <field name='afip_code'>012</field>
+	    <field name='active' eval="True"/>
         </record> 
         <record model='afip.journal_class' id='jc_CVC'>
             <field name='code'>CVC</field>
@@ -65,6 +73,7 @@
             <field name='name'>Nota de Crédito [Venta C]</field>
             <field name='document_class'>C</field>
 	    <field name='afip_code'>013</field>
+	    <field name='active' eval="True"/>
         </record> 
 
         <record model='afip.journal_class' id='jc_FVM'>
@@ -73,6 +82,7 @@
             <field name='name'>Factura [Venta M]</field>
             <field name='document_class'>M</field>
 	    <field name='afip_code'>051</field>
+	    <field name='active' eval="True"/>
         </record> 
         <record model='afip.journal_class' id='jc_DVM'>
             <field name='code'>DVM</field>
@@ -80,6 +90,7 @@
             <field name='name'>Nota de Débito [Venta M]</field>
             <field name='document_class'>M</field>
 	    <field name='afip_code'>052</field>
+	    <field name='active' eval="True"/>
         </record> 
         <record model='afip.journal_class' id='jc_CVM'>
             <field name='code'>CVM</field>
@@ -87,6 +98,7 @@
             <field name='name'>Nota de Crédito [Venta M]</field>
             <field name='document_class'>M</field>
 	    <field name='afip_code'>053</field>
+	    <field name='active' eval="True"/>
         </record> 
 
         <record model='afip.journal_class' id='jc_FVE'>
@@ -95,6 +107,7 @@
             <field name='name'>Factura [Venta E]</field>
             <field name='document_class'>E</field>
 	    <field name='afip_code'>019</field>
+	    <field name='active' eval="True"/>
         </record> 
         <record model='afip.journal_class' id='jc_DVE'>
             <field name='code'>DVE</field>
@@ -102,6 +115,7 @@
             <field name='name'>Nota de Débito [Venta E]</field>
             <field name='document_class'>E</field>
 	    <field name='afip_code'>020</field>
+	    <field name='active' eval="True"/>
         </record> 
         <record model='afip.journal_class' id='jc_CVE'>
             <field name='code'>CVE</field>
@@ -109,6 +123,7 @@
             <field name='name'>Nota de Crédito [Venta E]</field>
             <field name='document_class'>E</field>
 	    <field name='afip_code'>021</field>
+	    <field name='active' eval="True"/>
         </record> 
 
         <record model='afip.journal_class' id='jc_FCA'>
@@ -116,18 +131,21 @@
             <field name='type'>purchase</field>
             <field name='name'>Factura [Compra A]</field>
             <field name='document_class'>A</field>
+	    <field name='active' eval="True"/>
         </record> 
         <record model='afip.journal_class' id='jc_DCA'>
             <field name='code'>DCA</field>
             <field name='type'>purchase</field>
             <field name='name'>Nota de Débito [Compra A]</field>
             <field name='document_class'>A</field>
+	    <field name='active' eval="True"/>
         </record> 
         <record model='afip.journal_class' id='jc_CCA'>
             <field name='code'>CCA</field>
             <field name='type'>purchase_refund</field>
             <field name='name'>Nota de Crédito [Compra A]</field>
             <field name='document_class'>A</field>
+	    <field name='active' eval="True"/>
         </record> 
 
         <record model='afip.journal_class' id='jc_FCB'>
@@ -135,18 +153,21 @@
             <field name='type'>purchase</field>
             <field name='name'>Factura [Compra B]</field>
             <field name='document_class'>B</field>
+	    <field name='active' eval="True"/>
         </record> 
         <record model='afip.journal_class' id='jc_DCB'>
             <field name='code'>DCB</field>
             <field name='type'>purchase</field>
             <field name='name'>Nota de Débito [Compra B]</field>
             <field name='document_class'>B</field>
+	    <field name='active' eval="True"/>
         </record> 
         <record model='afip.journal_class' id='jc_CCB'>
             <field name='code'>CCB</field>
             <field name='type'>purchase_refund</field>
             <field name='name'>Nota de Crédito [Compra B]</field>
             <field name='document_class'>B</field>
+	    <field name='active' eval="True"/>
         </record> 
 
         <record model='afip.journal_class' id='jc_FCC'>
@@ -154,18 +175,21 @@
             <field name='type'>purchase</field>
             <field name='name'>Factura [Compra C]</field>
             <field name='document_class'>C</field>
+	    <field name='active' eval="True"/>
         </record> 
         <record model='afip.journal_class' id='jc_DCC'>
             <field name='code'>DCC</field>
             <field name='type'>purchase</field>
             <field name='name'>Nota de Débito [Compra C]</field>
             <field name='document_class'>C</field>
+	    <field name='active' eval="True"/>
         </record> 
         <record model='afip.journal_class' id='jc_CCC'>
             <field name='code'>CCC</field>
             <field name='type'>purchase_refund</field>
             <field name='name'>Nota de Crédito [Compra C]</field>
             <field name='document_class'>C</field>
+	    <field name='active' eval="True"/>
         </record> 
 
         <record model='afip.journal_class' id='jc_FCM'>
@@ -173,18 +197,21 @@
             <field name='type'>purchase</field>
             <field name='name'>Factura [Compra M]</field>
             <field name='document_class'>M</field>
+	    <field name='active' eval="True"/>
         </record> 
         <record model='afip.journal_class' id='jc_DCM'>
             <field name='code'>DCM</field>
             <field name='type'>purchase</field>
             <field name='name'>Nota de Débito [Compra M]</field>
             <field name='document_class'>M</field>
+	    <field name='active' eval="True"/>
         </record> 
         <record model='afip.journal_class' id='jc_CCM'>
             <field name='code'>CCM</field>
             <field name='type'>purchase_refund</field>
             <field name='name'>Nota de Crédito [Compra M]</field>
             <field name='document_class'>M</field>
+	    <field name='active' eval="True"/>
         </record> 
 
         <record model='afip.journal_class' id='jc_FCX'>
@@ -192,18 +219,21 @@
             <field name='type'>purchase</field>
             <field name='name'>Factura [Compra]</field>
             <field name='document_class'>X</field>
+	    <field name='active' eval="True"/>
         </record> 
         <record model='afip.journal_class' id='jc_DCX'>
             <field name='code'>DCX</field>
             <field name='type'>purchase</field>
             <field name='name'>Nota de Débito [Compra]</field>
             <field name='document_class'>X</field>
+	    <field name='active' eval="True"/>
         </record> 
         <record model='afip.journal_class' id='jc_CCX'>
             <field name='code'>CCX</field>
             <field name='type'>purchase_refund</field>
             <field name='name'>Nota de Crédito [Compra]</field>
             <field name='document_class'>X</field>
+	    <field name='active' eval="True"/>
         </record> 
     </data>
 </openerp>

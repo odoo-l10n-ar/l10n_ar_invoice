@@ -30,6 +30,7 @@
                 <form string="AFIP Responsability">
                     <field name="name"/>
                     <field name='code'/>
+                    <field name='active'/>
                 </form>
             </field>
         </record>
@@ -42,6 +43,7 @@
                 <tree string="AFIP Responsability">
                     <field name="name"/>
                     <field name="code"/>
+                    <field name="active"/>
                 </tree>
             </field>
         </record>

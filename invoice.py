@@ -64,6 +64,30 @@ class account_invoice_line(osv.osv):
                 res[line.id] = cur_obj.round(cr, uid, cur, res[line.id])
         return res
 
+    def compute_all(self, cr, uid, ids, tax_filter=None, context=None):
+        res = {}
+        tax_obj = self.pool.get('account.tax')
+        cur_obj = self.pool.get('res.currency')
+        _tax_filter = tax_filter
+        for line in self.browse(cr, uid, ids):
+            _quantity = line.quantity
+            _discount = line.discount
+            _price = line.price_unit * (1-(_discount or 0.0)/100.0)
+            _tax_ids = filter(_tax_filter, line.invoice_line_tax_id)
+            taxes = tax_obj.compute_all(cr, uid,
+                                        _tax_ids, _price, _quantity,
+                                        product=line.product_id,
+                                        partner=line.invoice_id.partner_id)
+
+            _round = (lambda x: cur_obj.round(cr, uid, line.invoice_id.currency_id, x)) if line.invoice_id else (lambda x: x)
+            res[line.id] = {
+                'amount_untaxed': _round(taxes['total']),
+                'amount_tax': _round(taxes['total_included'])-_round(taxes['total']),
+                'amount_total': _round(taxes['total_included']), 
+                'taxes': taxes['taxes'],
+            }
+        return res.get(len(ids)==1 and ids[0], res)
+
 account_invoice_line()
 
 class account_invoice(osv.osv):
@@ -104,6 +128,28 @@ class account_invoice(osv.osv):
                 raise osv.except_osv(_('Partner without Identification for total invoices > $1000.-'),
                                      _('You must define valid document type and number for this Final Consumer.'))
         return True
+
+    def compute_all(self, cr, uid, ids, line_filter=lambda line: True, tax_filter=lambda tax: True, context=None):
+        res = {}
+        for inv in self.browse(cr, uid, ids, context=context):
+            amounts = []
+            for line in inv.invoice_line:
+                if line_filter(line):
+                    amounts.append(line.compute_all(tax_filter=tax_filter, context=context))
+
+            s = {
+                 'amount_total': 0,
+                 'amount_tax': 0,
+                 'amount_untaxed': 0,
+                 'taxes': [],
+                }
+            for amount in amounts:
+                for key, value in amount.items():
+                    s[key] = s.get(key, 0) + value
+
+            res[inv.id] = s
+
+        return res.get(len(ids)==1 and ids[0], res)
 
 account_invoice()
 

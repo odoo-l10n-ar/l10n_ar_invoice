@@ -33,6 +33,7 @@
                     <field name='document_class'/>
                     <field name='type'/>
                     <field name='afip_code'/>
+                    <field name='active'/>
                 </form>
             </field>
         </record>
@@ -45,6 +46,7 @@
                     <field name="name"/>
                     <field name="code"/>
                     <field name="afip_code"/>
+                    <field name='active'/>
                 </tree>
             </field>
         </record>

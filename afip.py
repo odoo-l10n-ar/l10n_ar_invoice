@@ -26,6 +26,7 @@ class afip_responsability(osv.osv):
     _columns={
         'name': fields.char('Name', size=64, required=True),
         'code': fields.char('Code', size=8, required=True),
+        'active': fields.boolean('Active'),
     }
     _sql_constraints = [('name','unique(name)', 'Not repeat name!'),
                         ('code','unique(code)', 'Not repeat code!')]
@@ -39,6 +40,7 @@ class afip_responsability_class(osv.osv):
         'emisor_id': fields.many2one('afip.responsability', 'Emisor', required=True),
         'receptor_id': fields.many2one('afip.responsability', 'Receptor', required=True),
         'document_class': fields.char('Journal Class', size=3, required=True),
+        'active': fields.boolean('Active'),
     }
     _sql_constraints = [('main_constraints','unique(emisor_id, receptor_id, document_class)', 'Not configuration!'),
                         ('name','unique(name)', 'Not repeat name!')]
@@ -58,6 +60,7 @@ class afip_journal_class(osv.osv):
                                  " Select 'General' for miscellaneous operations."\
                                  " Select 'Opening/Closing Situation' to be used at the time of new fiscal year creation or end of year entries generation."),
         'afip_code': fields.integer('AFIP Code'),
+        'active': fields.boolean('Active'),
     }
     _sql_constraints = [('name','unique(name)', 'Not repeat name!')]
 afip_journal_class()
@@ -69,7 +72,19 @@ class afip_document_type(osv.osv):
         'name': fields.char('Name', size=120),
         'code': fields.char('Code', size=16),
         'afip_code': fields.integer('AFIP Code'),
+        'active': fields.boolean('Active'),
     }
 afip_document_type()
+
+class afip_concept_type(osv.osv):
+    _name = 'afip.concept_type'
+    _description='AFIP concept types'
+    _columns = {
+        'name': fields.char('Name', size=120),
+        'code': fields.char('Code', size=16),
+        'afip_code': fields.integer('AFIP Code'),
+        'active': fields.boolean('Active'),
+    }
+afip_concept_type()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

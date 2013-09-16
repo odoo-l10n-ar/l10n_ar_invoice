@@ -7,3 +7,5 @@
 "access_afip_journal_class_user","afip.journal_class.user","model_afip_journal_class","group_l10n_ar_invoice_user",1,0,0,0
 "access_afip_document_type_manager","afip.document_type.manager","model_afip_document_type","group_l10n_ar_invoice_admin",1,1,1,1
 "access_afip_document_type_user","afip.document_type.user","model_afip_document_type","group_l10n_ar_invoice_user",1,0,0,0
+"access_afip_concept_type_manager","afip.concept_type.manager","model_afip_concept_type","group_l10n_ar_invoice_admin",1,1,1,1
+"access_afip_concept_type_user","afip.concept_type.user","model_afip_concept_type","group_l10n_ar_invoice_user",1,0,0,0

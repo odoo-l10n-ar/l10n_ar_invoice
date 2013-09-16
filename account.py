@@ -30,4 +30,11 @@ class account_journal(osv.osv):
     }
 account_journal()
 
+class res_currency(osv.osv):
+    _inherit = "res.currency"
+    _columns = {
+        'afip_code': fields.char('AFIP Code', size=4),
+    }
+res_currency()
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

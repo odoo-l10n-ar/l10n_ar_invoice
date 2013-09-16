@@ -32,6 +32,9 @@ Incluye:
 
   - Configuración de libros, diarios y otros detalles para facturación argentina.
   - Wizard para configurar los talonarios necesarios para facturar.
+
+Falta:
+  - Terminar de completar la lista de codigos del AFIP de monedas (http://www.afip.gob.ar/fe/documentos/TABLA%20MONEDAS%20V.0%20%2025082010.xls)
 """,
     'depends': [
         'base_setup',
@@ -62,9 +65,11 @@ Incluye:
         'data/invoice_workflow.xml',
         'data/reports.xml',
         'data/country.xml',
+        'data/res.currency.csv',
         'view/partner_view.xml',
         'view/country_view.xml',
         'view/afip_menuitem.xml',
+        'view/afip_concept_type_view.xml',
         'view/afip_document_type_view.xml',
         'view/afip_journal_class_view.xml',
         'view/afip_responsability_view.xml',

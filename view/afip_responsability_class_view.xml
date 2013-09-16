@@ -32,6 +32,7 @@
                     <field name='emisor_id'/>
                     <field name='receptor_id'/>
                     <field name='document_class'/>
+                    <field name='active'/>
                 </form>
             </field>
         </record>
@@ -46,6 +47,7 @@
                     <field name='emisor_id'/>
                     <field name='receptor_id'/>
                     <field name='document_class'/>
+                    <field name='active'/>
                 </tree>
             </field>
         </record>
