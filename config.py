@@ -148,14 +148,6 @@ class l10n_ar_invoice_config(osv.osv_memory):
             help=u'Si es su primera instalación indique que necesita borrar los diarios existentes. Si agrega un nuevo punto de ventas indique que no va a eliminar los journals. Igual, puede indicar cuales borra y cuales no en el próximo paso.'),
         'point_of_sale': fields.integer(u'Número de Punto de Venta',
             help=u'Este es el número que aparecerá como prefijo del número de la factura. Si solo tiene un solo talonario ese número es 1. Si necesita agregar un nuevo punto de venta debe acceder a opciones Administración/Configuración/Wizards de Configuración/Wizards de Configuración y ejecutar nuevamente el wizard de "Configuración de Facturación".'),
-        'purchase_by_class': fields.boolean(u'Diario de Facturas de Compra diferenciado por tipo',
-            help=u'Puede indicar tener un diario de facturación de compras por cada tipo de facturas que puede recibir, o simplemente usar un solo diario de facturación que será identificado con una X en su nombre'),
-        'sequence_by': fields.selection([('type', 'Type'),('sub_type', 'Sub type'),('class', 'Class'),('journal', 'Journal')],
-                                        'Sequence by', size=32, required=True,
-                                        help="Select 'Type' for different sequence by 'sale' and 'puchase'"\
-                                        "Select 'Sub type' for different sequence by 'sale', 'sale refund', 'purchase' and 'purchase refund'"\
-                                        "Select 'Class' for different sequence by class of document (A, B, C, M or E) "\
-                                        "Select 'Journal' for different sequence by Journal "),
         'journals_to_delete': fields.one2many('l10n_ar_invoice.del_journal', 'builder_id', 'Journals to delete'),
         'sequences_to_create': fields.one2many('l10n_ar_invoice.new_sequence', 'builder_id', 'Sequence to delete'),
         'journals_to_create': fields.one2many('l10n_ar_invoice.new_journal', 'builder_id', 'Journals to create'),
@@ -165,7 +157,6 @@ class l10n_ar_invoice_config(osv.osv_memory):
         'company_id': _default_company,
         'do_export': False,
         'remove_old_journals': True,
-        'sequence_by': 'type',
         'point_of_sale': 1,
         'purchase_by_class': False,
         'journals_to_delete': lambda self, cr, uid, c, context=None: self.update_del_journals(
@@ -221,7 +212,7 @@ class l10n_ar_invoice_config(osv.osv_memory):
             }
         return { 'value': v }
 
-    def update_del_journals(self, cr, uid, ids, company_id, responsability_id, do_export, remove_old_journals, sequence_by, point_of_sale, purchase_by_class, context=None):
+    def update_del_journals(self, cr, uid, ids, company_id, responsability_id, do_export, remove_old_journals, point_of_sale, context=None):
         """
         Remove Sale Journal, Purchase Journal, Sale Refund Journal, Purchase Refund Journal.
         """
@@ -245,7 +236,7 @@ class l10n_ar_invoice_config(osv.osv_memory):
 
         return ret
 
-    def update_new_journals(self, cr, uid, ids, company_id, responsability_id, do_export, remove_old_journals, sequence_by, point_of_sale, purchase_by_class, update_posted=False, context=None):
+    def update_new_journals(self, cr, uid, ids, company_id, responsability_id, do_export, remove_old_journals, point_of_sale, update_posted=False, context=None):
         """
         Create Journals for Argentinian Invoices.
         """
@@ -262,21 +253,24 @@ class l10n_ar_invoice_config(osv.osv_memory):
 
             currency_id = obj_company.browse(cr, uid, company_id).currency_id.id
 
-            cr.execute("""select row_number() over () as row,
-                          JC.name as name, max(JC.code) as code,
-                          JC.type as type, JC.document_class as document_class,
-                          max(JC.id) as document_class_id
+            cr.execute("""
+                       select row_number() over () as row,
+                          Ri.name as Ri,
+                          Dc.name as document_class,
+                          JC.name as name,
+                          max(JC.code) as code,
+                          JC.type as type,
+                          DC.id as document_class_id,
+                          max(JC.id) as journal_class_id
                        from afip_responsability_relation as RC
-                       left join afip_responsability as Re on (RC.emisor_id=Re.id)
+                       left join afip_responsability as Ri on (RC.issuer_id = Ri.id)
                        left join afip_responsability as Rr on (RC.receptor_id = Rr.id)
-                       left join afip_journal_class  as JC on (RC.document_class = JC.document_class or JC.document_class = 'X')
-                       where (Re.id = %s and type in ('sale', 'sale_refund')) or (Rr.id = %s and type in ('purchase','purchase_refund')) and
-                        case when %s then (not JC.document_class = 'X')
-                                     else (JC.document_class = 'X' or JC.type in ('sale','sale_refund'))
-                        end
-                       group by JC.name, JC.type, JC.document_class order by type, document_class
+                       left join afip_document_class as DC on (RC.document_class_id = DC.id)
+                       left join afip_journal_class  as JC on (RC.document_class_id = JC.document_class_id)
+                       where Ri.id = %s
+                       group by Ri.name, JC.name, JC.type, DC.name, DC.id order by name
                        """,
-                       (responsability_id, responsability_id, purchase_by_class))
+                       (responsability_id,))
 
             fetch_items = list(cr.fetchall())
             items = [ dict(zip([c.name for c in cr.description], item)) for item in fetch_items ]
@@ -287,119 +281,34 @@ class l10n_ar_invoice_config(osv.osv_memory):
                 fetch_items = list(cr.fetchall())
                 items.extend([ dict(zip([c.name for c in cr.description], item)) for item in fetch_items ])
 
-            # Create sequence
-            if sequence_by == 'journal':
-                _code_to_type = {
-                    'sale': 'journal_sale_vou',
-                    'sale_refund': 'journal_sale_vou',
-                    'purchase': 'journal_pur_vou',
-                    'purchase_refund': 'journal_pur_vou',
+            # Create sequence by journal
+            _code_to_type = {
+                'sale': 'journal_sale_vou',
+                'sale_refund': 'journal_sale_vou',
+                'purchase': 'journal_pur_vou',
+                'purchase_refund': 'journal_pur_vou',
+            }
+            #_code_to_type = dict( (k, obj_seq_type.search(cr, uid, [('code','=',v)])[0] ) for k,v in _code_to_type.items() )
+
+            for item in items:
+                sequence = {
+                    'name': u"%s (%04i-%s)" % (item['name'], point_of_sale, item['code']),
+                    'code': _code_to_type[item['type']],
+                    'number_next': 1,
+                    'prefix': '%04i-' % (point_of_sale,),
+                    'suffix': '',
+                    'padding': 8,
+                    'company_id': company_id,
                 }
-                #_code_to_type = dict( (k, obj_seq_type.search(cr, uid, [('code','=',v)])[0] ) for k,v in _code_to_type.items() )
-
-                for item in items:
-                    sequence = {
-                        'name': u"%s (%04i-%s)" % (item['name'], point_of_sale, item['code']),
-                        'code': _code_to_type[item['type']],
-                        'number_next': 1,
-                        'prefix': '%04i-' % (point_of_sale,),
-                        'suffix': '',
-                        'padding': 8,
-                        'company_id': company_id,
-                    }
-                    seq.append(sequence)
-                    rel[item['row']]= sequence['name']
-
-            elif sequence_by == 'class':
-                _code_to_type = {
-                    'sale': 'journal_sale_vou',
-                    'sale_refund': 'journal_sale_vou',
-                    'purchase': 'journal_pur_vou',
-                    'purchase_refund': 'journal_pur_vou',
-                }
-                #_code_to_type = dict( (k, obj_seq_type.search(cr, uid, [('code','=',v)])[0] ) for k,v in _code_to_type.items() )
-                _name = lambda item: u"Document class %s (%04i)" % (item['document_class'], point_of_sale)
-                group = {}
-                for item in items:
-                    group[item['document_class']] = item
-                    rel[item['row']]= _name(item)
-
-                for key, item in group.items():
-                    sequence = {
-                        'name': _name(item),
-                        'code': _code_to_type[item['type']],
-                        'number_next': 1,
-                        'prefix': '%04i-' % (point_of_sale,),
-                        'suffix': '',
-                        'padding': 8,
-                        'company_id': company_id,
-                    }
-                    seq.append(sequence)
-
-            elif sequence_by == 'sub_type':
-                _code_to_type = {
-                    'sale': 'account.invoice.out_invoice',
-                    'sale_refund': 'account.invoice.out_refund',
-                    'purchase': 'account.invoice.in_invoice',
-                    'purchase_refund': 'account.invoice.in_refund',
-                }
-                #_code_to_type = dict( (k, obj_seq_type.search(cr, uid, [('code','=',v)])[0] ) for k,v in _code_to_type.items() )
-                _name = lambda item: u"Document type %s (%04i)" % (item['type'], point_of_sale)
-                group = {}
-                for item in items:
-                    group[item['type']] = item
-                    rel[item['row']]= _name(item)
-
-                for key, item in group.items():
-                    sequence = {
-                        'name': _name(item),
-                        'code': _code_to_type[item['type']],
-                        'number_next': 1,
-                        'prefix': '%04i-' % (point_of_sale,),
-                        'suffix': '',
-                        'padding': 8,
-                        'company_id': company_id,
-                    }
-                    seq.append(sequence)
-
-            elif sequence_by == 'type':
-                _code_to_type = {
-                    'sale': 'journal_sale_vou',
-                    'sale_refund': 'journal_sale_vou',
-                    'purchase': 'journal_pur_vou',
-                    'purchase_refund': 'journal_pur_vou',
-                }
-                #_code_to_type = dict( (k, obj_seq_type.search(cr, uid, [('code','=',v)])[0] ) for k,v in _code_to_type.items() )
-                _group_type = {
-                    'sale': 'sale',
-                    'sale_refund': 'sale',
-                    'purchase': 'purchase',
-                    'purchase_refund': 'purchase',
-                }
-                _name = lambda item: u"Document type %s (%04i)" % (_group_type[item['type']], point_of_sale)
-                group = {}
-                for item in items:
-                    group[_group_type[item['type']]] = item
-                    rel[item['row']]= _name(item)
-
-                for key, item in group.items():
-                    sequence = {
-                        'name': _name(item),
-                        'code': _code_to_type[item['type']],
-                        'number_next': 1,
-                        'prefix': '%04i-' % (point_of_sale,),
-                        'suffix': '',
-                        'padding': 8,
-                        'company_id': company_id,
-                    }
-                    seq.append(sequence)
+                seq.append(sequence)
+                rel[item['row']]= sequence['name']
 
             # Create journal
             for item in items:
                 journal = {
                     'name': u"%s (%04i-%s)" % (item['name'], point_of_sale, item['code']),
                     'code': u"%s%04i" % (item['code'], point_of_sale),
-                    'journal_class_id': item['document_class_id'],
+                    'journal_class_id': item['journal_class_id'],
                     'company_id': company_id,
                     'currency': currency_id,
                     'point_of_sale': point_of_sale,
@@ -411,15 +320,14 @@ class l10n_ar_invoice_config(osv.osv_memory):
 
         return ret, seq
 
-    def update_journals(self, cr, uid, ids, company_id, responsability_id, do_export, remove_old_journals, sequence_by, point_of_sale, purchase_by_class, update_posted=False, context=None):
+    def update_journals(self, cr, uid, ids, company_id, responsability_id, do_export, remove_old_journals, point_of_sale, update_posted=False, context=None):
 
         v = {
-            'journals_to_delete': self.update_del_journals (cr, uid, ids, company_id, responsability_id, do_export, remove_old_journals, sequence_by, point_of_sale, purchase_by_class),
+            'journals_to_delete': self.update_del_journals (cr, uid, ids, company_id, responsability_id, do_export, remove_old_journals, point_of_sale),
         }
         j, s = self.update_new_journals (cr, uid, ids, company_id,
                                          responsability_id, do_export,
-                                         remove_old_journals, sequence_by,
-                                         point_of_sale, purchase_by_class,
+                                         remove_old_journals, point_of_sale,
                                          update_posted)
         v.update({
             'sequences_to_create': s,
@@ -472,7 +380,7 @@ class l10n_ar_invoice_config(osv.osv_memory):
             obj_partner.write(cr, uid, partner_id,
                                                {'responsability_id': wzd.responsability_id.id,
                                                 'document_number': wzd.cuit,
-                                                'document_type': document_type_cuit,
+                                                'document_type_id': document_type_cuit,
                                                 'iibb': wzd.iibb,
                                                 'start_date': wzd.start_date,
                                                 'vat': 'ar%s' % wzd.cuit,
@@ -482,9 +390,6 @@ class l10n_ar_invoice_config(osv.osv_memory):
         self.delete_journals(cr, uid, ids, context=context)
         self.create_sequences(cr, uid, ids, context=context)
         self.create_journals(cr, uid, ids, context=context)
-
-        # We dont need install any addon at this point.
-        #super(l10n_ar_invoice_config, self).execute(cr, uid, ids, context)
 
 l10n_ar_invoice_config()
 

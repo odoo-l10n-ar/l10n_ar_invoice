@@ -27,7 +27,7 @@ class res_partner(osv.osv):
 
     _columns = {
         'responsability_id': fields.many2one('afip.responsability', 'Resposability'),
-        'document_type': fields.many2one('afip.document_type', 'Document type'),
+        'document_type_id': fields.many2one('afip.document_type', 'Document type'),
         'document_number': fields.char('Document number', size=64, select=1),
         'iibb': fields.char('Ingresos Brutos', size=64),
         'start_date': fields.date('Inicio de actividades'),
@@ -57,7 +57,7 @@ class res_partner(osv.osv):
             
             Del prefijo se toma el número de documento. Que opinanará la comunidad?"""
         
-        for part in self.read(cr, uid, ids, ['document_number', 'document_type', 'vat', 'is_vat_subject']):
+        for part in self.read(cr, uid, ids, ['document_number', 'document_type_id', 'vat', 'is_vat_subject']):
             pass
 
 res_partner()
