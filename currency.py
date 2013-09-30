@@ -18,15 +18,18 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from openerp.osv import fields, osv
 
-import test
-import afip
-import invoice
-import config
-import partner
-import account
-import country
-import report
-import currency
+class res_currency(osv.osv):
+    _inherit = "res.currency"
+    _description = "Currency"
+
+    _columns = {
+        'afip_code': fields.char('AFIP Code', size=4, readonly=True),
+        'afip_desc': fields.char('AFIP Description', size=250, readonly=True),
+        'afip_dt_from': fields.date('AFIP Valid from', readonly=True),
+    }
+
+res_currency()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

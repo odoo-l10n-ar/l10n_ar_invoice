@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*-
+<?xml version="1.0" encoding="utf-8"?>
+<!--
 ##############################################################################
 #
 # Copyright (C) 2012 OpenERP - Team de Localización Argentina.
@@ -18,15 +19,24 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+-->
+<openerp>
+    <data>
 
-import test
-import afip
-import invoice
-import config
-import partner
-import account
-import country
-import report
-import currency
+        <record id="view_invoice_form" model="ir.ui.view">
+            <field name="name">l10n_ar.invoice.form</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="journal_id" position="replace">
+			<field name="journal_id" groups="account.group_account_user" on_change="onchange_journal_id(journal_id, context)" widget="many2one"/>
+                    </field>
+                </data>
+            </field>
+        </record>
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+    </data>
+</openerp>
+<!-- vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4
+     -->
