@@ -266,7 +266,7 @@ class l10n_ar_invoice_config(osv.osv_memory):
                           JC.name as name, max(JC.code) as code,
                           JC.type as type, JC.document_class as document_class,
                           max(JC.id) as document_class_id
-                       from afip_responsability_class as RC
+                       from afip_responsability_relation as RC
                        left join afip_responsability as Re on (RC.emisor_id=Re.id)
                        left join afip_responsability as Rr on (RC.receptor_id = Rr.id)
                        left join afip_journal_class  as JC on (RC.document_class = JC.document_class or JC.document_class = 'X')
