@@ -31,7 +31,7 @@
                 <data>
                     <field name="parent_id" position="before">
                         <group col="3">
-                            <field name="document_type" nolabel="1" colspan="1"/>
+                            <field name="document_type_id" nolabel="1" colspan="1"/>
                             <field name="document_number" nolabel="1" colspan="1"/>
                             <div/>
                         </group>
@@ -52,8 +52,8 @@
             <field name="arch" type="xml">
 		        <field name="name" position="after">
                     <field name="responsability_id"/>
+                    <field name="document_type_id"/>
                     <field name="document_number"/>
-                    <field name="document_type"/>
                 </field>
             </field>
         </record>

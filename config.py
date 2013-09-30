@@ -158,22 +158,21 @@ class l10n_ar_invoice_config(osv.osv_memory):
         'do_export': False,
         'remove_old_journals': True,
         'point_of_sale': 1,
-        'purchase_by_class': False,
         'journals_to_delete': lambda self, cr, uid, c, context=None: self.update_del_journals(
             cr, uid, [],
             self._default_company(cr, uid, c, context),
             self._default_responsability(cr, uid, c, context),
-            False, True, 'type', 1, False, context=context),
+            False, True, 1, context=context),
         'sequences_to_create': lambda self, cr, uid, c, context=None: self.update_new_journals(
             cr, uid, [],
             self._default_company(cr, uid, c, context),
             self._default_responsability(cr, uid, c, context),
-            False, True, 'type', 1, False, context=context)[1],
+            False, True, 1, context=context)[1],
         'journals_to_create': lambda self, cr, uid, c, context=None: self.update_new_journals(
             cr, uid, [],
             self._default_company(cr, uid, c, context),
             self._default_responsability(cr, uid, c, context),
-            False, True, 'type', 1, False, context=context)[0],
+            False, True, 1, context=context)[0],
     }
 
     def _get_account_properties(self, cr, uid, company_id):
@@ -276,8 +275,9 @@ class l10n_ar_invoice_config(osv.osv_memory):
             items = [ dict(zip([c.name for c in cr.description], item)) for item in fetch_items ]
 
             if do_export:
-                cr.execute("""select code, name, document_class, %i + (row_number() over ()) as row, type, id as document_class_id
-                           from afip_journal_class where document_class = 'E'""" % len(items))
+                cr.execute("""select JC.code, JC.name, document_class_id, %i + (row_number() over ()) as row, type, JC.id as journal_class_id
+                           from afip_journal_class as JC left join afip_document_class as DC on (document_class_id = DC.id)
+                           where DC.name = 'E'""" % len(items))
                 fetch_items = list(cr.fetchall())
                 items.extend([ dict(zip([c.name for c in cr.description], item)) for item in fetch_items ])
 
@@ -317,6 +317,8 @@ class l10n_ar_invoice_config(osv.osv_memory):
                     'update_posted': update_posted
                 }
                 ret.append(journal)
+
+            _logger.info('Journals to create %s' % [ r['name'] for r in ret ])
 
         return ret, seq
 
