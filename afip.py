@@ -20,6 +20,26 @@
 ##############################################################################
 from openerp.osv import fields, osv
 
+class afip_journal_template(osv.osv):
+    _name = 'afip.journal_template'
+    _columns = {
+        'name': fields.char('Name', size=120),
+        'code': fields.integer('Code'),
+    }
+afip_journal_template()
+
+class afip_document_class(osv.osv):
+    _name='afip.document_class'
+    _description='Document class'
+    _columns={
+        'name': fields.char('Name', size=64, required=True),
+        'description': fields.text('Description'),
+        'responsability_relation_ids': fields.one2many('afip.responsability_relation','document_class_id', 'Reponsability relations'),
+        'journal_class_ids': fields.one2many('afip.journal_class', 'document_class_id', 'Journal classes'),
+    }
+    _sql_constraints = [('name','unique(name)', 'Not repeat name!'),]
+afip_document_class()
+
 class afip_responsability(osv.osv):
     _name='afip.responsability'
     _description='VAT Responsability'
@@ -27,24 +47,26 @@ class afip_responsability(osv.osv):
         'name': fields.char('Name', size=64, required=True),
         'code': fields.char('Code', size=8, required=True),
         'active': fields.boolean('Active'),
+        'issuer_relation_ids': fields.one2many('afip.responsability_relation', 'issuer_id', 'Issuer relation'),
+        'receptor_relation_ids': fields.one2many('afip.responsability_relation', 'receptor_id', 'Receptor relation'),
     }
     _sql_constraints = [('name','unique(name)', 'Not repeat name!'),
                         ('code','unique(code)', 'Not repeat code!')]
 afip_responsability()
 
-class afip_responsability_class(osv.osv):
-    _name='afip.responsability_class'
+class afip_responsability_relation(osv.osv):
+    _name='afip.responsability_relation'
     _description='Responsability Interaction'
     _columns={
         'name': fields.char('Name', size=64),
-        'emisor_id': fields.many2one('afip.responsability', 'Emisor', required=True),
+        'issuer_id': fields.many2one('afip.responsability', 'Issuer', required=True),
         'receptor_id': fields.many2one('afip.responsability', 'Receptor', required=True),
-        'document_class': fields.char('Journal Class', size=3, required=True),
+        'document_class_id': fields.many2one('afip.document_class', 'Document class', required=True),
         'active': fields.boolean('Active'),
     }
-    _sql_constraints = [('main_constraints','unique(emisor_id, receptor_id, document_class)', 'Not configuration!'),
+    _sql_constraints = [('main_constraints','unique(issuer_id, receptor_id, document_class_id)', 'Not configuration!'),
                         ('name','unique(name)', 'Not repeat name!')]
-afip_responsability_class()
+afip_responsability_relation()
 
 class afip_journal_class(osv.osv):
     _name='afip.journal_class'
@@ -52,7 +74,7 @@ class afip_journal_class(osv.osv):
     _columns={
         'name': fields.char('Name', size=64, required=True),
         'code': fields.char('Code', size=8, required=True),
-        'document_class': fields.char('Class', size=3, required=True),
+        'document_class_id': fields.many2one('afip.document_class', 'Document Class'),
         'type': fields.selection([('sale', 'Sale'),('sale_refund','Sale Refund'), ('purchase', 'Purchase'), ('purchase_refund','Purchase Refund'), ('cash', 'Cash'), ('bank', 'Bank and Cheques'), ('general', 'General'), ('situation', 'Opening/Closing Situation')], 'Type', size=32, required=True,
                                  help="Select 'Sale' for Sale journal to be used at the time of making invoice."\
                                  " Select 'Purchase' for Purchase Journal to be used at the time of approving purchase order."\
@@ -60,6 +82,7 @@ class afip_journal_class(osv.osv):
                                  " Select 'General' for miscellaneous operations."\
                                  " Select 'Opening/Closing Situation' to be used at the time of new fiscal year creation or end of year entries generation."),
         'afip_code': fields.integer('AFIP Code'),
+        'journal_ids': fields.one2many('account.journal', 'journal_class_id', 'Journals'),
         'active': fields.boolean('Active'),
     }
     _sql_constraints = [('name','unique(name)', 'Not repeat name!')]

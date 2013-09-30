@@ -23,44 +23,43 @@
 <openerp>
     <data>
 
-        <record id="view_afip_responsability_class_form" model="ir.ui.view">
-            <field name="name">afip.responsability_class.form</field>
-            <field name="model">afip.responsability_class</field>
+        <record id="view_afip_responsability_relation_form" model="ir.ui.view">
+            <field name="name">afip.responsability_relation.form</field>
+            <field name="model">afip.responsability_relation</field>
             <field name="arch" type="xml">
-                <form string="AFIP Resposability class">
+                <form string="AFIP Resposability relation">
                     <field name="name"/>
-                    <field name='emisor_id'/>
+                    <field name='issuer_id'/>
                     <field name='receptor_id'/>
-                    <field name='document_class'/>
+                    <field name='document_class_id'/>
                     <field name='active'/>
                 </form>
             </field>
         </record>
 
-        <record id="view_afip_responsability_class_tree" model="ir.ui.view">
-            <field name="name">afip.responsability_class.tree</field>
-            <field name="model">afip.responsability_class</field>
-            <field name="type">tree</field>
+        <record id="view_afip_responsability_relation_tree" model="ir.ui.view">
+            <field name="name">afip.responsability_relation.tree</field>
+            <field name="model">afip.responsability_relation</field>
             <field name="arch" type="xml">
-                <tree string="AFIP Resposability class">
+                <tree string="AFIP Resposability relation">
                     <field name="name"/>
-                    <field name='emisor_id'/>
+                    <field name='issuer_id'/>
                     <field name='receptor_id'/>
-                    <field name='document_class'/>
+                    <field name='document_class_id'/>
                     <field name='active'/>
                 </tree>
             </field>
         </record>
 
-        <record model="ir.actions.act_window" id="act_afip_responsability_class">
-            <field name="name">AFIP Resposability class</field>
+        <record model="ir.actions.act_window" id="act_afip_responsability_relation">
+            <field name="name">AFIP Resposability Relation</field>
             <field name="type">ir.actions.act_window</field>
-            <field name="res_model">afip.responsability_class</field>
+            <field name="res_model">afip.responsability_relation</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
         </record>
 
-        <menuitem name="Resposability class" action="act_afip_responsability_class" id="menu_action_afip_responsability_class" parent="menu_afip_config"/>
+        <menuitem name="Resposability class" action="act_afip_responsability_relation" id="menu_action_afip_responsability_relation" parent="menu_afip_config"/>
 
     </data>
 </openerp>

@@ -94,7 +94,7 @@ class account_invoice(osv.osv):
     _inherit = "account.invoice"
 
     def afip_validation(self, cr, uid, ids, context={}):
-        obj_resp_class = self.pool.get('afip.responsability_class')
+        obj_resp_class = self.pool.get('afip.responsability_relation')
 
         for invoice in self.browse(cr, uid, ids):
             # If parter is not in Argentina, ignore it.
@@ -107,18 +107,18 @@ class account_invoice(osv.osv):
                                      _('Your partner have not afip responsability assigned. Assign one please.'))
 
             # Take responsability classes for this journal
-            invoice_class = invoice.journal_id.journal_class_id.document_class
-            resp_class_ids = obj_resp_class.search(cr, uid, [('document_class','=', invoice_class)])
+            invoice_class = invoice.journal_id.journal_class_id.document_class_id
+            resp_class_ids = obj_resp_class.search(cr, uid, [('document_class_id','=', invoice_class.id)])
 
             # You can emmit this document?
-            resp_class = [ rc.emisor_id.code for rc in obj_resp_class.browse(cr, uid, resp_class_ids) ]
+            resp_class = [ rc.issuer_id.code for rc in obj_resp_class.browse(cr, uid, resp_class_ids) ]
             if invoice.journal_id.company_id.partner_id.responsability_id.code not in resp_class:
                 raise osv.except_osv(_('Invalid emisor'),
                                      _('Your responsability with AFIP dont let you generate this kind of document.'))
 
             # Partner can receive this document?
             resp_class = [ rc.receptor_id.code for rc in obj_resp_class.browse(cr, uid, resp_class_ids) ]
-            if invoice.partner_id.responsability_id.code not in resp_class:
+            if False and invoice.partner_id.responsability_id.code not in resp_class:
                 raise osv.except_osv(_('Invalid receptor'),
                                      _('Your partner cant recive this document. Check AFIP responsability of the partner, or Journal Account of the invoice.'))
 
@@ -150,6 +150,56 @@ class account_invoice(osv.osv):
             res[inv.id] = s
 
         return res.get(len(ids)==1 and ids[0], res)
+
+    def onchange_partner_id(self, cr, uid, ids, type, partner_id,\
+            date_invoice=False, payment_term=False, partner_bank_id=False, company_id=False):
+        result = super(account_invoice,self).onchange_partner_id(cr, uid, ids, type, partner_id, date_invoice, payment_term, partner_bank_id, company_id)
+
+        if partner_id:
+            # Set list of valid journals by partner responsability
+            partner_obj = self.pool.get('res.partner')
+            company_obj = self.pool.get('res.company')
+            partner = partner_obj.browse(cr, uid, partner_id)
+            company = company_obj.browse(cr, uid, company_id)
+            responsability = partner.responsability_id
+            if responsability.issuer_relation_ids is None:
+                return result
+
+            document_class_set = set([ i.document_class_id.id for i in responsability.issuer_relation_ids ])
+
+            cr.execute("""
+                       SELECT DISTINCT J.id, J.name
+                       FROM afip_responsability_relation RR
+                        LEFT join afip_document_class DC on (DC.id = RR.document_class_id) 
+                        LEFT join afip_journal_class JC on (DC.id = JC.document_class_id) 
+                        LEFT join account_journal J on (J.journal_class_id = JC.id)
+                       WHERE
+                        RR.issuer_id = %s AND
+                        RR.receptor_id = %s AND
+                        J.id is not NULL
+                       ORDER BY J.name DESC;
+                      """, (company.partner_id.responsability_id.id, partner.responsability_id.id))
+            accepted_journal_ids = [ x[0] for x in cr.fetchall() ]
+
+            if 'domain' not in result: result['domain'] = {}
+            if 'value' not in result: result['value'] = {}
+
+            if accepted_journal_ids:
+                result['domain'].update({
+                    'journal_id': [('id','in', accepted_journal_ids)],
+                })
+                result['value'].update({
+                    'journal_id': accepted_journal_ids[0],
+                })
+            else:
+                result['domain'].update({
+                    'journal_id': [('id','in',[])],
+                })
+                result['value'].update({
+                    'journal_id': False,
+                })
+
+        return result
 
 account_invoice()
 

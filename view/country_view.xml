@@ -39,7 +39,6 @@
         <record id="view_res_country_tree" model="ir.ui.view">
             <field name="name">res.country.tree</field>
             <field name="model">res.country</field>
-            <field name="type">tree</field>
             <field name="inherit_id" ref="base.view_country_tree"/>
             <field name="arch" type="xml">
 		    <field name="code" position="after">

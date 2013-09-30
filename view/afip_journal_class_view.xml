@@ -30,10 +30,11 @@
                 <form string="AFIP Journal class">
                     <field name="name"/>
                     <field name='code'/>
-                    <field name='document_class'/>
+                    <field name='document_class_id'/>
                     <field name='type'/>
                     <field name='afip_code'/>
                     <field name='active'/>
+                    <field name='journal_ids'/>
                 </form>
             </field>
         </record>
