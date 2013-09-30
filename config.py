@@ -310,7 +310,6 @@ class l10n_ar_invoice_config(osv.osv_memory):
                     'code': u"%s%04i" % (item['code'], point_of_sale),
                     'journal_class_id': item['journal_class_id'],
                     'company_id': company_id,
-                    'currency': currency_id,
                     'point_of_sale': point_of_sale,
                     'sequence_name': rel[item['row']],
                     'type': item['type'],
