@@ -56,7 +56,7 @@ afip_responsability()
 
 class afip_responsability_relation(osv.osv):
     _name='afip.responsability_relation'
-    _description='Responsability Interaction'
+    _description='Responsability relation'
     _columns={
         'name': fields.char('Name', size=64),
         'issuer_id': fields.many2one('afip.responsability', 'Issuer', required=True),

@@ -68,6 +68,7 @@ Falta:
         'data/country.xml',
         'data/res.currency.csv',
         'data/afip.journal_template.csv',
+        'data/afip.concept_type.csv',
         'view/partner_view.xml',
         'view/country_view.xml',
         'view/afip_menuitem.xml',

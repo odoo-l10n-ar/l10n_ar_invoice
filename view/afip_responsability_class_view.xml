@@ -59,7 +59,7 @@
             <field name="view_mode">tree,form</field>
         </record>
 
-        <menuitem name="Resposability class" action="act_afip_responsability_relation" id="menu_action_afip_responsability_relation" parent="menu_afip_config"/>
+        <menuitem name="Resposability relations" action="act_afip_responsability_relation" id="menu_action_afip_responsability_relation" parent="menu_afip_config"/>
 
     </data>
 </openerp>
