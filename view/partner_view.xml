@@ -30,10 +30,11 @@
             <field name="arch" type="xml">
                 <data>
                     <field name="parent_id" position="before">
-                        <group col="3">
+                        <group col="2">
+                            <label for="document_type_id" colspan="1" class="oe_edit_only"/>
+                            <label for="document_number" colspan="1" class="oe_edit_only"/>
                             <field name="document_type_id" nolabel="1" colspan="1"/>
                             <field name="document_number" nolabel="1" colspan="1"/>
-                            <div/>
                         </group>
                     </field>
                     <field name="property_account_position" position="before">

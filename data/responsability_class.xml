@@ -8,6 +8,13 @@
                 <field name='receptor_id' ref='res_CF'/>
 	    	<field name='active' eval="True"/>
         </record> 
+        <record model='afip.responsability_relation' id='ivari_ext'>
+                <field name='document_class_id' ref='dc_E'/>
+                <field name='name'>Responsable Inscripto A Extrangero</field>
+                <field name='issuer_id' ref='res_IVARI'/>
+                <field name='receptor_id' ref='res_EXT'/>
+	    	<field name='active' eval="True"/>
+        </record>
         <record model='afip.responsability_relation' id='1'>
                 <field name='document_class_id' ref='dc_B'/>
                 <field name='name'>Responsable Inscripto A Iva Excento</field>
@@ -64,6 +71,13 @@
                 <field name='receptor_id' ref='res_CF'/>
 	    	<field name='active' eval="True"/>
         </record> 
+        <record model='afip.responsability_relation' id='rm_ext'>
+                <field name='document_class_id' ref='dc_E'/>
+                <field name='name'>Responsable Monotributo A Extrangero</field>
+                <field name='issuer_id' ref='res_RM'/>
+                <field name='receptor_id' ref='res_EXT'/>
+	    	<field name='active' eval="True"/>
+        </record>
         <record model='afip.responsability_relation' id='9'>
                 <field name='document_class_id' ref='dc_C'/>
                 <field name='name'>Responsable Monotributo A Iva Excento</field>
