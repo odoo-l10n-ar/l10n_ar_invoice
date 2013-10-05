@@ -175,26 +175,6 @@ class l10n_ar_invoice_config(osv.osv_memory):
             False, True, 1, context=context)[0],
     }
 
-    def _get_account_properties(self, cr, uid, company_id):
-        """
-        Return id of accounts from properties
-        """
-        obj_property = self.pool.get('ir.property')
-        properties = {
-            'sale': 'property_account_income_categ',
-            'sale_refund': 'property_account_income_categ',
-            'purchase': 'property_account_expense_categ',
-            'purchase_refund': 'property_account_expense_categ',
-        }
-        property_ids = obj_property.search(cr, uid, [('name','in',properties.values()),
-                                                     ('company_id','=',company_id)])
-
-
-        prop = obj_property.read(cr, uid, property_ids, ['name', 'value_reference'])
-        d = dict( (p['name'].encode('ascii'), int(p['value_reference'].split(',')[1])) for p in prop )
-        r = dict( (k, d[v]) for k,v in properties.items() )
-        return r
-
     def update_company_id(self, cr, uid, ids, company_id, context=None):
         """
         Set cuit & iibb
@@ -245,8 +225,6 @@ class l10n_ar_invoice_config(osv.osv_memory):
 
         if company_id and responsability_id and point_of_sale:
  
-            account_ids = self._get_account_properties(cr, uid, company_id)
-            
             obj_company = self.pool.get('res.company')
             obj_seq_type = self.pool.get('ir.sequence.type')
 
