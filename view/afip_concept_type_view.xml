@@ -29,7 +29,7 @@
             <field name="arch" type="xml">
                 <form string="AFIP Concept type">
                     <field name="name"/>
-                    <field name='code'/>
+                    <field name='product_types'/>
                     <field name='afip_code'/>
                     <field name='active'/>
                 </form>
@@ -42,7 +42,7 @@
             <field name="arch" type="xml">
                 <tree string="AFIP Concept type">
                     <field name="name"/>
-                    <field name="code"/>
+                    <field name='product_types'/>
                     <field name="afip_code"/>
                     <field name='active'/>
                 </tree>

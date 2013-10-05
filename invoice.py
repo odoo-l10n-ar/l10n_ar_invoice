@@ -151,9 +151,12 @@ class account_invoice(osv.osv):
 
         return res.get(len(ids)==1 and ids[0], res)
 
-    def onchange_partner_id(self, cr, uid, ids, type, partner_id,\
-            date_invoice=False, payment_term=False, partner_bank_id=False, company_id=False):
-        result = super(account_invoice,self).onchange_partner_id(cr, uid, ids, type, partner_id, date_invoice, payment_term, partner_bank_id, company_id)
+    def onchange_partner_id(self, cr, uid, ids, type, partner_id,
+                            date_invoice=False, payment_term=False,
+                            partner_bank_id=False, company_id=False):
+        result = super(account_invoice,self).onchange_partner_id(cr, uid, ids,
+                       type, partner_id, date_invoice, payment_term,
+                       partner_bank_id, company_id)
 
         if partner_id:
             # Set list of valid journals by partner responsability
@@ -167,6 +170,13 @@ class account_invoice(osv.osv):
 
             document_class_set = set([ i.document_class_id.id for i in responsability.issuer_relation_ids ])
 
+            type_map = {
+                'out_invoice': ['sale'],
+                'out_refund': ['sale_refund'],
+                'in_invoice': ['purchase'],
+                'in_refund': ['purchase_refund'],
+            }
+
             cr.execute("""
                        SELECT DISTINCT J.id, J.name
                        FROM afip_responsability_relation RR
@@ -176,9 +186,10 @@ class account_invoice(osv.osv):
                        WHERE
                         RR.issuer_id = %s AND
                         RR.receptor_id = %s AND
+                        J.type in %s AND
                         J.id is not NULL
                        ORDER BY J.name DESC;
-                      """, (company.partner_id.responsability_id.id, partner.responsability_id.id))
+                      """, (company.partner_id.responsability_id.id, partner.responsability_id.id, tuple(type_map[type])))
             accepted_journal_ids = [ x[0] for x in cr.fetchall() ]
 
             if 'domain' not in result: result['domain'] = {}

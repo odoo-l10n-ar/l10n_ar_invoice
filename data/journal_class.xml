@@ -8,6 +8,7 @@
             <field name='document_class_id' ref='dc_A'/>
 	    <field name='afip_code'>001</field>
 	    <field name='active' eval="True"/>
+	    <field name='product_types'>consu,service</field>
         </record> 
         <record model='afip.journal_class' id='jc_DVA'>
             <field name='code'>DVA</field>
@@ -16,6 +17,7 @@
             <field name='document_class_id' ref='dc_A'/>
 	    <field name='afip_code'>002</field>
 	    <field name='active' eval="True"/>
+	    <field name='product_types'>adjust</field>
         </record> 
         <record model='afip.journal_class' id='jc_CVA'>
             <field name='code'>CVA</field>
@@ -24,6 +26,7 @@
             <field name='document_class_id' ref='dc_A'/>
 	    <field name='afip_code'>003</field>
 	    <field name='active' eval="True"/>
+	    <field name='product_types'>consu,service,adjust</field>
         </record> 
 
         <record model='afip.journal_class' id='jc_FVB'>
@@ -33,6 +36,7 @@
             <field name='document_class_id' ref='dc_B'/>
 	    <field name='afip_code'>006</field>
 	    <field name='active' eval="True"/>
+	    <field name='product_types'>consu,service</field>
         </record> 
         <record model='afip.journal_class' id='jc_DVB'>
             <field name='code'>DVB</field>
@@ -41,6 +45,7 @@
             <field name='document_class_id' ref='dc_B'/>
 	    <field name='afip_code'>007</field>
 	    <field name='active' eval="True"/>
+	    <field name='product_types'>adjust</field>
         </record> 
         <record model='afip.journal_class' id='jc_CVB'>
             <field name='code'>CVB</field>
@@ -49,6 +54,7 @@
             <field name='document_class_id' ref='dc_B'/>
 	    <field name='afip_code'>008</field>
 	    <field name='active' eval="True"/>
+	    <field name='product_types'>consu,service,adjust</field>
         </record> 
 
         <record model='afip.journal_class' id='jc_FVC'>
@@ -58,6 +64,7 @@
             <field name='document_class_id' ref='dc_C'/>
 	    <field name='afip_code'>011</field>
 	    <field name='active' eval="True"/>
+	    <field name='product_types'>consu,service</field>
         </record> 
         <record model='afip.journal_class' id='jc_DVC'>
             <field name='code'>DVC</field>
@@ -66,6 +73,7 @@
             <field name='document_class_id' ref='dc_C'/>
 	    <field name='afip_code'>012</field>
 	    <field name='active' eval="True"/>
+	    <field name='product_types'>adjust</field>
         </record> 
         <record model='afip.journal_class' id='jc_CVC'>
             <field name='code'>CVC</field>
@@ -74,6 +82,7 @@
             <field name='document_class_id' ref='dc_C'/>
 	    <field name='afip_code'>013</field>
 	    <field name='active' eval="True"/>
+	    <field name='product_types'>consu,service,adjust</field>
         </record> 
 
         <record model='afip.journal_class' id='jc_FVM'>
@@ -83,6 +92,7 @@
             <field name='document_class_id' ref='dc_M'/>
 	    <field name='afip_code'>051</field>
 	    <field name='active' eval="True"/>
+	    <field name='product_types'>consu,service</field>
         </record> 
         <record model='afip.journal_class' id='jc_DVM'>
             <field name='code'>DVM</field>
@@ -91,6 +101,7 @@
             <field name='document_class_id' ref='dc_M'/>
 	    <field name='afip_code'>052</field>
 	    <field name='active' eval="True"/>
+	    <field name='product_types'>adjust</field>
         </record> 
         <record model='afip.journal_class' id='jc_CVM'>
             <field name='code'>CVM</field>
@@ -99,6 +110,7 @@
             <field name='document_class_id' ref='dc_M'/>
 	    <field name='afip_code'>053</field>
 	    <field name='active' eval="True"/>
+	    <field name='product_types'>consu,service,adjust</field>
         </record> 
 
         <record model='afip.journal_class' id='jc_FVE'>
@@ -108,6 +120,7 @@
             <field name='document_class_id' ref='dc_E'/>
 	    <field name='afip_code'>019</field>
 	    <field name='active' eval="True"/>
+	    <field name='product_types'>consu,service</field>
         </record> 
         <record model='afip.journal_class' id='jc_DVE'>
             <field name='code'>DVE</field>
@@ -116,6 +129,7 @@
             <field name='document_class_id' ref='dc_E'/>
 	    <field name='afip_code'>020</field>
 	    <field name='active' eval="True"/>
+	    <field name='product_types'>adjust</field>
         </record> 
         <record model='afip.journal_class' id='jc_CVE'>
             <field name='code'>CVE</field>
@@ -124,6 +138,7 @@
             <field name='document_class_id' ref='dc_E'/>
 	    <field name='afip_code'>021</field>
 	    <field name='active' eval="True"/>
+	    <field name='product_types'>consu,service,adjust</field>
         </record> 
 
         <record model='afip.journal_class' id='jc_FCA'>
@@ -132,6 +147,7 @@
             <field name='name'>Factura [Compra A]</field>
             <field name='document_class_id' ref='dc_A'/>
 	    <field name='active' eval="True"/>
+	    <field name='product_types'>consu,service</field>
         </record> 
         <record model='afip.journal_class' id='jc_DCA'>
             <field name='code'>DCA</field>
@@ -139,6 +155,7 @@
             <field name='name'>Nota de Débito [Compra A]</field>
             <field name='document_class_id' ref='dc_A'/>
 	    <field name='active' eval="True"/>
+	    <field name='product_types'>adjust</field>
         </record> 
         <record model='afip.journal_class' id='jc_CCA'>
             <field name='code'>CCA</field>
@@ -146,6 +163,7 @@
             <field name='name'>Nota de Crédito [Compra A]</field>
             <field name='document_class_id' ref='dc_A'/>
 	    <field name='active' eval="True"/>
+	    <field name='product_types'>consu,service,adjust</field>
         </record> 
 
         <record model='afip.journal_class' id='jc_FCB'>
@@ -154,6 +172,7 @@
             <field name='name'>Factura [Compra B]</field>
             <field name='document_class_id' ref='dc_B'/>
 	    <field name='active' eval="True"/>
+	    <field name='product_types'>consu,service</field>
         </record> 
         <record model='afip.journal_class' id='jc_DCB'>
             <field name='code'>DCB</field>
@@ -161,6 +180,7 @@
             <field name='name'>Nota de Débito [Compra B]</field>
             <field name='document_class_id' ref='dc_B'/>
 	    <field name='active' eval="True"/>
+	    <field name='product_types'>adjust</field>
         </record> 
         <record model='afip.journal_class' id='jc_CCB'>
             <field name='code'>CCB</field>
@@ -168,6 +188,7 @@
             <field name='name'>Nota de Crédito [Compra B]</field>
             <field name='document_class_id' ref='dc_B'/>
 	    <field name='active' eval="True"/>
+	    <field name='product_types'>consu,service,adjust</field>
         </record> 
 
         <record model='afip.journal_class' id='jc_FCC'>
@@ -176,6 +197,7 @@
             <field name='name'>Factura [Compra C]</field>
             <field name='document_class_id' ref='dc_C'/>
 	    <field name='active' eval="True"/>
+	    <field name='product_types'>consu,service</field>
         </record> 
         <record model='afip.journal_class' id='jc_DCC'>
             <field name='code'>DCC</field>
@@ -183,6 +205,7 @@
             <field name='name'>Nota de Débito [Compra C]</field>
             <field name='document_class_id' ref='dc_C'/>
 	    <field name='active' eval="True"/>
+	    <field name='product_types'>adjust</field>
         </record> 
         <record model='afip.journal_class' id='jc_CCC'>
             <field name='code'>CCC</field>
@@ -190,6 +213,7 @@
             <field name='name'>Nota de Crédito [Compra C]</field>
             <field name='document_class_id' ref='dc_C'/>
 	    <field name='active' eval="True"/>
+	    <field name='product_types'>consu,service,adjust</field>
         </record> 
 
         <record model='afip.journal_class' id='jc_FCM'>
@@ -198,6 +222,7 @@
             <field name='name'>Factura [Compra M]</field>
             <field name='document_class_id' ref='dc_M'/>
 	    <field name='active' eval="True"/>
+	    <field name='product_types'>consu,service</field>
         </record> 
         <record model='afip.journal_class' id='jc_DCM'>
             <field name='code'>DCM</field>
@@ -205,6 +230,7 @@
             <field name='name'>Nota de Débito [Compra M]</field>
             <field name='document_class_id' ref='dc_M'/>
 	    <field name='active' eval="True"/>
+	    <field name='product_types'>adjust</field>
         </record> 
         <record model='afip.journal_class' id='jc_CCM'>
             <field name='code'>CCM</field>
@@ -212,6 +238,7 @@
             <field name='name'>Nota de Crédito [Compra M]</field>
             <field name='document_class_id' ref='dc_M'/>
 	    <field name='active' eval="True"/>
+	    <field name='product_types'>consu,service,adjust</field>
         </record> 
 
         <record model='afip.journal_class' id='jc_FCX'>
@@ -220,6 +247,7 @@
             <field name='name'>Factura [Compra]</field>
             <field name='document_class_id' ref='dc_X'/>
 	    <field name='active' eval="True"/>
+	    <field name='product_types'>consu,service</field>
         </record> 
         <record model='afip.journal_class' id='jc_DCX'>
             <field name='code'>DCX</field>
@@ -227,6 +255,7 @@
             <field name='name'>Nota de Débito [Compra]</field>
             <field name='document_class_id' ref='dc_X'/>
 	    <field name='active' eval="True"/>
+	    <field name='product_types'>adjust</field>
         </record> 
         <record model='afip.journal_class' id='jc_CCX'>
             <field name='code'>CCX</field>
@@ -234,6 +263,7 @@
             <field name='name'>Nota de Crédito [Compra]</field>
             <field name='document_class_id' ref='dc_X'/>
 	    <field name='active' eval="True"/>
+	    <field name='product_types'>consu,service,adjust</field>
         </record> 
     </data>
 </openerp>

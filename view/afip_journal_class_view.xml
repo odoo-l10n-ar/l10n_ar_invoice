@@ -35,6 +35,7 @@
                     <field name='afip_code'/>
                     <field name='active'/>
                     <field name='journal_ids'/>
+                    <field name='product_types'/>
                 </form>
             </field>
         </record>

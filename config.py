@@ -275,7 +275,12 @@ class l10n_ar_invoice_config(osv.osv_memory):
             items = [ dict(zip([c.name for c in cr.description], item)) for item in fetch_items ]
 
             if do_export:
-                cr.execute("""select JC.code, JC.name, document_class_id, %i + (row_number() over ()) as row, type, JC.id as journal_class_id
+                cr.execute("""select %i + (row_number() over ()) as row,
+                                JC.code,
+                                JC.name,
+                                document_class_id,
+                                type,
+                                JC.id as journal_class_id
                            from afip_journal_class as JC left join afip_document_class as DC on (document_class_id = DC.id)
                            where DC.name = 'E'""" % len(items))
                 fetch_items = list(cr.fetchall())
