@@ -85,6 +85,7 @@ Falta:
         'view/afip_responsability_class_view.xml',
         'view/journal_view.xml',
         'view/invoice_view.xml',
+        'view/res_config_view.xml',
         'security/l10n_ar_invoice_security.xml',
         'security/ir.model.access.csv',
     ],
