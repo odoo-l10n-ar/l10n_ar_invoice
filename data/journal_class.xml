@@ -240,6 +240,7 @@
             <field name='name'>Nota de Débito [Compra M]</field>
             <field name='document_class_id' ref='dc_M'/>
 	    <field name='active' eval="True"/>
+	    <field name='afip_code'>052</field>
 	    <field name='product_types'>adjust</field>
         </record> 
         <record model='afip.journal_class' id='jc_CCM'>
@@ -248,34 +249,6 @@
             <field name='name'>Nota de Crédito [Compra M]</field>
             <field name='document_class_id' ref='dc_M'/>
 	    <field name='afip_code'>053</field>
-	    <field name='active' eval="True"/>
-	    <field name='product_types'>consu,service,adjust</field>
-        </record> 
-
-        <record model='afip.journal_class' id='jc_FCX'>
-            <field name='code'>FCX</field>
-            <field name='type'>purchase</field>
-            <field name='name'>Factura [Compra]</field>
-            <field name='document_class_id' ref='dc_X'/>
-	    <field name='afip_code'>019</field>
-	    <field name='active' eval="True"/>
-	    <field name='product_types'>consu,service</field>
-        </record> 
-        <record model='afip.journal_class' id='jc_DCX'>
-            <field name='code'>DCX</field>
-            <field name='type'>purchase</field>
-            <field name='name'>Nota de Débito [Compra]</field>
-            <field name='document_class_id' ref='dc_X'/>
-	    <field name='afip_code'>020</field>
-	    <field name='active' eval="True"/>
-	    <field name='product_types'>adjust</field>
-        </record> 
-        <record model='afip.journal_class' id='jc_CCX'>
-            <field name='code'>CCX</field>
-            <field name='type'>purchase_refund</field>
-            <field name='name'>Nota de Crédito [Compra]</field>
-            <field name='document_class_id' ref='dc_X'/>
-	    <field name='afip_code'>021</field>
 	    <field name='active' eval="True"/>
 	    <field name='product_types'>consu,service,adjust</field>
         </record> 

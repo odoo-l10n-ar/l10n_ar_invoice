@@ -18,9 +18,12 @@
         chart_template_id: !ref {model: account.chart.template, search: "[('name','=','Plan Contable Genérico de Argentina para Responsables Inscriptos')]"}
         company_id: com_ivari
         bank_accounts_id: []
+        code_digits: 8
+        currency_id: 1
 
 - !python {model: wizard.multi.charts.accounts }: |
     self.is_test = True
+    self.onchange_company_id(cr, uid, [ref("cha_wiz_ivari")], ref("com_ivari"))
     self.execute(cr, uid, [ref("cha_wiz_ivari")], {})
 
 #
@@ -34,6 +37,7 @@
         purchase_by_class: False
         responsability_id: !ref {model: afip.responsability, search: "[('name','=','IVA Responsable Inscripto')]"}
         sequence_by: type
+        currency_id: 1
 
 - !python {model: l10n_ar_invoice.config }: |
     self.is_test = True

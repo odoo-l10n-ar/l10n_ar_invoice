@@ -4,7 +4,7 @@
 - !record {model: res.partner, id: par_cf_gm }:
     name: Cristian Sebastian Rocha
     responsability_id: res_CF
-    document_type: dt_DNI
+    document_type_id: dt_DNI
     document_number: 25095454
     street: Av. Rivadavia
     city: Capital Federal
@@ -19,7 +19,7 @@
 - !record {model: res.partner, id: par_ivae }:
     name: ASOCIACION DOCENTES DE LA UNIVERSIDAD NACIONAL DE BUENOS AIRES
     responsability_id: res_IVAE
-    document_type: dt_CUIT
+    document_type_id: dt_CUIT
     document_number: 30681521077
     vat: ar30681521077
     street: Azcuenaga 770
@@ -44,7 +44,7 @@
 - !record {model: res.partner, id: par_ivari }:
     name: Coop. Trab. Moldeo Interactive Ltda.
     responsability_id: res_IVARI 
-    document_type: dt_CUIT
+    document_type_id: dt_CUIT
     document_number: 30712007288
     vat: ar30712007288
     street: Castillo 1336 12A 
@@ -123,7 +123,7 @@
 - !record {model: res.partner, id: par_ivarni }:
     name: FUNDACION UNIVERSIDAD NACIONAL
     responsability_id: res_IVARNI 
-    document_type: dt_CUIT
+    document_type_id: dt_CUIT
     document_number: 30642332771
     vat: ar30642332771
     street: Roca Julio A. Pte. Av. 733, 5
@@ -161,7 +161,7 @@
 - !record {model: res.partner, id: par_ivanr }:
     name: CONSORCIO DE PROPIETARIOS EDIFICIO UNIVERSIDAD
     responsability_id: res_IVANR
-    document_type: dt_CUIT
+    document_type_id: dt_CUIT
     document_number: 33707348629
     vat: ar33707348629
     street: Urquiza 494
@@ -199,7 +199,7 @@
 - !record {model: res.partner, id: par_rm }:
     name: Cristian S. Rocha
     responsability_id: res_RM
-    document_type: dt_CUIT
+    document_type_id: dt_CUIT
     document_number: 23250954549
     vat: ar23250954549
     street: Av. Rivadavia
