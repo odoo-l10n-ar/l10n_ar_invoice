@@ -30,6 +30,9 @@
                 <form string="AFIP Responsability">
                     <field name="name"/>
                     <field name='code'/>
+                    <field name='active'/>
+                    <field name='issuer_relation_ids'/>
+                    <field name='receptor_relation_ids'/>
                 </form>
             </field>
         </record>
@@ -37,11 +40,11 @@
         <record id="view_afip_responsability_tree" model="ir.ui.view">
             <field name="name">afip.responsability.tree</field>
             <field name="model">afip.responsability</field>
-            <field name="type">tree</field>
             <field name="arch" type="xml">
                 <tree string="AFIP Responsability">
                     <field name="name"/>
                     <field name="code"/>
+                    <field name="active"/>
                 </tree>
             </field>
         </record>

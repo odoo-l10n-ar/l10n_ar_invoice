@@ -23,43 +23,37 @@
 <openerp>
     <data>
 
-        <record id="view_afip_responsability_relation_form" model="ir.ui.view">
-            <field name="name">afip.responsability_relation.form</field>
-            <field name="model">afip.responsability_relation</field>
+        <record id="view_afip_journal_template_form" model="ir.ui.view">
+            <field name="name">afip.journal_template.form</field>
+            <field name="model">afip.journal_template</field>
             <field name="arch" type="xml">
-                <form string="AFIP Resposability relation">
+                <form string="AFIP Document type">
                     <field name="name"/>
-                    <field name='issuer_id'/>
-                    <field name='receptor_id'/>
-                    <field name='document_class_id'/>
-                    <field name='active'/>
+                    <field name='code'/>
                 </form>
             </field>
         </record>
 
-        <record id="view_afip_responsability_relation_tree" model="ir.ui.view">
-            <field name="name">afip.responsability_relation.tree</field>
-            <field name="model">afip.responsability_relation</field>
+        <record id="view_afip_journal_template_tree" model="ir.ui.view">
+            <field name="name">afip.journal_template.tree</field>
+            <field name="model">afip.journal_template</field>
             <field name="arch" type="xml">
-                <tree string="AFIP Resposability relation">
+                <tree string="AFIP Document type">
                     <field name="name"/>
-                    <field name='issuer_id'/>
-                    <field name='receptor_id'/>
-                    <field name='document_class_id'/>
-                    <field name='active'/>
+                    <field name="code"/>
                 </tree>
             </field>
         </record>
 
-        <record model="ir.actions.act_window" id="act_afip_responsability_relation">
-            <field name="name">AFIP Resposability Relation</field>
+        <record model="ir.actions.act_window" id="act_afip_journal_template">
+            <field name="name">AFIP Journal template</field>
             <field name="type">ir.actions.act_window</field>
-            <field name="res_model">afip.responsability_relation</field>
+            <field name="res_model">afip.journal_template</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
         </record>
 
-        <menuitem name="Resposability relations" action="act_afip_responsability_relation" id="menu_action_afip_responsability_relation" parent="menu_afip_config"/>
+        <menuitem name="Document type" action="act_afip_journal_template" id="menu_action_afip_journal_template" parent="menu_afip_config"/>
 
     </data>
 </openerp>

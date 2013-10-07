@@ -64,13 +64,37 @@ class account_invoice_line(osv.osv):
                 res[line.id] = cur_obj.round(cr, uid, cur, res[line.id])
         return res
 
+    def compute_all(self, cr, uid, ids, tax_filter=None, context=None):
+        res = {}
+        tax_obj = self.pool.get('account.tax')
+        cur_obj = self.pool.get('res.currency')
+        _tax_filter = tax_filter
+        for line in self.browse(cr, uid, ids):
+            _quantity = line.quantity
+            _discount = line.discount
+            _price = line.price_unit * (1-(_discount or 0.0)/100.0)
+            _tax_ids = filter(_tax_filter, line.invoice_line_tax_id)
+            taxes = tax_obj.compute_all(cr, uid,
+                                        _tax_ids, _price, _quantity,
+                                        product=line.product_id,
+                                        partner=line.invoice_id.partner_id)
+
+            _round = (lambda x: cur_obj.round(cr, uid, line.invoice_id.currency_id, x)) if line.invoice_id else (lambda x: x)
+            res[line.id] = {
+                'amount_untaxed': _round(taxes['total']),
+                'amount_tax': _round(taxes['total_included'])-_round(taxes['total']),
+                'amount_total': _round(taxes['total_included']), 
+                'taxes': taxes['taxes'],
+            }
+        return res.get(len(ids)==1 and ids[0], res)
+
 account_invoice_line()
 
 class account_invoice(osv.osv):
     _inherit = "account.invoice"
 
     def afip_validation(self, cr, uid, ids, context={}):
-        obj_resp_class = self.pool.get('afip.responsability_class')
+        obj_resp_class = self.pool.get('afip.responsability_relation')
 
         for invoice in self.browse(cr, uid, ids):
             # If parter is not in Argentina, ignore it.
@@ -83,18 +107,18 @@ class account_invoice(osv.osv):
                                      _('Your partner have not afip responsability assigned. Assign one please.'))
 
             # Take responsability classes for this journal
-            invoice_class = invoice.journal_id.journal_class_id.document_class
-            resp_class_ids = obj_resp_class.search(cr, uid, [('document_class','=', invoice_class)])
+            invoice_class = invoice.journal_id.journal_class_id.document_class_id
+            resp_class_ids = obj_resp_class.search(cr, uid, [('document_class_id','=', invoice_class.id)])
 
             # You can emmit this document?
-            resp_class = [ rc.emisor_id.code for rc in obj_resp_class.browse(cr, uid, resp_class_ids) ]
+            resp_class = [ rc.issuer_id.code for rc in obj_resp_class.browse(cr, uid, resp_class_ids) ]
             if invoice.journal_id.company_id.partner_id.responsability_id.code not in resp_class:
                 raise osv.except_osv(_('Invalid emisor'),
                                      _('Your responsability with AFIP dont let you generate this kind of document.'))
 
             # Partner can receive this document?
             resp_class = [ rc.receptor_id.code for rc in obj_resp_class.browse(cr, uid, resp_class_ids) ]
-            if invoice.partner_id.responsability_id.code not in resp_class:
+            if False and invoice.partner_id.responsability_id.code not in resp_class:
                 raise osv.except_osv(_('Invalid receptor'),
                                      _('Your partner cant recive this document. Check AFIP responsability of the partner, or Journal Account of the invoice.'))
 
@@ -104,6 +128,89 @@ class account_invoice(osv.osv):
                 raise osv.except_osv(_('Partner without Identification for total invoices > $1000.-'),
                                      _('You must define valid document type and number for this Final Consumer.'))
         return True
+
+    def compute_all(self, cr, uid, ids, line_filter=lambda line: True, tax_filter=lambda tax: True, context=None):
+        res = {}
+        for inv in self.browse(cr, uid, ids, context=context):
+            amounts = []
+            for line in inv.invoice_line:
+                if line_filter(line):
+                    amounts.append(line.compute_all(tax_filter=tax_filter, context=context))
+
+            s = {
+                 'amount_total': 0,
+                 'amount_tax': 0,
+                 'amount_untaxed': 0,
+                 'taxes': [],
+                }
+            for amount in amounts:
+                for key, value in amount.items():
+                    s[key] = s.get(key, 0) + value
+
+            res[inv.id] = s
+
+        return res.get(len(ids)==1 and ids[0], res)
+
+    def onchange_partner_id(self, cr, uid, ids, type, partner_id,
+                            date_invoice=False, payment_term=False,
+                            partner_bank_id=False, company_id=False):
+        result = super(account_invoice,self).onchange_partner_id(cr, uid, ids,
+                       type, partner_id, date_invoice, payment_term,
+                       partner_bank_id, company_id)
+
+        if partner_id:
+            # Set list of valid journals by partner responsability
+            partner_obj = self.pool.get('res.partner')
+            company_obj = self.pool.get('res.company')
+            partner = partner_obj.browse(cr, uid, partner_id)
+            company = company_obj.browse(cr, uid, company_id)
+            responsability = partner.responsability_id
+            if responsability.issuer_relation_ids is None:
+                return result
+
+            document_class_set = set([ i.document_class_id.id for i in responsability.issuer_relation_ids ])
+
+            type_map = {
+                'out_invoice': ['sale'],
+                'out_refund': ['sale_refund'],
+                'in_invoice': ['purchase'],
+                'in_refund': ['purchase_refund'],
+            }
+
+            cr.execute("""
+                       SELECT DISTINCT J.id, J.name
+                       FROM afip_responsability_relation RR
+                        LEFT join afip_document_class DC on (DC.id = RR.document_class_id) 
+                        LEFT join afip_journal_class JC on (DC.id = JC.document_class_id) 
+                        LEFT join account_journal J on (J.journal_class_id = JC.id)
+                       WHERE
+                        RR.issuer_id = %s AND
+                        RR.receptor_id = %s AND
+                        J.type in %s AND
+                        J.id is not NULL
+                       ORDER BY J.name DESC;
+                      """, (company.partner_id.responsability_id.id, partner.responsability_id.id, tuple(type_map[type])))
+            accepted_journal_ids = [ x[0] for x in cr.fetchall() ]
+
+            if 'domain' not in result: result['domain'] = {}
+            if 'value' not in result: result['value'] = {}
+
+            if accepted_journal_ids:
+                result['domain'].update({
+                    'journal_id': [('id','in', accepted_journal_ids)],
+                })
+                result['value'].update({
+                    'journal_id': accepted_journal_ids[0],
+                })
+            else:
+                result['domain'].update({
+                    'journal_id': [('id','in',[])],
+                })
+                result['value'].update({
+                    'journal_id': False,
+                })
+
+        return result
 
 account_invoice()
 

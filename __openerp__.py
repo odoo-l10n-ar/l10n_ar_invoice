@@ -32,6 +32,9 @@ Incluye:
 
   - Configuración de libros, diarios y otros detalles para facturación argentina.
   - Wizard para configurar los talonarios necesarios para facturar.
+
+Falta:
+  - Terminar de completar la lista de codigos del AFIP de monedas (http://www.afip.gob.ar/fe/documentos/TABLA%20MONEDAS%20V.0%20%2025082010.xls)
 """,
     'depends': [
         'base_setup',
@@ -45,14 +48,15 @@ Incluye:
     'test': [
         'test/partners.yml',
         'test/com_ri1.yml',
-        #'test/com_ri2.yml',
-        #'test/com_mon.yml',
-        #'test/inv_ri2ri.yml',
-        #'test/inv_rm2ri.yml',
-        #'test/inv_ri2rm.yml',
-        #'test/bug_1042944.yml',
+        'test/com_ri2.yml',
+        'test/com_mon.yml',
+        'test/inv_ri2ri.yml',
+        'test/inv_rm2ri.yml',
+        'test/inv_ri2rm.yml',
+        'test/bug_1042944.yml',
     ],
     'update_xml': [
+        'data/document_class.xml',
         'data/responsability.xml',
         'data/responsability_class.xml',
         'data/journal_class.xml',
@@ -62,11 +66,17 @@ Incluye:
         'data/invoice_workflow.xml',
         'data/reports.xml',
         'data/country.xml',
+        'data/res.currency.csv',
+        'data/afip.journal_template.csv',
+        'data/afip.concept_type.csv',
         'view/partner_view.xml',
         'view/country_view.xml',
         'view/afip_menuitem.xml',
+        'view/afip_concept_type_view.xml',
         'view/afip_document_type_view.xml',
+        'view/afip_document_class_view.xml',
         'view/afip_journal_class_view.xml',
+        'view/afip_journal_template_view.xml',
         'view/afip_responsability_view.xml',
         'view/afip_responsability_class_view.xml',
         'view/afip_document_type_view.xml',
@@ -74,6 +84,8 @@ Incluye:
         'view/afip_responsability_view.xml',
         'view/afip_responsability_class_view.xml',
         'view/journal_view.xml',
+        'view/invoice_view.xml',
+        'view/res_config_view.xml',
         'security/l10n_ar_invoice_security.xml',
         'security/ir.model.access.csv',
     ],

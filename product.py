@@ -18,23 +18,16 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+
 from openerp.osv import fields, osv
 
-class account_journal(osv.osv):
-    _inherit = "account.journal"
-    _columns = {
-        'code': fields.char('Code', size=10, required=True,
-                            help="The code will be used to generate the numbers of the journal entries of this journal."),
-        'journal_class_id': fields.many2one('afip.journal_class', 'Document class'),
-        'point_of_sale': fields.integer('Point of sale ID'),
-    }
-account_journal()
+class product_template(osv.osv):
+    _inherit = 'product.template'
 
-class res_currency(osv.osv):
-    _inherit = "res.currency"
     _columns = {
-        'afip_code': fields.char('AFIP Code', size=4),
+        'type': fields.selection([('adjust', 'Adjust concept'),('consu', 'Consumable'),('service','Service')], 'Product Type', required=True, help="Adjust concept are items to be incremented in the client account by invoice errors, interest or other reasons, consumable are product where you don't manage stock, a service is a non-material product provided by a company or an individual."),
     }
-res_currency()
+
+product_template()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

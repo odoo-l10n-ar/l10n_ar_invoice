@@ -20,21 +20,16 @@
 ##############################################################################
 from openerp.osv import fields, osv
 
-class account_journal(osv.osv):
-    _inherit = "account.journal"
-    _columns = {
-        'code': fields.char('Code', size=10, required=True,
-                            help="The code will be used to generate the numbers of the journal entries of this journal."),
-        'journal_class_id': fields.many2one('afip.journal_class', 'Document class'),
-        'point_of_sale': fields.integer('Point of sale ID'),
-    }
-account_journal()
-
 class res_currency(osv.osv):
     _inherit = "res.currency"
+    _description = "Currency"
+
     _columns = {
-        'afip_code': fields.char('AFIP Code', size=4),
+        'afip_code': fields.char('AFIP Code', size=4, readonly=True),
+        'afip_desc': fields.char('AFIP Description', size=250, readonly=True),
+        'afip_dt_from': fields.date('AFIP Valid from', readonly=True),
     }
+
 res_currency()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

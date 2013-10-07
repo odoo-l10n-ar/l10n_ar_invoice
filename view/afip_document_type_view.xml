@@ -31,6 +31,7 @@
                     <field name="name"/>
                     <field name='code'/>
                     <field name='afip_code'/>
+                    <field name='active'/>
                 </form>
             </field>
         </record>
@@ -38,12 +39,12 @@
         <record id="view_afip_document_type_tree" model="ir.ui.view">
             <field name="name">afip.document_type.tree</field>
             <field name="model">afip.document_type</field>
-            <field name="type">tree</field>
             <field name="arch" type="xml">
                 <tree string="AFIP Document type">
                     <field name="name"/>
                     <field name="code"/>
                     <field name="afip_code"/>
+                    <field name='active'/>
                 </tree>
             </field>
         </record>
