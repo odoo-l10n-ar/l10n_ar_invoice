@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!--record id="view_account_config_settings" model="ir.ui.view">
+            <field name="name">account settings</field>
+            <field name="model">account.config.settings</field>
+	    <field name="inherit_id" ref="l10n_ar_chart_generic.view_account_config_settings"/>
+            <field name="arch" type="xml">
+		    <label name='module_l10n_ar_invoice' position="before">
+			<button name="New point of sale" class="oe_inline"/>
+		    </label>
+            </field>
+        </record-->
+
+    </data>
+</openerp>
