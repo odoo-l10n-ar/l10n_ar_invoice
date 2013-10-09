@@ -38,6 +38,7 @@ Falta:
 """,
     'depends': [
         'base_setup',
+        'account_voucher',
         'l10n_ar_base_vat',
         'l10n_ar_chart_generic',
         'l10n_ar_states',
