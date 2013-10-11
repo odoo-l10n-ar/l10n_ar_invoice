@@ -7,7 +7,6 @@
 
 
 - !python {model: account.installer }: |
-    self.is_test = True
     self.view_init(cr, uid, [ref("acc_wiz_ivari")], {})
     self.execute(cr, uid, [ref("acc_wiz_ivari")], {})
 
@@ -22,16 +21,16 @@
         currency_id: 1
 
 - !python {model: wizard.multi.charts.accounts }: |
-    self.onchange_company_id(cr, uid, [ref("cha_wiz_ivari")], ref("com_ivari"))
-    self.onchange_chart_template_id(cr, uid, [ref("cha_wiz_ivari")], ref("l10n_ar_chart_generic.ri_l10nAR_chart_template"))
-    cr.commit()
+    self.view_init(cr, uid, [ref("acc_wiz_ivari")], {})
+    r = self.onchange_company_id(cr, uid, [ref("cha_wiz_ivari")], ref("com_ivari"))
+    self.write(cr, uid, [ref("cha_wiz_ivari")], r['value'])
+    r = self.onchange_chart_template_id(cr, uid, [ref("cha_wiz_ivari")], ref("l10n_ar_chart_generic.ri_l10nAR_chart_template"))
+    self.write(cr, uid, [ref("cha_wiz_ivari")], r['value'])
+    self.execute(cr, uid, [ref("cha_wiz_ivari")], {})
 
-- !assert {model: wizard.multi.charts.accounts, id: cha_wiz_ivari }:
+- !assert {model: wizard.multi.charts.accounts, id: cha_wiz_ivari, string: Select VAT taxes }:
   - sale_tax.id == ref("l10n_ar_chart_generic.ri_tax_vat_21_ventas")
   - purchase_tax.id == ref("l10n_ar_chart_generic.ri_tax_vat_21_compras")
-
-- !python {model: wizard.multi.charts.accounts }: |
-    self.execute(cr, uid, [ref("cha_wiz_ivari")], {})
 
 #
 # Wizard que crea los journals para un responsable inscripto
@@ -39,18 +38,19 @@
 - !record {model: l10n_ar_invoice.config, id: inv_wiz_ivari }:
         company_id: com_ivari
         cuit: 30712007288
+        iibb: 1248845-03
+        start_date: 2011-09-01
         do_export: False
         remove_old_journals: True
-        purchase_by_class: False
         responsability_id: !ref {model: afip.responsability, search: "[('name','=','IVA Responsable Inscripto')]"}
-        sequence_by: type
-        currency_id: 1
 
 - !python {model: l10n_ar_invoice.config }: |
-    self.is_test = True
     self.view_init(cr, uid, [ref("inv_wiz_ivari")], {})
     data = self.read(cr, uid, ref("inv_wiz_ivari"), ['company_id', 'responsability_id', 'do_export', 'remove_old_journals', 'sequence_by', 'point_of_sale', 'purchase_by_class'])
     del data['id']
+    # Relations come with id and name, take only id.
+    data['company_id'] = data['company_id'][0]
+    data['responsability_id'] = data['responsability_id'][0]
     res = self.update_journals(cr, uid, None, **data)
     k = { 'journals_to_delete': [(5,)]+[ (0, 0, v) for v in res['value']['journals_to_delete'] ],
        'sequences_to_create': [(5,)]+[ (0, 0, v) for v in res['value']['sequences_to_create'] ],
@@ -60,9 +60,10 @@
 
 - !python {model: account.journal }: |
     journal_ids = self.search(cr, uid, [('company_id.name','=','Coop. Trab. Moldeo Interactive Ltda.')])
-    if (len(journal_ids)!=15):
+    expected_journals = 3 * 3 * 2 + 2 # # tipos de documentos, # Clase de Journals, Ventas y Compras, u'Miscellaneous Journal', u'Opening Entries Journal'
+    if (len(journal_ids)!=expected_journals):
         print [ a.name for a in self.browse(cr, uid, journal_ids) ]
-        raise AssertionError, 'Error in journals creation for Resp. Insc.. Expected 15, exists %i.' % len(journal_ids)
+        raise AssertionError, 'Error in journals creation for Resp. Insc.. Expected %i, exists %i.' % (expected_journals, len(journal_ids))
 
 #
 # El responsable inscripto esta listo para facturar !!!

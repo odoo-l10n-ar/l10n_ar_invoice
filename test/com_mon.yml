@@ -22,7 +22,6 @@
         charts: l10n_ar_chart_generic
 
 - !python {model: account.installer }: |
-    self.is_test = True
     self.view_init(cr, uid, [ref("acc_wiz_rm")], {})
     self.execute(cr, uid, [ref("acc_wiz_rm")], {})
 
@@ -30,13 +29,18 @@
 # Wizard que selecciona el plan contable
 #
 - !record {model: wizard.multi.charts.accounts, id: cha_wiz_rm }:
-        chart_template_id: !ref {model: account.chart.template, search: "[('name','=','Plan Contable Genérico de Argentina para Monotributistas')]"}
+        chart_template_id: l10n_ar_chart_generic.mt_l10nAR_chart_template
         company_id: com_rm
         bank_accounts_id: []
+        code_digits: 8
+        currency_id: 1
 
 - !python {model: wizard.multi.charts.accounts }: |
-    self.is_test = True
-    self.write(cr, uid, [ref("cha_wiz_rm")], {'sale_tax': False, 'purchase_tax': False})
+    self.view_init(cr, uid, [ref("acc_wiz_rm")], {})
+    r = self.onchange_company_id(cr, uid, [ref("cha_wiz_rm")], ref("com_rm"))
+    self.write(cr, uid, [ref("cha_wiz_rm")], r['value'])
+    r = self.onchange_chart_template_id(cr, uid, [ref("cha_wiz_rm")], ref("l10n_ar_chart_generic.mt_l10nAR_chart_template"))
+    self.write(cr, uid, [ref("cha_wiz_rm")], r['value'])
     self.execute(cr, uid, [ref("cha_wiz_rm")], {})
 
 #
