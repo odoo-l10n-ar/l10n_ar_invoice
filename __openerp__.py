@@ -74,6 +74,7 @@ Falta:
         'view/country_view.xml',
         'view/afip_menuitem.xml',
         'view/afip_concept_type_view.xml',
+        'view/afip_optional_type_view.xml',
         'view/afip_document_type_view.xml',
         'view/afip_document_class_view.xml',
         'view/afip_journal_class_view.xml',

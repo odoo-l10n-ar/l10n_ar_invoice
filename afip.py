@@ -148,4 +148,52 @@ class afip_concept_type(osv.osv):
 
 afip_concept_type()
 
+class afip_tax_code(osv.osv):
+    _inherit = 'account.tax.code'
+
+    def _get_parent_afip_code(self, cr, uid, ids, field_name, args, context=None):
+        r = {}
+
+        for tc in self.browse(cr, uid, ids, context=context):
+            if tc.afip_code:
+                r[tc.id] = tc.afip_code
+            elif tc.parent_id:
+                r[tc.id] = tc.parent_id.parent_afip_code
+            else:
+                r[tc.id] = False
+
+        return r
+
+    _columns = {
+        'afip_code': fields.integer('AFIP Code'),
+        'parent_afip_code': fields.function(_get_parent_afip_code, type='integer', method=True, string='Parent AFIP Code', readonly=1),
+    }
+
+    def get_afip_name(self, cr, uid, ids, context=None):
+        r = {}
+
+        for tc in self.browse(cr, uid, ids, context=context):
+            if tc.afip_code:
+                r[tc.id] = tc.name
+            elif tc.parent_id:
+                r[tc.id] = tc.parent_id.get_afip_name()[tc.parent_id.id]
+            else:
+                r[tc.id] = False
+
+        return r
+
+afip_tax_code()
+
+class afip_optional_type(osv.osv):
+    _name = 'afip.optional_type'
+    _description='AFIP optional types'
+    _columns = {
+        'name': fields.char('Name', size=120,required=True),
+        'afip_code': fields.integer('AFIP Code',required=True),
+        'apply_rule': fields.char('Apply rule'),
+        'value_computation': fields.char('Value computation'),
+        'active': fields.boolean('Active'),
+    }
+afip_optional_type()
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
