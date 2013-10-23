@@ -120,7 +120,7 @@
         </record>
 
 	<record id="action_invoice_ar_installer" model="ir.actions.act_window">
-	  <field name="name">Configuración de Facturación</field>
+	  <field name="name">Invoice Configuration</field>
 	  <field name="type">ir.actions.act_window</field>
 	  <field name="res_model">l10n_ar_invoice.config</field>
 	  <field name="view_id" ref="view_invoice_ar_installer"/>
