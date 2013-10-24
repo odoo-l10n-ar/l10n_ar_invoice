@@ -28,7 +28,7 @@ _re_ar_vat = re.compile('ar(\d\d)(\d*)(\d)')
 class ar_account_invoice(report_sxw.rml_parse):
 
     def _is_class(self, o, cls):
-        r = o.journal_id.journal_class_id.document_class in cls
+        r = o.journal_id.journal_class_id.document_class_id.name in cls
         return r
     
     def _flatdate(self, d):
