@@ -13,3 +13,5 @@
 "access_afip_document_class_user","afip.document_class.user","model_afip_document_class","group_l10n_ar_invoice_user",1,0,0,0
 "access_afip_journal_template_manager","afip.journal_template.manager","model_afip_journal_template","group_l10n_ar_invoice_admin",1,1,1,1
 "access_afip_journal_template_user","afip.journal_template.user","model_afip_journal_template","group_l10n_ar_invoice_user",1,0,0,0
+"access_afip_optional_type_manager","afip.optional_type.manager","model_afip_optional_type","group_l10n_ar_invoice_admin",1,1,1,1
+"access_afip_optional_type_user","afip.optional_type.user","model_afip_optional_type","group_l10n_ar_invoice_user",1,0,0,0
