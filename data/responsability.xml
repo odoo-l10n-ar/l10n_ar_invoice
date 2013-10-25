@@ -8,7 +8,7 @@
         </record>
         <record model='afip.responsability' id='res_IVAE'>
             <field name='code'>IVAE</field>
-            <field name='name'>IVA Excento</field>
+            <field name='name'>IVA Exento</field>
 	    <field name='active' eval="True"/>
         </record>
         <record model='afip.responsability' id='res_IVARI'>
