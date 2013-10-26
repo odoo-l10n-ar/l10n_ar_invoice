@@ -73,6 +73,6 @@
                       'view/res_config_view.xml',
                       'security/l10n_ar_invoice_security.xml',
                       'security/ir.model.access.csv'],
-    'version': '2.7.246',
+    'version': '2.7.247',
     'website': 'https://launchpad.net/~openerp-l10n-ar-localization'}
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
