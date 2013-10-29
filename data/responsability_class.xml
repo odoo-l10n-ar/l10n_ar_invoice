@@ -17,7 +17,7 @@
         </record>
         <record model='afip.responsability_relation' id='1'>
                 <field name='document_class_id' ref='dc_B'/>
-                <field name='name'>Responsable Inscripto A Iva Excento</field>
+                <field name='name'>Responsable Inscripto A Iva Exento</field>
                 <field name='issuer_id' ref='res_IVARI'/>
                 <field name='receptor_id' ref='res_IVAE'/>
 	    	<field name='active' eval="True"/>
@@ -80,7 +80,7 @@
         </record>
         <record model='afip.responsability_relation' id='9'>
                 <field name='document_class_id' ref='dc_C'/>
-                <field name='name'>Responsable Monotributo A Iva Excento</field>
+                <field name='name'>Responsable Monotributo A Iva Exento</field>
                 <field name='issuer_id' ref='res_RM'/>
                 <field name='receptor_id' ref='res_IVAE'/>
 	    	<field name='active' eval="True"/>
@@ -122,7 +122,7 @@
         </record> 
         <record model='afip.responsability_relation' id='15'>
                 <field name='document_class_id' ref='dc_C'/>
-                <field name='name'>Iva Responsable No Inscripto A Iva Excento</field>
+                <field name='name'>Iva Responsable No Inscripto A Iva Exento</field>
                 <field name='issuer_id' ref='res_IVARNI'/>
                 <field name='receptor_id' ref='res_IVAE'/>
 	    	<field name='active' eval="True"/>
@@ -157,42 +157,42 @@
         </record> 
         <record model='afip.responsability_relation' id='20'>
                 <field name='document_class_id' ref='dc_C'/>
-                <field name='name'>Iva Excento A Consumidor Final</field>
+                <field name='name'>Iva Exento A Consumidor Final</field>
                 <field name='issuer_id' ref='res_IVAE'/>
                 <field name='receptor_id' ref='res_CF'/>
 	    	<field name='active' eval="True"/>
         </record> 
         <record model='afip.responsability_relation' id='21'>
                 <field name='document_class_id' ref='dc_C'/>
-                <field name='name'>Iva Excento A Iva Excento</field>
+                <field name='name'>Iva Exento A Iva Exento</field>
                 <field name='issuer_id' ref='res_IVAE'/>
                 <field name='receptor_id' ref='res_IVAE'/>
 	    	<field name='active' eval="True"/>
         </record> 
         <record model='afip.responsability_relation' id='22'>
                 <field name='document_class_id' ref='dc_C'/>
-                <field name='name'>Iva Excento A Iva Responsable Inscripto</field>
+                <field name='name'>Iva Exento A Iva Responsable Inscripto</field>
                 <field name='issuer_id' ref='res_IVAE'/>
                 <field name='receptor_id' ref='res_IVARI'/>
 	    	<field name='active' eval="True"/>
         </record> 
         <record model='afip.responsability_relation' id='23'>
                 <field name='document_class_id' ref='dc_C'/>
-                <field name='name'>Iva Excento A Iva Responsable No Inscripto</field>
+                <field name='name'>Iva Exento A Iva Responsable No Inscripto</field>
                 <field name='issuer_id' ref='res_IVAE'/>
                 <field name='receptor_id' ref='res_IVARNI'/>
 	    	<field name='active' eval="True"/>
         </record> 
         <record model='afip.responsability_relation' id='24'>
                 <field name='document_class_id' ref='dc_C'/>
-                <field name='name'>Iva Excento A Iva No Responsable</field>
+                <field name='name'>Iva Exento A Iva No Responsable</field>
                 <field name='issuer_id' ref='res_IVAE'/>
                 <field name='receptor_id' ref='res_IVANR'/>
 	    	<field name='active' eval="True"/>
         </record> 
         <record model='afip.responsability_relation' id='25'>
                 <field name='document_class_id' ref='dc_C'/>
-                <field name='name'>Iva Excento A Responsable Monotributo</field>
+                <field name='name'>Iva Exento A Responsable Monotributo</field>
                 <field name='issuer_id' ref='res_IVAE'/>
                 <field name='receptor_id' ref='res_RM'/>
 	    	<field name='active' eval="True"/>
@@ -206,7 +206,7 @@
         </record> 
         <record model='afip.responsability_relation' id='27'>
                 <field name='document_class_id' ref='dc_C'/>
-                <field name='name'>Iva No Responsable A Iva Excento</field>
+                <field name='name'>Iva No Responsable A Iva Exento</field>
                 <field name='issuer_id' ref='res_IVANR'/>
                 <field name='receptor_id' ref='res_IVAE'/>
 	    	<field name='active' eval="True"/>

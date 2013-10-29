@@ -18,8 +18,8 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
 from openerp.osv import fields, osv
+from openerp.tools.translate import _
 import re
 
 class res_partner(osv.osv):
@@ -27,22 +27,51 @@ class res_partner(osv.osv):
 
     _columns = {
         'responsability_id': fields.many2one('afip.responsability', 'Resposability'),
-        'document_type_id': fields.many2one('afip.document_type', 'Document type'),
-        'document_number': fields.char('Document number', size=64, select=1),
+        'document_type_id': fields.many2one('afip.document_type', 'Document type',
+                                            on_change="onchange_document(vat,document_type_id,document_number)"),
+        'document_number': fields.char('Document number', size=64, select=1,
+                                       on_change="onchange_document(vat,document_type_id,document_number)"),
         'iibb': fields.char('Ingresos Brutos', size=64),
         'start_date': fields.date('Inicio de actividades'),
     }
 
+    def onchange_document(self, cr, uid, ids, vat, document_type, document_number, context={}):
+        v = {}
+        m = None
+        mod_obj = self.pool.get('ir.model.data')
+        if (u'afip.document_type', document_type) == mod_obj.get_object_reference(cr, uid, 'l10n_ar_invoice', 'dt_CUIT'):
+            document_number = re.sub('[^1234567890]','',document_number)
+            if not self.check_vat_ar(document_number):
+                m = {'title': _('Warning!'),
+                     'message': _('VAT Number is wrong.\n Please verify the number before continue.'), }
+            if vat == False:
+                v['vat'] = 'AR%s' % document_number
+            v['document_number'] = document_number
+        return { 'value': v,
+                 'warning': m }
+
     def onchange_vat(self, cr, uid, ids, vat, document_type, document_number, context={}):
-        obj_doc_type = self.pool.get('afip.document_type')
+        """
+        Not used because is complex to integrate.
+        Could be associated to country?
+        """
+        doc_type_obj = self.pool.get('afip.document_type')
+        country_obj = self.pool.get('res.country')
 
-        cuit_document_type = obj_doc_type.search(cr, uid, [('code','=','CUIT')])
+        cuit_document_type_id = doc_type_obj.search(cr, uid, [('code','=','CUIT')])
 
-        if vat[:2]=='ar' and document_type==False and document_number==False:
-            document_type = cuit_document_type
-            document_number = vat[2:]
+        v = {}
+        if vat[:2].lower()=='ar' and document_type==False and document_number==False:
+            v['document_type'] = cuit_document_type_id
+            v['document_number'] = vat[2:]
         elif document_type==False and document_number==False:
-            country = vat[:2]
+            country_ids = countr_obj.search(cr, uid, [('code','=',vat[:2].upper())])
+            iva_data = countr_obj.read(cr, uid, country_ids, ['cuit_juridica','cuit_fisica'])
+            v['document_type'] = cuit_document_type_id
+            v['document_number'] = iva_data['cuit_juridica' if is_company else 'cuit_fisica']
+
+        return { 'value': v }
+
 
     def afip_validation(sefl, cr, uid, ids, context={}):
         """ Hay que validar si el partner no es de tipo 'consumidor final' tenga un CUIT asociado.

@@ -22,7 +22,7 @@ from openerp.osv import fields, osv, orm
 from openerp.tools.translate import _
 
 _all_taxes = lambda x: True
-_all_except_vat = lambda x: x.name not in [u'IVA Ventas 21%', u'IVA Compras 21%']
+_all_except_vat = lambda x: x.tax_code_id.parent_id.name != 'IVA'
 
 class account_invoice_line(osv.osv):
     """

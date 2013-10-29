@@ -18,7 +18,6 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
 import time, re
 from openerp.report import report_sxw
 import openerp.report.interface
