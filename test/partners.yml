@@ -36,6 +36,7 @@
     rml_header2: Web - Tel -
     rml_header3: CUIT - 
     currency_id: base.ARS
+    parent_id: base.main_company
 
 #
 # IVA responsable inscripto
@@ -61,6 +62,7 @@
     rml_header2: Web - Tel -
     rml_header3: CUIT - 
     currency_id: base.ARS
+    parent_id: base.main_company
 
 - Create account company
 - !record {model: ir.property, id: prop_paec_ivari}:
@@ -80,13 +82,28 @@
 #
 # IVA responsable inscripto
 #
+- Create partner
+- !record {model: res.partner, id: par_ivari2 }:
+    name: Melanoma SA.
+    responsability_id: res_IVARI 
+    document_type_id: dt_CUIT
+    document_number: 30571421352
+    vat: ar30571421352
+    street: Pigmentos 10
+    city: Capital Federal
+    state_id: l10n_ar_states.C
+    country_id: base.ar
+    zip: 1001
+
 - Create company
 - !record {model: res.company, id: com_ivari2 }:
     name: Melanoma SA.
+    partner_id: par_ivari2
     rml_header1: .
     rml_header2: Web - Tel -
     rml_header3: CUIT - 
     currency_id: base.ARS
+    parent_id: base.main_company
 
 - Create account company
 - !record {model: ir.property, id: prop_paec_ivari2}:
@@ -140,6 +157,7 @@
     rml_header2: Web - Tel -
     rml_header3: CUIT - 
     currency_id: base.ARS
+    parent_id: base.main_company
 
 - Set account company properties
 - !record {model: ir.property, id: prop_paec_ivarni}:
@@ -178,6 +196,7 @@
     rml_header2: Web - Tel -
     rml_header3: CUIT - 
     currency_id: base.ARS
+    parent_id: base.main_company
 
 - Set account company properties
 - !record {model: ir.property, id: prop_paec_ivanr}:
@@ -216,6 +235,7 @@
     rml_header2: Web - Tel -
     rml_header3: CUIT - 
     currency_id: base.ARS
+    parent_id: base.main_company
 
 - Set account company properties
 - !record {model: ir.property, id: prop_paec_rm}:
