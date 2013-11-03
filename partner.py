@@ -39,8 +39,8 @@ class res_partner(osv.osv):
         v = {}
         m = None
         mod_obj = self.pool.get('ir.model.data')
-        if (u'afip.document_type', document_type) == mod_obj.get_object_reference(cr, uid, 'l10n_ar_invoice', 'dt_CUIT'):
-            document_number = re.sub('[^1234567890]','',document_number)
+        if document_number and (u'afip.document_type', document_type) == mod_obj.get_object_reference(cr, uid, 'l10n_ar_invoice', 'dt_CUIT'):
+            document_number = re.sub('[^1234567890]','',str(document_number))
             if not self.check_vat_ar(document_number):
                 m = {'title': _('Warning!'),
                      'message': _('VAT Number is wrong.\n Please verify the number before continue.'), }
