@@ -50,7 +50,7 @@ class ar_account_invoice(report_sxw.rml_parse):
         })
 
 def publish_account_invoice():
-    del openerp.report.interface.report_int['report.account.invoice']
+    openerp.report.interface.report_int.remove('report.account.invoice')
 
     report_sxw.report_sxw(
         'report.account.invoice',
@@ -59,5 +59,7 @@ def publish_account_invoice():
         parser=ar_account_invoice,
         header=False
     )
+
+publish_account_invoice()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
