@@ -46,16 +46,7 @@
 
 - !python {model: l10n_ar_invoice.config }: |
     self.view_init(cr, uid, [ref("inv_wiz_rm")], {})
-    data = self.read(cr, uid, ref("inv_wiz_rm"), ['company_id', 'responsability_id', 'do_export', 'remove_old_journals', 'sequence_by', 'point_of_sale', 'purchase_by_class'])
-    del data['id']
-    # Relations come with id and name, take only id.
-    data['company_id'] = data['company_id'][0]
-    data['responsability_id'] = data['responsability_id'][0]
-    res = self.update_journals(cr, uid, None, **data)
-    k = { 'journals_to_delete': [(5,)]+[ (0, 0, v) for v in res['value']['journals_to_delete'] ],
-       'sequences_to_create': [(5,)]+[ (0, 0, v) for v in res['value']['sequences_to_create'] ],
-       'journals_to_create': [(5,)]+[ (0, 0, v) for v in res['value']['journals_to_create'] ] }
-    self.write(cr, uid, [ref("inv_wiz_rm")], k)
+    self.update_journals(cr, uid, [ref("inv_wiz_rm")], {})
     self.execute(cr, uid, [ref("inv_wiz_rm")], {})
 
 - Check if exists journals associated to this company

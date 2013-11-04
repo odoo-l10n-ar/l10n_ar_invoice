@@ -19,6 +19,7 @@
 #
 ##############################################################################
 from openerp.osv import fields, osv
+from openerp.tools.translate import _
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -49,8 +50,12 @@ class l10n_ar_invoice_del_journal(osv.osv_memory):
         obj_cb_line.unlink(cr, uid, cb_line_ids)
 
         # Remove journals
-        obj_journal.unlink(cr, uid, jids)
-        _logger.info('Deleted journal %s' % ','.join(names))
+        try:
+            obj_journal.unlink(cr, uid, jids)
+            _logger.info('Deleted journal %s' % ','.join(names))
+        except Exception, e:
+            raise osv.except_osv(_('Ilegal Operation'),
+                                 _('You want remove journals with moves: %s') % ','.join(names))
 
 l10n_ar_invoice_del_journal()
 
@@ -105,7 +110,6 @@ class l10n_ar_invoice_new_journal(osv.osv_memory):
         'company_id': fields.many2one('res.company', 'Compania'),
         'currency': fields.many2one('res.currency', 'Moneda'),
         'builder_id': fields.many2one('l10n_ar_invoice.config', 'Builder Wizard'),
-        'update_posted': fields.boolean('Allow Cancelling Entries'),
     }
 
     def doit(self, cr, uid, ids, context=None):
@@ -114,7 +118,7 @@ class l10n_ar_invoice_new_journal(osv.osv_memory):
 
         vals = self.read(cr, uid, ids, ['name', 'code', 'type', 'company_id',
                                         'journal_class_id', 'point_of_sale', 'sequence_name',
-                                        'currency', 'update_posted'])
+                                        'currency'])
         names = [ v['name'] for v in vals ]
         for val in vals:
             val['sequence_id'] = obj_sequence.search(cr, uid, [('name','=',val['sequence_name'])]).pop()
@@ -191,7 +195,10 @@ class l10n_ar_invoice_config(osv.osv_memory):
             }
         return { 'value': v }
 
-    def update_del_journals(self, cr, uid, ids, company_id, responsability_id, do_export, remove_old_journals, point_of_sale, context=None):
+    def update_del_journals(self, cr, uid, ids,
+                            company_id, responsability_id, do_export,
+                            remove_old_journals, point_of_sale,
+                            context=None):
         """
         Remove Sale Journal, Purchase Journal, Sale Refund Journal, Purchase Refund Journal.
         """
@@ -215,7 +222,10 @@ class l10n_ar_invoice_config(osv.osv_memory):
 
         return ret
 
-    def update_new_journals(self, cr, uid, ids, company_id, responsability_id, do_export, remove_old_journals, point_of_sale, update_posted=False, context=None):
+    def update_new_journals(self, cr, uid, ids,
+                            company_id, responsability_id, do_export,
+                            remove_old_journals, point_of_sale,
+                            context=None):
         """
         Create Journals for Argentinian Invoices.
         """
@@ -287,7 +297,6 @@ class l10n_ar_invoice_config(osv.osv_memory):
                     'point_of_sale': point_of_sale,
                     'sequence_name': rel[item['row']],
                     'type': item['type'],
-                    'update_posted': update_posted
                 }
                 ret.append(journal)
 
@@ -295,15 +304,39 @@ class l10n_ar_invoice_config(osv.osv_memory):
 
         return ret, seq
 
-    def update_journals(self, cr, uid, ids, company_id, responsability_id, do_export, remove_old_journals, point_of_sale, update_posted=False, context=None):
+    def update_journals(self, cr, uid, ids, context=None):
+        data = self.read(cr, uid, ids, ['company_id',
+                                        'responsability_id',
+                                        'do_export',
+                                        'remove_old_journals',
+                                        'sequence_by',
+                                        'point_of_sale',
+                                        'purchase_by_class'])
+        for w in data:
+            res = self.onchange_form(cr, uid, None,
+                                     w['company_id'][0],
+                                     w['responsability_id'][0],
+                                     w['do_export'],
+                                     w['remove_old_journals'],
+                                     w['point_of_sale'],
+                                     context=context)
+            k = {'journals_to_delete':  [(5,)]+[ (0, 0, v) for v in res['value']['journals_to_delete']  ],
+                 'sequences_to_create': [(5,)]+[ (0, 0, v) for v in res['value']['sequences_to_create'] ],
+                 'journals_to_create':  [(5,)]+[ (0, 0, v) for v in res['value']['journals_to_create']  ] }
+            self.write(cr, uid, w['id'], k)
 
+    def onchange_form(self, cr, uid, ids,
+                        company_id, responsability_id, do_export,
+                        remove_old_journals, point_of_sale,
+                        context=None):
         v = {
-            'journals_to_delete': self.update_del_journals (cr, uid, ids, company_id, responsability_id, do_export, remove_old_journals, point_of_sale),
+            'journals_to_delete': self.update_del_journals (cr, uid, ids,
+                                                            company_id, responsability_id, do_export,
+                                                            remove_old_journals, point_of_sale),
         }
         j, s = self.update_new_journals (cr, uid, ids, company_id,
                                          responsability_id, do_export,
-                                         remove_old_journals, point_of_sale,
-                                         update_posted)
+                                         remove_old_journals, point_of_sale)
         v.update({
             'sequences_to_create': s,
             'journals_to_create': j,
