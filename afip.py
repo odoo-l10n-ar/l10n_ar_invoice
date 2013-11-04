@@ -154,13 +154,15 @@ class afip_tax_code(osv.osv):
     def _get_parent_afip_code(self, cr, uid, ids, field_name, args, context=None):
         r = {}
 
-        for tc in self.browse(cr, uid, ids, context=context):
-            if tc.afip_code:
-                r[tc.id] = tc.afip_code
-            elif tc.parent_id:
-                r[tc.id] = tc.parent_id.parent_afip_code
+        for tc in self.read(cr, uid, ids, ['afip_code', 'parent_id'], context=context):
+            _id = tc['id']
+            if tc['afip_code']:
+                r[_id] = tc['afip_code']
+            elif tc['parent_id']:
+                p_id = tc['parent_id'][0]
+                r[_id] = self._get_parent_afip_code(cr, uid, [p_id], None, None)[p_id]
             else:
-                r[tc.id] = False
+                r[_id] = 0
 
         return r
 

@@ -26,7 +26,7 @@ _all_except_vat = lambda x: x.tax_code_id.parent_id.name != 'IVA'
 
 class account_invoice_line(osv.osv):
     """
-    En argentina como no se diferencian los impuestos en las facturas, excepto el IVA
+    En argentina como no se diferencian los impuestos en las facturas, excepto el IVA,
     agrego funciones que ignoran el iva solamenta a la hora de imprimir los valores.
 
     En esta nueva versión se cambia las tres variables a una única función 'price_calc'
@@ -176,6 +176,11 @@ class account_invoice(osv.osv):
                 'in_invoice': ['purchase'],
                 'in_refund': ['purchase_refund'],
             }
+
+            if not company.partner_id.responsability_id.id:
+                result['warning']={'title': _('Your company has not setted any responsability'),
+                                   'message': _('Please, set your company responsability in the company partner before continue.')}
+                return result
 
             cr.execute("""
                        SELECT DISTINCT J.id, J.name
