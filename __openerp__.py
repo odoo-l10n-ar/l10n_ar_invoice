@@ -47,7 +47,6 @@
                       'data/journal_class.xml',
                       'data/document_type.xml',
                       'data/partner.xml',
-                      'data/invoice_config.xml',
                       'data/invoice_workflow.xml',
                       'data/reports.xml',
                       'data/country.xml',
@@ -71,9 +70,10 @@
                       'view/afip_responsability_class_view.xml',
                       'view/journal_view.xml',
                       'view/invoice_view.xml',
+                      'view/invoice_config.xml',
                       'view/res_config_view.xml',
                       'security/l10n_ar_invoice_security.xml',
                       'security/ir.model.access.csv'],
-    'version': '2.7.208',
+    'version': '2.7.211',
     'website': 'https://launchpad.net/~openerp-l10n-ar-localization'}
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
