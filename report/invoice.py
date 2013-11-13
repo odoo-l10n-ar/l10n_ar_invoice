@@ -50,7 +50,7 @@ class ar_account_invoice(report_sxw.rml_parse):
         })
 
 def publish_account_invoice():
-    openerp.report.interface.report_int.remove('report.account.invoice')
+    del openerp.report.interface.report_int._reports['report.account.invoice']
 
     report_sxw.report_sxw(
         'report.account.invoice',

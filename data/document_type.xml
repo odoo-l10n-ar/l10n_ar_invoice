@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
-    <data noupdate="False">
+    <data>
         <record model='afip.document_type' id='dt_CPF'>
                 <field name='code'>CPF</field>
                 <field name='name'>CI Policía Federal</field>

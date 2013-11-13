@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
-    <data noupdate="False">
+    <data>
         <record model='afip.responsability' id='res_CF'>
             <field name='code'>CF</field>
             <field name='name'>Consumidor Final</field>

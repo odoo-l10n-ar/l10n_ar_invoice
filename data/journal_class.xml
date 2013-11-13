@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
-    <data noupdate="False">
+    <data>
         <record model='afip.journal_class' id='jc_FVA'>
             <field name='code'>FVA</field>
             <field name='type'>sale</field>

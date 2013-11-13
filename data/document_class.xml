@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
-	<data noupdate="False">
+	<data>
 		<record model='afip.document_class' id='dc_A'>
 			<field name='name'>A</field>
 			<field name='description'>A</field>
