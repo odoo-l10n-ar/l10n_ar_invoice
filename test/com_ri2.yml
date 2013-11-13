@@ -18,8 +18,6 @@
 
 - Execute wizard to create generic chart.
 - !python {model: wizard.multi.charts.accounts }: |
-    r = self.onchange_company_id(cr, uid, [ref("cha_wiz_ivari2")], ref("com_ivari2"))
-    self.write(cr, uid, [ref("cha_wiz_ivari2")], r['value'])
     r = self.onchange_chart_template_id(cr, uid, [ref("cha_wiz_ivari2")], ref("l10n_ar_chart_generic.ri_l10nAR_chart_template"))
     self.write(cr, uid, [ref("cha_wiz_ivari2")], r['value'])
     self.execute(cr, uid, [ref("cha_wiz_ivari2")], {})
