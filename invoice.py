@@ -98,7 +98,7 @@ class account_invoice(osv.osv):
 
         for invoice in self.browse(cr, uid, ids):
             # If parter is not in Argentina, ignore it.
-            if invoice.partner_id.country.name != 'Argentina':
+            if invoice.partner_id.country_id.name != 'Argentina':
                 continue
 
             # Partner responsability ?
