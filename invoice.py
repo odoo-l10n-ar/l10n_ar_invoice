@@ -184,20 +184,19 @@ class account_invoice(osv.osv):
 
             cr.execute("""
                        SELECT DISTINCT J.id, J.name, IRSEQ.number_next
-                       FROM afip_responsability_relation RR
-                        LEFT join afip_document_class DC on (DC.id = RR.document_class_id) 
-                        LEFT join afip_journal_class JC on (DC.id = JC.document_class_id) 
-                        LEFT join account_journal J on (J.journal_class_id = JC.id)
-                        LEFT join ir_sequence IRSEQ on (J.sequence_id = IRSEQ.id)
+                       FROM account_journal J
+                       LEFT join ir_sequence IRSEQ on (J.sequence_id = IRSEQ.id)
+                       LEFT join afip_journal_class JC on (J.journal_class_id = JC.id)
+                       LEFT join afip_document_class DC on (JC.document_class_id = DC.id)
+                       LEFT join afip_responsability_relation RR on (DC.id = RR.document_class_id)
                        WHERE
-                        RR.issuer_id = %s AND
-                        RR.receptor_id = %s AND
-                        J.type in %s AND
-                        J.id is not NULL AND
-                        J.sequence_id is not NULL
-                        AND IRSEQ.number_next is not NULL
+                       (RR.id is Null OR (RR.id is not Null AND RR.issuer_id = %s AND RR.receptor_id = %s)) AND
+                       J.type in %s AND                        
+                       J.id is not NULL AND
+                       J.sequence_id is not NULL
+                       AND IRSEQ.number_next is not NULL
                        ORDER BY IRSEQ.number_next DESC;
-                      """, (company.partner_id.responsability_id.id, partner.responsability_id.id, tuple(type_map[type])))
+                       """, (company.partner_id.responsability_id.id, partner.responsability_id.id, tuple(type_map[type])))
             accepted_journal_ids = [ x[0] for x in cr.fetchall() ]
 
             if 'domain' not in result: result['domain'] = {}
