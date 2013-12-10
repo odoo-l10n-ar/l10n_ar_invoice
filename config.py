@@ -255,6 +255,9 @@ class l10n_ar_invoice_config(osv.osv_memory):
                        left join afip_document_class as DC on (RC.document_class_id = DC.id)
                        left join afip_journal_class  as JC on (RC.document_class_id = JC.document_class_id)
                        where Ri.id = %s
+                         and Ri.name is not Null
+                         and Dc.name is not Null
+                         and JC.name is not Null
                        group by Ri.name, JC.name, JC.type, DC.name, DC.id order by name
                        """,
                        (responsability_id,))
@@ -263,7 +266,7 @@ class l10n_ar_invoice_config(osv.osv_memory):
             items = [ dict(zip([c.name for c in cr.description], item)) for item in fetch_items ]
 
             if not do_export:
-                items = [ i for i in items if i['code'] not in ['FVE', 'FCE', 'DVE', 'DCE', 'CVE', 'CCE'] ]
+                items = [ i for i in items if i['code'] not in ['FVE', 'FCE', 'DVE', 'DCE', 'CVE', 'CCE' ] ]
 
             # Create sequence by journal
             _code_to_type = {
@@ -275,6 +278,9 @@ class l10n_ar_invoice_config(osv.osv_memory):
             #_code_to_type = dict( (k, obj_seq_type.search(cr, uid, [('code','=',v)])[0] ) for k,v in _code_to_type.items() )
 
             for item in items:
+                if item['type'] is None:
+                    print item['name'], item['code'], item['type']
+                    import pdb; pdb.set_trace()
                 sequence = {
                     'name': u"%s (%04i-%s)" % (item['name'], point_of_sale, item['code']),
                     'code': _code_to_type[item['type']],
