@@ -58,7 +58,7 @@
     'depends': [   'base_setup',
                    'account_voucher',
                    'l10n_ar_base_vat',
-                   'l10n_ar_chart_generic',
+                   'l10n_ar_chart',
                    'l10n_ar_states'],
     'description': '\n\nM\xc3\xb3dulo de Facturaci\xc3\xb3n de la localizaci\xc3\xb3n Argentina\n\n\n\nIncluye:\n\n\n\n  - Configuraci\xc3\xb3n de libros, diarios y otros detalles para facturaci\xc3\xb3n argentina.\n\n  - Wizard para configurar los talonarios necesarios para facturar.\n\n\n\nFalta:\n\n  - Terminar de completar la lista de codigos del AFIP de monedas (http://www.afip.gob.ar/fe/documentos/TABLA%20MONEDAS%20V.0%20%2025082010.xls)\n\n',
     'init_xml': [],
