@@ -50,15 +50,18 @@ class ar_account_invoice(report_sxw.rml_parse):
         })
 
 def publish_account_invoice():
-    del openerp.report.interface.report_int._reports['report.account.invoice']
+	try:
+	    del openerp.report.interface.report_int._reports['report.account.invoice']
+	except:
+	    pass
 
-    report_sxw.report_sxw(
-        'report.account.invoice',
-        'account.invoice',
-        'addons/l10n_ar_wsafip/report/invoice.rml',
-        parser=ar_account_invoice,
-        header=False
-    )
+	report_sxw.report_sxw(
+        	'report.account.invoice',
+	        'account.invoice',
+        	'addons/l10n_ar_invoice/report/invoice.rml',
+	        parser=ar_account_invoice,
+        	header=False
+	    )
 
 publish_account_invoice()
 
