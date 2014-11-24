@@ -26,7 +26,7 @@ class res_partner(osv.osv):
     _inherit = 'res.partner'
 
     _columns = {
-        'responsability_id': fields.many2one('afip.responsability', 'Resposability'),
+        'responsability_id': fields.many2one('afip.responsability', 'Responsability'),
         'document_type_id': fields.many2one('afip.document_type', 'Document type',
                                             on_change="onchange_document(vat,document_type_id,document_number)"),
         'document_number': fields.char('Document number', size=64, select=1,
