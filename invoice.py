@@ -18,6 +18,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from openerp import api,_
 from openerp.osv import fields, osv, orm
 from openerp.tools.translate import _
 
@@ -151,20 +152,26 @@ class account_invoice(osv.osv):
 
         return res.get(len(ids)==1 and ids[0], res)
 
-    def onchange_partner_id(self, cr, uid, ids, type, partner_id,
-                            date_invoice=False, payment_term=False,
-                            partner_bank_id=False, company_id=False):
-        result = super(account_invoice,self).onchange_partner_id(cr, uid, ids,
+    @api.multi
+    def onchange_partner_id(self, type, partner_id, date_invoice=False,
+            payment_term=False, partner_bank_id=False, company_id=False):
+
+        result = super(account_invoice,self).onchange_partner_id(
                        type, partner_id, date_invoice, payment_term,
                        partner_bank_id, company_id)
 
         if partner_id:
             # Set list of valid journals by partner responsability
-            partner_obj = self.pool.get('res.partner')
+            # partner_obj = self.pool.get('res.partner')
             company_obj = self.pool.get('res.company')
-            partner = partner_obj.browse(cr, uid, partner_id)
-            company = company_obj.browse(cr, uid, company_id)
+            partner = self.env['res.partner'].browse(partner_id)
+            company = self.env['res.company'].browse(company_id)
             responsability = partner.responsability_id
+	    if not responsability:
+                result['warning']={'title': _('The partner has not set any fiscal responsability'),
+                                   'message': _('Please, set partner fiscal responsability in the partner form before continuing.')}
+                return result
+
             if responsability.issuer_relation_ids is None:
                 return result
 
@@ -178,11 +185,11 @@ class account_invoice(osv.osv):
             }
 
             if not company.partner_id.responsability_id.id:
-                result['warning']={'title': _('Your company has not setted any responsability'),
-                                   'message': _('Please, set your company responsability in the company partner before continue.')}
+                result['warning']={'title': _('Your company has not set any fiscal responsability'),
+                                   'message': _('Please, set your company responsability in the company form before continuing.')}
                 return result
 
-            cr.execute("""
+            self._cr.execute("""
                        SELECT DISTINCT J.id, J.name, IRSEQ.number_next
                        FROM account_journal J
                        LEFT join ir_sequence IRSEQ on (J.sequence_id = IRSEQ.id)
@@ -197,7 +204,7 @@ class account_invoice(osv.osv):
                        AND IRSEQ.number_next is not NULL
                        ORDER BY IRSEQ.number_next DESC;
                        """, (company.partner_id.responsability_id.id, partner.responsability_id.id, tuple(type_map[type])))
-            accepted_journal_ids = [ x[0] for x in cr.fetchall() ]
+            accepted_journal_ids = [ x[0] for x in self._cr.fetchall() ]
 
             if 'domain' not in result: result['domain'] = {}
             if 'value' not in result: result['value'] = {}
