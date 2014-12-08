@@ -167,10 +167,11 @@ class account_invoice(osv.osv):
             partner = self.env['res.partner'].browse(partner_id)
             company = self.env['res.company'].browse(company_id)
             responsability = partner.responsability_id
-	    if not responsability:
-                result['warning']={'title': _('The partner has not set any fiscal responsability'),
-                                   'message': _('Please, set partner fiscal responsability in the partner form before continuing.')}
-                return result
+
+            if not responsability:
+                    result['warning']={'title': _('The partner has not set any fiscal responsability'),
+                                       'message': _('Please, set partner fiscal responsability in the partner form before continuing.')}
+                    return result
 
             if responsability.issuer_relation_ids is None:
                 return result
