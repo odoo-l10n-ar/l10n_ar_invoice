@@ -1,7 +1,7 @@
 - Setup wizard to select argentine chart
 - !record {model: account.installer, id: acc_wiz_ivari }:
         company_id: com_ivari
-        charts: l10n_ar_chart_generic
+        charts: l10n_ar_chart
 
 - Execute wizard to create generic chart.
 - !python {model: account.installer }: |
@@ -10,7 +10,7 @@
 
 - Setup wizard to create generic chart.
 - !record {model: wizard.multi.charts.accounts, id: cha_wiz_ivari }:
-        chart_template_id: l10n_ar_chart_generic.ri_l10nAR_chart_template
+        chart_template_id: l10n_ar_chart.ri_l10nAR_chart_template
         company_id: com_ivari
         bank_accounts_id: []
         code_digits: 8
@@ -21,14 +21,14 @@
     self.view_init(cr, uid, [ref("acc_wiz_ivari")], {})
     #r = self.onchange_company_id(cr, uid, [ref("cha_wiz_ivari")], ref("com_ivari"))
     #self.write(cr, uid, [ref("cha_wiz_ivari")], r['value'])
-    r = self.onchange_chart_template_id(cr, uid, [ref("cha_wiz_ivari")], ref("l10n_ar_chart_generic.ri_l10nAR_chart_template"))
+    r = self.onchange_chart_template_id(cr, uid, [ref("cha_wiz_ivari")], ref("l10n_ar_chart.ri_l10nAR_chart_template"))
     self.write(cr, uid, [ref("cha_wiz_ivari")], r['value'])
     self.execute(cr, uid, [ref("cha_wiz_ivari")], {})
 
 - Check if chart has been created.
 - !assert {model: wizard.multi.charts.accounts, id: cha_wiz_ivari, string: Select VAT taxes }:
-  - sale_tax.id == ref("l10n_ar_chart_generic.ri_tax_vat_21_ventas")
-  - purchase_tax.id == ref("l10n_ar_chart_generic.ri_tax_vat_21_compras")
+  - sale_tax.id == ref("l10n_ar_chart.ri_tax_vat_21_ventas")
+  - purchase_tax.id == ref("l10n_ar_chart.ri_tax_vat_21_compras")
 
 - Setup wizard to create journals for responsable inscripto
 - !record {model: l10n_ar_invoice.config, id: inv_wiz_ivari }:
