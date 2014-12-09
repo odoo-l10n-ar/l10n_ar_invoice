@@ -311,25 +311,18 @@ class l10n_ar_invoice_config(osv.osv_memory):
         return ret, seq
 
     def update_journals(self, cr, uid, ids, context=None):
-        data = self.read(cr, uid, ids, ['company_id',
-                                        'responsability_id',
-                                        'do_export',
-                                        'remove_old_journals',
-                                        'sequence_by',
-                                        'point_of_sale',
-                                        'purchase_by_class'])
-        for w in data:
+        for wiz in self.browse(cr, uid, ids, context=context):
             res = self.onchange_form(cr, uid, None,
-                                     w['company_id'][0],
-                                     w['responsability_id'][0],
-                                     w['do_export'],
-                                     w['remove_old_journals'],
-                                     w['point_of_sale'],
+                                     wiz.company_id,
+                                     wiz.responsability_id,
+                                     wiz.do_export,
+                                     wiz.remove_old_journals,
+                                     wiz.point_of_sale,
                                      context=context)
-            k = {'journals_to_delete':  [(5,)]+[ (0, 0, v) for v in res['value']['journals_to_delete']  ],
-                 'sequences_to_create': [(5,)]+[ (0, 0, v) for v in res['value']['sequences_to_create'] ],
-                 'journals_to_create':  [(5,)]+[ (0, 0, v) for v in res['value']['journals_to_create']  ] }
-            self.write(cr, uid, w['id'], k)
+            wiz.write({'journals_to_delete':  [(5,)]+[ (0, 0, v) for v in res['value']['journals_to_delete']  ],
+                       'sequences_to_create': [(5,)]+[ (0, 0, v) for v in res['value']['sequences_to_create'] ],
+                       'journals_to_create':  [(5,)]+[ (0, 0, v) for v in res['value']['journals_to_create']  ] })
+        return {}
 
     def onchange_form(self, cr, uid, ids,
                         company_id, responsability_id, do_export,
