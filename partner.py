@@ -89,6 +89,64 @@ class res_partner(osv.osv):
         for part in self.read(cr, uid, ids, ['document_number', 'document_type_id', 'vat', 'is_vat_subject']):
             pass
 
+    def prefered_journals(self, cr, uid, ids, company_id, type, context=None):
+        """
+        Devuelve la lista de journals disponibles para este partner.
+        """
+        # Set list of valid journals by partner responsability
+        users_obj   = self.pool.get('res.users')
+        partner_obj = self.pool.get('res.partner')
+        company_obj = self.pool.get('res.company')
+
+        result = {}
+        context = context or {}
+
+        for partner in self.browse(cr, uid, ids):
+            partner_id = partner.id
+            partner = partner_obj.browse(cr, uid, partner_id)
+            company = company_obj.browse(cr, uid, company_id)
+            responsability = partner.responsability_id
+
+            if responsability.issuer_relation_ids is None:
+                return result
+
+            document_class_set = set([ i.document_class_id.id for i in responsability.issuer_relation_ids ])
+
+            type_map = {
+                'out_invoice': ['sale'],
+                'out_refund': ['sale_refund'],
+                'in_invoice': ['purchase'],
+                'in_refund': ['purchase_refund'],
+            }
+
+            if not company.partner_id:
+                raise osv.except_osv(_('Error!'), _('Your company has not setted any partner'))
+
+            if not company.partner_id.responsability_id:
+                raise osv.except_osv(_('Error!'), _('Your company has not setted any responsability'))
+
+            import pdb; pdb.set_trace()
+
+            cr.execute("""
+                       SELECT DISTINCT J.id, J.name, IRSEQ.number_next
+                       FROM account_journal J
+                       LEFT join ir_sequence IRSEQ on (J.sequence_id = IRSEQ.id)
+                       LEFT join afip_journal_class JC on (J.journal_class_id = JC.id)
+                       LEFT join afip_document_class DC on (JC.document_class_id = DC.id)
+                       LEFT join afip_responsability_relation RR on (DC.id = RR.document_class_id)
+                       WHERE
+                       (RR.id is Null OR (RR.id is not Null AND RR.issuer_id = %s AND RR.receptor_id = %s)) AND
+                       J.type in %s AND                        
+                       J.id is not NULL AND
+                       J.sequence_id is not NULL
+                       AND IRSEQ.number_next is not NULL
+                       ORDER BY IRSEQ.number_next DESC;
+                      """, (company.partner_id.responsability_id.id, partner.responsability_id.id, tuple(type_map[type])))
+            result[partner_id] = [ x[0] for x in cr.fetchall() ]
+
+        return result
+
+
 res_partner()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
