@@ -28,7 +28,6 @@
                 'data/document_type.xml',
                 'data/partner.xml',
                 'data/invoice_workflow.xml',
-                #'data/reports.xml',
                 'data/country.xml',
                 'data/res.currency.csv',
                 'data/afip.journal_template.csv',
