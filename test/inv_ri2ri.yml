@@ -54,6 +54,13 @@
     - amount_tax == 1890.0
     - amount_total == 10890.0
 
+- Prepare http controllers to prevent errors
+- !python {model: account.invoice}: |
+    import urllib
+    import time
+    urllib.urlopen('http://localhost:8069/')
+    time.sleep(3)
+
 - Print invoice
 - !python {model: account.invoice}: |
     import os
