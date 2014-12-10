@@ -18,58 +18,55 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import api,_
-from openerp.osv import fields, osv, orm
-from openerp.tools.translate import _
+from openerp import api, models, fields, _
 
 _all_taxes = lambda x: True
 _all_except_vat = lambda x: x.tax_code_id.parent_id.name != 'IVA'
 
-class account_invoice_line(osv.osv):
+class account_invoice_line(models.Model):
     """
-    En argentina como no se diferencian los impuestos en las facturas, excepto el IVA,
-    agrego funciones que ignoran el iva solamenta a la hora de imprimir los valores.
-
-    En esta nueva versión se cambia las tres variables a una única función 'price_calc'
-    que se reemplaza de la siguiente manera:
-
-        'price_unit_vat_included'         -> price_calc(use_vat=True, quantity=1, discount=True)[id]
-        'price_subtotal_vat_included'     -> price_calc(use_vat=True, discount=True)[id]
-        'price_unit_not_vat_included'     -> price_calc(use_vat=False, quantity=1, discount=True)[id]
-        'price_subtotal_not_vat_included' -> price_calc(use_vat=False, discount=True)[id]
-
-    Y ahora puede imprimir sin descuento:
-
-        price_calc(use_vat=True, quantity=1, discount=False)
+    Line of an invoice. Compute pirces with and without vat, for unit or line quantity.
     """
-
+    _name = "account.invoice.line"
     _inherit = "account.invoice.line"
 
-    def price_calc(self, cr, uid, ids, use_vat=True, tax_filter=None, quantity=None, discount=None, context=None):
-        res = {}
-        tax_obj = self.pool.get('account.tax')
-        cur_obj = self.pool.get('res.currency')
-        _tax_filter = tax_filter or ( use_vat and _all_taxes ) or _all_except_vat
-        for line in self.browse(cr, uid, ids):
-            _quantity = quantity if quantity is not None else line.quantity
-            _discount = discount if discount is not None else line.discount
-            _price = line.price_unit * (1-(_discount or 0.0)/100.0)
-            _tax_ids = filter(_tax_filter, line.invoice_line_tax_id)
-            taxes = tax_obj.compute_all(cr, uid,
-                                        _tax_ids, _price, _quantity,
-                                        product=line.product_id,
-                                        partner=line.invoice_id.partner_id)
-            res[line.id] = taxes['total_included']
-            if line.invoice_id:
-                cur = line.invoice_id.currency_id
-                res[line.id] = cur_obj.round(cr, uid, cur, res[line.id])
-        return res
+    @api.one
+    @api.depends('quantity','discount','price_unit','invoice_line_tax_id','product_id','invoice_id.partner_id','invoice_id.currency_id')
+    def compute_price(self, context=None):
+        self.price_unit_vat_included         = self.price_calc(use_vat=True, quantity=1)
+        self.price_subtotal_vat_included     = self.price_calc(use_vat=True)
+        self.price_unit_not_vat_included     = self.price_calc(use_vat=False, quantity=1)
+        self.price_subtotal_not_vat_included = self.price_calc(use_vat=False)
 
+    price_unit_vat_included         = fields.Float(compute='compute_price')
+    price_subtotal_vat_included     = fields.Float(compute='compute_price')
+    price_unit_not_vat_included     = fields.Float(compute='compute_price')
+    price_subtotal_not_vat_included = fields.Float(compute='compute_price')
+
+    @api.v8
+    def price_calc(self, use_vat=True, tax_filter=None, quantity=None, discount=None, context=None):
+        assert len(self) == 1, "Use price_calc with one instance"
+        _tax_filter = tax_filter or ( use_vat and _all_taxes ) or _all_except_vat
+        _quantity = quantity if quantity is not None else self.quantity
+        _discount = discount if discount is not None else self.discount
+        _price = self.price_unit * (1-(_discount or 0.0)/100.0)
+
+        taxes = self.invoice_line_tax_id.filtered(_tax_filter).compute_all(
+            _price, _quantity,product=self.product_id,partner=self.invoice_id.partner_id
+        )
+        return self.invoice_id.currency_id.round(taxes['total_included']) \
+                if self.invoice_id \
+                else taxes['total_included']
+
+    @api.multi
     def compute_all(self, cr, uid, ids, tax_filter=None, context=None):
         res = {}
         tax_obj = self.pool.get('account.tax')
         cur_obj = self.pool.get('res.currency')
         _tax_filter = tax_filter
+
+        import pdb; pdb.set_trace()
+
         for line in self.browse(cr, uid, ids):
             _quantity = line.quantity
             _discount = line.discount
@@ -91,7 +88,11 @@ class account_invoice_line(osv.osv):
 
 account_invoice_line()
 
-class account_invoice(osv.osv):
+class account_invoice(models.Model):
+    """
+    Argentine invoice functions.
+    """
+    _name = "account.invoice"
     _inherit = "account.invoice"
 
     def afip_validation(self, cr, uid, ids, context={}):
