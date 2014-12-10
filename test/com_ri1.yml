@@ -3,12 +3,12 @@
         company_id: com_ivari
         charts: l10n_ar_chart
 
-- Execute wizard to create generic chart.
+- Execute wizard to create chart.
 - !python {model: account.installer }: |
     self.view_init(cr, uid, [ref("acc_wiz_ivari")], {})
     self.execute(cr, uid, [ref("acc_wiz_ivari")], {})
 
-- Setup wizard to create generic chart.
+- Setup wizard to create chart.
 - !record {model: wizard.multi.charts.accounts, id: cha_wiz_ivari }:
         chart_template_id: l10n_ar_chart.ri_l10nAR_chart_template
         company_id: com_ivari
@@ -16,7 +16,7 @@
         code_digits: 8
         currency_id: 1
 
-- Execute wizard to create generic chart.
+- Execute wizard to create chart.
 - !python {model: wizard.multi.charts.accounts }: |
     self.view_init(cr, uid, [ref("acc_wiz_ivari")], {})
     #r = self.onchange_company_id(cr, uid, [ref("cha_wiz_ivari")], ref("com_ivari"))
