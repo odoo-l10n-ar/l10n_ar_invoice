@@ -19,8 +19,6 @@
 - Execute wizard to create chart.
 - !python {model: wizard.multi.charts.accounts }: |
     self.view_init(cr, uid, [ref("acc_wiz_ivari")], {})
-    #r = self.onchange_company_id(cr, uid, [ref("cha_wiz_ivari")], ref("com_ivari"))
-    #self.write(cr, uid, [ref("cha_wiz_ivari")], r['value'])
     r = self.onchange_chart_template_id(cr, uid, [ref("cha_wiz_ivari")], ref("l10n_ar_chart.ri_l10nAR_chart_template"))
     self.write(cr, uid, [ref("cha_wiz_ivari")], r['value'])
     self.execute(cr, uid, [ref("cha_wiz_ivari")], {})

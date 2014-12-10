@@ -29,14 +29,15 @@
     - amount_untaxed == 9000.0
     - amount_tax == 1890.0
     - amount_total == 10890.0
+    - currency_id.id == ref('base.ARS')
 
 - Check invoice lines
 - !assert {model: account.invoice.line, search: "[('invoice_id','=',ref('inv_ri2rm'))]", string: Check invoice lines}:
     - name == '[PC3] Medium PC'
-    - price_calc(use_vat=True, quantity=1).values() == [1089.0]
-    - price_calc(use_vat=True).values() == [10890.0]
-    - price_calc(use_vat=False, quantity=1).values() == [900.0]
-    - price_calc(use_vat=False).values() == [9000.0]
+    - price_unit_vat_included == 1089.0
+    - price_subtotal_vat_included == 10890.0
+    - price_unit_not_vat_included == 900.0
+    - price_subtotal_not_vat_included == 9000.0
 
 - Validate invoice
 - !python {model: account.invoice}: |
@@ -55,7 +56,10 @@
 
 - Print invoice
 - !python {model: account.invoice}: |
-    from openerp.tools.test_reports import try_report
-    try_report(cr, uid, 'report.account.invoice', [ref('inv_ri2rm')])
-
+    import os
+    import openerp.report
+    from openerp import tools
+    data, format = openerp.report.render_report(cr, uid, [ref('inv_ri2rm')], 'account.report_invoice', {}, {})
+    if tools.config['test_report_directory']:
+       file(os.path.join(tools.config['test_report_directory'], 'account-invoice.ri2rm.'+format), 'wb+').write(data)
 
