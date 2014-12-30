@@ -36,7 +36,7 @@
                         <field name="journal_id" groups="account.group_account_user" on_change="onchange_journal_id(journal_id, context)" widget="many2one"/>
                         <field name="afip_service_start" attrs="{'invisible': ['!',('afip_concept','in',['2','3'])], 'readonly': ['!',('state','=','draft')]}"/>
                         <field name="afip_service_end"   attrs="{'invisible': ['!',('afip_concept','in',['2','3'])], 'readonly': ['!',('state','=','draft')]}"/>
-                        <field name="afip_concept"/>
+                        <field name="afip_concept" invisible="1"/>
                     </field>
                 </data>
             </field>
