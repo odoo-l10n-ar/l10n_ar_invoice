@@ -19,6 +19,8 @@
 #
 ##############################################################################
 from openerp import api, models, fields, _
+from openerp.exceptions import except_orm, Warning, RedirectWarning
+from datetime import date, timedelta
 
 _all_taxes = lambda x: True
 _all_except_vat = lambda x: x.tax_code_id.parent_id.name != 'IVA'
@@ -88,6 +90,17 @@ class account_invoice_line(models.Model):
 
 account_invoice_line()
 
+def _calc_concept(product_types):
+    if product_types == set(['consu']):
+        concept = '1'
+    elif product_types == set(['service']):
+        concept = '2'
+    elif product_types == set(['consu','service']):
+        concept = '3'
+    else:
+        concept = False
+    return concept
+
 class account_invoice(models.Model):
     """
     Argentine invoice functions.
@@ -95,40 +108,86 @@ class account_invoice(models.Model):
     _name = "account.invoice"
     _inherit = "account.invoice"
 
-    def afip_validation(self, cr, uid, ids, context={}):
-        obj_resp_class = self.pool.get('afip.responsability_relation')
+    @api.depends('invoice_line.product_id.type')
+    def _get_concept(self):
+        """
+        Compute concept type from selected products in invoice.
+        """
+        r = {}
+        for inv in self:
+            concept = False
+            product_types = set([ line.product_id.type for line in inv.invoice_line ])
+            inv.afip_concept = _calc_concept(product_types)
 
-        for invoice in self.browse(cr, uid, ids):
+    def _get_service_begin_date(self):
+        today = date.today()
+        first = date(day=1, month=today.month, year=today.year)
+        prev_last_day = first - timedelta(days=1)
+        period = self.period_id.find(prev_last_day)
+        return period and period.date_start or False
+
+    def _get_service_end_date(self):
+        today = date.today()
+        first = date(day=1, month=today.month, year=today.year)
+        prev_last_day = first - timedelta(days=1)
+        period = self.period_id.find(prev_last_day)
+        return period and prev_last_day or False
+
+    afip_concept = fields.Selection([('1','Consumible'), ('2','Service'), ('3','Mixted')],
+                                    compute="_get_concept",
+                                    store=False,
+                                    help="AFIP invoice concept.") 
+    afip_service_start = fields.Date('Service Start Date', default=_get_service_begin_date)
+    afip_service_end = fields.Date('Service End Date', default=_get_service_end_date)
+
+    def afip_validation(self):
+        """
+        Check basic AFIP request to generate invoices.
+        """
+        for invoice in self:
             # If parter is not in Argentina, ignore it.
-            if invoice.partner_id.country_id.name != 'Argentina':
+            if invoice.company_id.partner_id.country_id.name != 'Argentina':
                 continue
 
+            # Check if you choose the right journal.
+            if invoice.type == 'out_invoice' and invoice.journal_id.journal_class_id.afip_code not in [1,6,11,51,19, 2,7,12,52,20]:
+                raise except_orm(_('Wrong Journal'),
+                                 _('Out invoice journal must have a valid journal class.'))
+            if invoice.type == 'out_refund' and invoice.journal_id.journal_class_id.afip_code not in [3,8,13,53,21]:
+                raise except_orm(_('Wrong Journal'),
+                                 _('Out invoice journal must have a valid journal class.'))
+
             # Partner responsability ?
-            if isinstance(invoice.partner_id.responsability_id, orm.browse_null):
-                raise osv.except_osv(_('No responsability'),
-                                     _('Your partner have not afip responsability assigned. Assign one please.'))
+            if not invoice.partner_id.responsability_id:
+                raise except_orm(_('No responsability'),
+                                 _('Your partner have not afip responsability assigned. Assign one please.'))
 
             # Take responsability classes for this journal
             invoice_class = invoice.journal_id.journal_class_id.document_class_id
-            resp_class_ids = obj_resp_class.search(cr, uid, [('document_class_id','=', invoice_class.id)])
+            resp_class = self.env['afip.responsability_relation'].search([
+                ('document_class_id','=', invoice_class.id),
+                ('issuer_id.code','=',invoice.journal_id.company_id.partner_id.responsability_id.code)
+            ])
 
             # You can emmit this document?
-            resp_class = [ rc.issuer_id.code for rc in obj_resp_class.browse(cr, uid, resp_class_ids) ]
-            if invoice.journal_id.company_id.partner_id.responsability_id.code not in resp_class:
-                raise osv.except_osv(_('Invalid emisor'),
-                                     _('Your responsability with AFIP dont let you generate this kind of document.'))
+            if not resp_class:
+                raise except_orm(_('Invalid emisor'),
+                                 _('Your responsability with AFIP dont let you generate this kind of document.'))
 
             # Partner can receive this document?
-            resp_class = [ rc.receptor_id.code for rc in obj_resp_class.browse(cr, uid, resp_class_ids) ]
-            if False and invoice.partner_id.responsability_id.code not in resp_class:
-                raise osv.except_osv(_('Invalid receptor'),
-                                     _('Your partner cant recive this document. Check AFIP responsability of the partner, or Journal Account of the invoice.'))
+            resp_class = self.env['afip.responsability_relation'].search([
+                ('document_class_id','=', invoice_class.id),
+                ('receptor_id.code','=',invoice.journal_id.company_id.partner_id.responsability_id.code)
+            ])
+            if not resp_class:
+                raise except_orm(_('Invalid receptor'),
+                                 _('Your partner cant receive this document. Check AFIP responsability of the partner, or Journal Account of the invoice.'))
 
             # If Final Consumer have pay more than 1000$, you need more information to generate document.
             if invoice.partner_id.responsability_id.code == 'CF' and invoice.amount_total > 1000 and \
                (invoice.partner_id.document_type.code in [ None, 'Sigd' ] or invoice.partner_id.document_number is None):
-                raise osv.except_osv(_('Partner without Identification for total invoices > $1000.-'),
-                                     _('You must define valid document type and number for this Final Consumer.'))
+                raise except_orm(_('Partner without Identification for total invoices > $1000.-'),
+                                 _('You must define valid document type and number for this Final Consumer.'))
         return True
 
     def compute_all(self, cr, uid, ids, line_filter=lambda line: True, tax_filter=lambda tax: True, context=None):
