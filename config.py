@@ -330,11 +330,11 @@ class l10n_ar_invoice_config(osv.osv_memory):
                         context=None):
         v = {
             'journals_to_delete': self.update_del_journals (cr, uid, ids,
-                                                            company_id.id, responsability_id.id, do_export,
+                                                            company_id, responsability_id, do_export,
                                                             remove_old_journals, point_of_sale),
         }
-        j, s = self.update_new_journals (cr, uid, ids, company_id.id,
-                                         responsability_id.id, do_export,
+        j, s = self.update_new_journals (cr, uid, ids, company_id,
+                                         responsability_id, do_export,
                                          remove_old_journals, point_of_sale)
         v.update({
             'sequences_to_create': s,
