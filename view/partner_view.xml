@@ -40,7 +40,7 @@
                         </group>
                     </field>
                     <field name="property_account_position" position="before">
-                        <field name="responsability_id" widget="selection"/>
+                        <field name="responsability_id" widget="selection" attrs="{'required':[('document_type_id','in',['CUIT'])]}"/>
                         <field name="iibb"/>
                         <field name="start_date"/>
                     </field>
