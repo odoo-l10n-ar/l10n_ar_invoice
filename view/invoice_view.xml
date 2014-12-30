@@ -29,8 +29,14 @@
             <field name="inherit_id" ref="account.invoice_form"/>
             <field name="arch" type="xml">
                 <data>
+                    <field name="fiscal_position" position="replace">
+                        <field name="fiscal_position" invisible="1"/>
+                    </field>
                     <field name="journal_id" position="replace">
-			<field name="journal_id" groups="account.group_account_user" on_change="onchange_journal_id(journal_id, context)" widget="many2one"/>
+                        <field name="journal_id" groups="account.group_account_user" on_change="onchange_journal_id(journal_id, context)" widget="many2one"/>
+                        <field name="afip_service_start" attrs="{'invisible': ['!',('afip_concept','in',['2','3'])], 'readonly': ['!',('state','=','draft')]}"/>
+                        <field name="afip_service_end"   attrs="{'invisible': ['!',('afip_concept','in',['2','3'])], 'readonly': ['!',('state','=','draft')]}"/>
+                        <field name="afip_concept"/>
                     </field>
                 </data>
             </field>
