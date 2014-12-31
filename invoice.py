@@ -60,33 +60,26 @@ class account_invoice_line(models.Model):
                 if self.invoice_id \
                 else taxes['total_included']
 
-    @api.multi
-    def compute_all(self, cr, uid, ids, tax_filter=None, context=None):
+    @api.v8
+    def compute_all(self, tax_filter=lambda tax: True, context=None):
         res = {}
-        tax_obj = self.pool.get('account.tax')
-        cur_obj = self.pool.get('res.currency')
-        _tax_filter = tax_filter
-
-        import pdb; pdb.set_trace()
-
-        for line in self.browse(cr, uid, ids):
+        for line in self:
             _quantity = line.quantity
             _discount = line.discount
             _price = line.price_unit * (1-(_discount or 0.0)/100.0)
-            _tax_ids = filter(_tax_filter, line.invoice_line_tax_id)
-            taxes = tax_obj.compute_all(cr, uid,
-                                        _tax_ids, _price, _quantity,
-                                        product=line.product_id,
-                                        partner=line.invoice_id.partner_id)
+            taxes = line.invoice_line_tax_id.filtered(tax_filter).compute_all(
+                _price, _quantity,
+                product=line.product_id,
+                partner=line.invoice_id.partner_id)
 
-            _round = (lambda x: cur_obj.round(cr, uid, line.invoice_id.currency_id, x)) if line.invoice_id else (lambda x: x)
+            _round = (lambda x: line.invoice_id.currency_id.round(x)) if line.invoice_id else (lambda x: x)
             res[line.id] = {
                 'amount_untaxed': _round(taxes['total']),
                 'amount_tax': _round(taxes['total_included'])-_round(taxes['total']),
                 'amount_total': _round(taxes['total_included']), 
                 'taxes': taxes['taxes'],
             }
-        return res.get(len(ids)==1 and ids[0], res)
+        return res.get(len(self)==1 and res.keys()[0], res)
 
 account_invoice_line()
 
