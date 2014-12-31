@@ -89,16 +89,16 @@
 			    <field name="iibb" /><newline/>
 			    <field name="start_date" /><newline/>
 			    <field name="responsability_id" widget="selection"
-				    on_change="onchange_form(company_id, responsability_id, do_export, remove_old_journals, point_of_sale,context=context)"
+				    on_change="onchange_form(company_id, responsability_id, do_export, remove_old_journals, point_of_sale)"
 				    /><newline/>
 			    <field name="do_export"
-				    on_change="onchange_form(company_id, responsability_id, do_export, remove_old_journals, point_of_sale,context=context)"
+				    on_change="onchange_form(company_id, responsability_id, do_export, remove_old_journals, point_of_sale)"
 				    /><newline/>
 			    <field name="remove_old_journals"
-				    on_change="onchange_form(company_id, responsability_id, do_export, remove_old_journals, point_of_sale,context=context)"
+				    on_change="onchange_form(company_id, responsability_id, do_export, remove_old_journals, point_of_sale)"
 				    /><newline/>
 			    <field name="point_of_sale"
-				    on_change="onchange_form(company_id, responsability_id, do_export, remove_old_journals, point_of_sale,context=context)"
+				    on_change="onchange_form(company_id, responsability_id, do_export, remove_old_journals, point_of_sale)"
 				    /><newline/>
 			    <group colspan="4" groups="base.group_extended">
 				    <notebook >
