@@ -1,26 +1,8 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-# Copyright (C) 2012 OpenERP - Team de Localización Argentina.
-# https://launchpad.net/~openerp-l10n-ar-localization
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program. If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
 from openerp import api, models, fields, _
 from openerp.exceptions import except_orm, Warning, RedirectWarning
 from datetime import date, timedelta
+from openerp import exceptions
 
 _all_taxes = lambda x: True
 _all_except_vat = lambda x: x.tax_code_id.parent_id.name != 'IVA'
@@ -84,6 +66,7 @@ class account_invoice_line(models.Model):
 account_invoice_line()
 
 def _calc_concept(product_types):
+
     if product_types == set(['consu']):
         concept = '1'
     elif product_types == set(['service']):
@@ -91,7 +74,9 @@ def _calc_concept(product_types):
     elif product_types == set(['consu','service']):
         concept = '3'
     else:
-        concept = False
+        raise exceptions.Warning(
+            _('Cant compute AFIP concept from product types %s.') % product_types
+        )
     return concept
 
 class account_invoice(models.Model):
@@ -106,11 +91,12 @@ class account_invoice(models.Model):
         """
         Compute concept type from selected products in invoice.
         """
+        concept_obj = self.env['afip.concept_type']
+
         r = {}
         for inv in self:
-            concept = False
             product_types = set([ line.product_id.type for line in inv.invoice_line ])
-            inv.afip_concept = _calc_concept(product_types)
+            inv.afip_concept = concept_obj.get_code(product_types)
 
     def _get_service_begin_date(self):
         today = date.today()

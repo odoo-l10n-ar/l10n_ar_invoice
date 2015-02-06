@@ -1,24 +1,8 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-# Copyright (C) 2012 OpenERP - Team de Localización Argentina.
-# https://launchpad.net/~openerp-l10n-ar-localization
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program. If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
+from openerp import api, models, _
+from openerp import fields as Fields
 from openerp.osv import fields, osv
+from openerp import exceptions
 
 class afip_journal_template(osv.osv):
     _name = 'afip.journal_template'
@@ -101,7 +85,7 @@ class afip_journal_class(osv.osv):
     def _check_product_types(self, cr, uid, ids, context=None):
         for jc in self.browse(cr, uid, ids, context=context):
             if jc.product_types:
-                types = set(jc.product_types.split(','))
+                types = set(','.split(jc.product_types))
                 res = types.issubset(['adjust','consu','service'])
             else:
                 res = True
@@ -123,28 +107,29 @@ class afip_document_type(osv.osv):
     }
 afip_document_type()
 
-class afip_concept_type(osv.osv):
+class afip_concept_type(models.Model):
     _name = 'afip.concept_type'
     _description='AFIP concept types'
-    _columns = {
-        'name': fields.char('Name', size=120,required=True),
-        'afip_code': fields.integer('AFIP Code',required=True),
-        'active': fields.boolean('Active'),
-        'product_types': fields.char('Product types',
-                                     help='Translate this product types to this AFIP concept. '
-                                     'Types must be a subset of adjust, consu and service separated by commas.',required=True),
-    }
 
-    def _check_product_types(self, cr, uid, ids, context=None):
-        for ct in self.browse(cr, uid, ids, context=context):
-            if ct.product_types:
-                types = set(ct.product_types.split(','))
-                res = types.issubset(['adjust','consu','service'])
-            else:
-                res = True
-        return res
+    name = Fields.Char('Name', size=120, required=True)
+    afip_code = Fields.Integer('AFIP Code', required=True)
+    active = Fields.Boolean('Active')
+    product_types = Fields.Char(
+        'Product types',
+        help='Translate this product types to this AFIP concept. '
+        'Types must be a subset of adjust, consu and service separated by commas.',
+        required=True)
 
-    _constraints = [(_check_product_types, 'You provided an invalid list of product types. Must been separated by commas',['product_types'])]
+    @api.model
+    def get_code(self, types):
+        types = set(types)
+        for concept in self.search([]):
+            product_types = set([ s.strip() for s in concept.product_types.split(',')])
+            if product_types == types:
+                return str(concept.afip_code)
+        raise exceptions.Warning(
+            _('Cant compute AFIP concept from product types [%s].') % ','.join(types)
+        )
 
 afip_concept_type()
 
