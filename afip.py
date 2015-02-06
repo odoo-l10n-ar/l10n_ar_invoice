@@ -82,17 +82,6 @@ class afip_journal_class(osv.osv):
                                      'Types must be a subset of adjust, consu and service separated by commas.'),
     }
 
-    def _check_product_types(self, cr, uid, ids, context=None):
-        for jc in self.browse(cr, uid, ids, context=context):
-            if jc.product_types:
-                types = set(','.split(jc.product_types))
-                res = types.issubset(['adjust','consu','service'])
-            else:
-                res = True
-        return res
-
-    _constraints = [(_check_product_types, 'You provided an invalid list of product types. Must been separated by commas.', ['product_types'])]
-
     _sql_constraints = [('name','unique(name)', 'Not repeat name!')]
 afip_journal_class()
 
@@ -131,6 +120,7 @@ class afip_concept_type(models.Model):
             _('Cant compute AFIP concept from product types [%s].') % ','.join(types)
         )
 
+    _sql_constraints = [('name','unique(name)', 'Not repeat name!')]
 afip_concept_type()
 
 class afip_tax_code(osv.osv):
