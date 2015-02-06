@@ -170,7 +170,7 @@ class account_invoice(models.Model):
             # Partner can receive this document?
             resp_class = self.env['afip.responsability_relation'].search([
                 ('document_class_id','=', invoice_class.id),
-                ('receptor_id.code','=',invoice.journal_id.company_id.partner_id.responsability_id.code)
+                ('receptor_id.code','=',invoice.partner_id.responsability_id.code)
             ])
             if not resp_class:
                 raise except_orm(_('Invalid receptor'),
