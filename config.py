@@ -313,8 +313,8 @@ class l10n_ar_invoice_config(osv.osv_memory):
     def update_journals(self, cr, uid, ids, context=None):
         for wiz in self.browse(cr, uid, ids, context=context):
             res = self.onchange_form(cr, uid, None,
-                                     wiz.company_id,
-                                     wiz.responsability_id,
+                                     wiz.company_id.id,
+                                     wiz.responsability_id.id,
                                      wiz.do_export,
                                      wiz.remove_old_journals,
                                      wiz.point_of_sale,
