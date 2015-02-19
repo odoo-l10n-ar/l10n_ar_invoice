@@ -112,6 +112,8 @@ class afip_concept_type(models.Model):
     @api.model
     def get_code(self, types):
         types = set(types)
+        if not types:
+            return False
         for concept in self.search([]):
             product_types = set([ s.strip() for s in concept.product_types.split(',')])
             if product_types == types:
