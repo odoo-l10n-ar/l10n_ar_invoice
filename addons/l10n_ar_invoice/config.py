@@ -1,23 +1,4 @@
 # -*- coding: utf-8 -*-
-##############################################################################
-#
-# Copyright (C) 2012 OpenERP - Team de Localización Argentina.
-# https://launchpad.net/~openerp-l10n-ar-localization
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program. If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
 from openerp.osv import fields, osv
 from openerp.tools.translate import _
 import logging
@@ -25,13 +6,15 @@ import logging
 _logger = logging.getLogger(__name__)
 _schema = logging.getLogger(__name__ + '.schema')
 
+
 class l10n_ar_invoice_del_journal(osv.osv_memory):
     _name = 'l10n_ar_invoice.del_journal'
     _description = 'Journal to delete'
     _columns = {
         'name': fields.char('Name', size=64, required=True),
         'journal_id': fields.many2one('account.journal', 'Journal'),
-        'builder_id': fields.many2one('l10n_ar_invoice.config', 'Builder Wizard')
+        'builder_id': fields.many2one('l10n_ar_invoice.config',
+                                      'Builder Wizard')
     }
 
     def doit(self, cr, uid, ids, context=None):
@@ -42,39 +25,44 @@ class l10n_ar_invoice_del_journal(osv.osv_memory):
         obj_cb_line = self.pool.get('account.journal.cashbox.line')
 
         to_delete = self.read(cr, uid, ids, ['name', 'journal_id'])
-        jids = [ j['journal_id'][0] for j in to_delete ]
-        names = [ j['name'] for j in to_delete ]
+        jids = [j['journal_id'][0] for j in to_delete]
+        names = [j['name'] for j in to_delete]
 
         # Remove dependencies
-        cb_line_ids = obj_cb_line.search(cr, uid, [('journal_id','in',jids)])
+        cb_line_ids = obj_cb_line.search(cr, uid, [('journal_id', 'in', jids)])
         obj_cb_line.unlink(cr, uid, cb_line_ids)
 
         # Remove journals
         try:
             obj_journal.unlink(cr, uid, jids)
             _logger.info('Deleted journal %s' % ','.join(names))
-        except Exception, e:
+        except Exception:
             raise osv.except_osv(_('Ilegal Operation'),
-                                 _('You want remove journals with moves: %s') % ','.join(names))
+                                 _('You want remove journals with moves: %s') %
+                                 ','.join(names))
 
 l10n_ar_invoice_del_journal()
+
 
 def _selection_code_get(self, cr, uid, context={}):
     cr.execute('select code, name from ir_sequence_type')
     return cr.fetchall()
+
 
 class l10n_ar_invoice_new_sequence(osv.osv_memory):
     _name = 'l10n_ar_invoice.new_sequence'
     _description = 'Sequence to create'
     _columns = {
         'name': fields.char('Name', size=64, required=True),
-        'code': fields.selection(_selection_code_get, 'Sequence type', size=64, required=True),
+        'code': fields.selection(_selection_code_get, 'Sequence type', size=64,
+                                 required=True),
         'number_next': fields.integer('First number'),
         'prefix': fields.char('Prefix', size=64),
         'suffix': fields.char('Suffix', size=64),
         'padding': fields.integer('Padding'),
         'company_id': fields.many2one('res.company', 'Company'),
-        'builder_id': fields.many2one('l10n_ar_invoice.config', 'Builder Wizard'),
+        'builder_id': fields.many2one('l10n_ar_invoice.config',
+                                      'Builder Wizard'),
     }
 
     def doit(self, cr, uid, ids, context=None):
@@ -83,15 +71,17 @@ class l10n_ar_invoice_new_sequence(osv.osv_memory):
         """
         obj_sequence = self.pool.get('ir.sequence')
 
-        vals = self.read(cr, uid, ids, ['name', 'code', 'number_next', 'prefix', 'suffix', 'padding'])
-        names = [ v['name'] for v in vals ]
+        vals = self.read(cr, uid, ids, ['name', 'code', 'number_next', 'prefix',
+                                        'suffix', 'padding'])
+        names = [v['name'] for v in vals]
         for val in vals:
             del val['id']
             val['implementation'] = 'no_gap'
-            sid = obj_sequence.create(cr, uid, val)
+            obj_sequence.create(cr, uid, val)
         _logger.info('Sequences created %s' % ','.join(names))
 
 l10n_ar_invoice_new_sequence()
+
 
 class l10n_ar_invoice_new_journal(osv.osv_memory):
     _name = 'l10n_ar_invoice.new_journal'
@@ -99,17 +89,24 @@ class l10n_ar_invoice_new_journal(osv.osv_memory):
     _columns = {
         'name': fields.char('Name', size=64, required=True),
         'code': fields.char('Code', size=10, required=True),
-        'type': fields.selection([('sale', 'Sale'),('sale_refund','Sale Refund'),
-                                  ('purchase', 'Purchase'), ('purchase_refund','Purchase Refund')],
+        'type': fields.selection([('sale', 'Sale'),
+                                  ('sale_refund', 'Sale Refund'),
+                                  ('purchase', 'Purchase'),
+                                  ('purchase_refund', 'Purchase Refund')],
                                  'Type', size=32, required=True,
-                                 help="Select 'Sale' for Sale journal to be used at the time of making invoice."\
-                                 " Select 'Purchase' for Purchase Journal to be used at the time of approving purchase order."),
-        'journal_class_id': fields.many2one('afip.journal_class', 'Document class'),
+                                 help="Select 'Sale' for Sale journal to be"
+                                 " used at the time of making invoice."
+                                 " Select 'Purchase' for Purchase Journal"
+                                 " to be used at the time of approving"
+                                 " purchase order."),
+        'journal_class_id': fields.many2one('afip.journal_class',
+                                            'Document class'),
         'point_of_sale': fields.integer('Point of sale'),
         'sequence_name': fields.char('Sequence Name', size=64),
         'company_id': fields.many2one('res.company', 'Compania'),
         'currency': fields.many2one('res.currency', 'Moneda'),
-        'builder_id': fields.many2one('l10n_ar_invoice.config', 'Builder Wizard'),
+        'builder_id': fields.many2one('l10n_ar_invoice.config',
+                                      'Builder Wizard'),
     }
 
     def doit(self, cr, uid, ids, context=None):
@@ -117,18 +114,21 @@ class l10n_ar_invoice_new_journal(osv.osv_memory):
         obj_sequence = self.pool.get('ir.sequence')
 
         vals = self.read(cr, uid, ids, ['name', 'code', 'type', 'company_id',
-                                        'journal_class_id', 'point_of_sale', 'sequence_name',
-                                        'currency'])
-        names = [ v['name'] for v in vals ]
+                                        'journal_class_id', 'point_of_sale',
+                                        'sequence_name', 'currency'])
+        names = [v['name'] for v in vals]
         for val in vals:
-            val['sequence_id'] = obj_sequence.search(cr, uid, [('name','=',val['sequence_name'])]).pop()
+            val['sequence_id'] = obj_sequence.search(
+                cr, uid, [('name', '=', val['sequence_name'])]).pop()
             del val['id']
             del val['sequence_name']
-            val = dict( (k, v[0]) if type(v) is tuple else (k, v) for k,v in val.items() )
-            sid = obj_journal.create(cr, uid, val)
+            val = dict((k, v[0]) if type(v) is tuple else (k, v)
+                       for k, v in val.items())
+            obj_journal.create(cr, uid, val)
         _logger.info('Journals created %s' % ','.join(names))
 
 l10n_ar_invoice_new_journal()
+
 
 class l10n_ar_invoice_config(osv.osv_memory):
     def _default_company(self, cr, uid, c, context=None):
@@ -136,7 +136,8 @@ class l10n_ar_invoice_config(osv.osv_memory):
 
     def _default_responsability(self, cr, uid, c, context=None):
         resp_obj = self.pool.get('afip.responsability')
-        ids = resp_obj.search(cr, uid, [('name','=','Responsable Monotributo')])
+        ids = resp_obj.search(cr, uid,
+                              [('name', '=', 'Responsable Monotributo')])
         return ids.pop()
 
     _name = 'l10n_ar_invoice.config'
@@ -146,15 +147,31 @@ class l10n_ar_invoice_config(osv.osv_memory):
         'cuit': fields.char('CUIT', size=12, required=True),
         'iibb': fields.char('IIBB', size=12, required=True),
         'start_date': fields.date('Inicio de Actividades', required=True),
-        'responsability_id': fields.many2one('afip.responsability', 'Resposability', required=True, domain=[('code','!=','CF')]),
-        'do_export': fields.boolean(u'Realiza o realizará operaciones de Exportación'),
-        'remove_old_journals': fields.boolean('Eliminar los diarios existentes',
-            help=u'Si es su primera instalación indique que necesita borrar los diarios existentes. Si agrega un nuevo punto de ventas indique que no va a eliminar los journals. Igual, puede indicar cuales borra y cuales no en el próximo paso.'),
-        'point_of_sale': fields.integer(u'Número de Punto de Venta',
-            help=u'Este es el número que aparecerá como prefijo del número de la factura. Si solo tiene un solo talonario ese número es 1. Si necesita agregar un nuevo punto de venta debe acceder a opciones Administración/Configuración/Wizards de Configuración/Wizards de Configuración y ejecutar nuevamente el wizard de "Configuración de Facturación".'),
-        'journals_to_delete': fields.one2many('l10n_ar_invoice.del_journal', 'builder_id', 'Journals to delete'),
-        'sequences_to_create': fields.one2many('l10n_ar_invoice.new_sequence', 'builder_id', 'Sequence to delete'),
-        'journals_to_create': fields.one2many('l10n_ar_invoice.new_journal', 'builder_id', 'Journals to create'),
+        'responsability_id': fields.many2one(
+            'afip.responsability', 'Resposability',
+            required=True, domain=[('code','!=','CF')]),
+        'do_export': fields.boolean(
+            'Realiza o realizará operaciones de Exportación'),
+        'remove_old_journals': fields.boolean(
+            'Eliminar los diarios existentes',
+            help=u'Si es su primera instalación indique que necesita borrar'
+            ' los diarios existentes. Si agrega un nuevo punto de ventas'
+            ' indique que no va a eliminar los journals. Igual, puede indicar'
+            ' cuales borra y cuales no en el próximo paso.'),
+        'point_of_sale': fields.integer(
+            'Número de Punto de Venta',
+            help=u'Este es el número que aparecerá como prefijo del número'
+            ' de la factura. Si solo tiene un solo talonario ese número es 1.'
+            ' Si necesita agregar un nuevo punto de venta debe acceder a'
+            ' opciones Administración/Configuración/Wizards de'
+            ' Configuración/Wizards de Configuración y ejecutar nuevamente'
+            ' el wizard de "Configuración de Facturación".'),
+        'journals_to_delete': fields.one2many(
+            'l10n_ar_invoice.del_journal', 'builder_id', 'Journals to delete'),
+        'sequences_to_create': fields.one2many(
+            'l10n_ar_invoice.new_sequence', 'builder_id', 'Sequence to delete'),
+        'journals_to_create': fields.one2many(
+            'l10n_ar_invoice.new_journal', 'builder_id', 'Journals to create'),
     }
 
     _defaults= {
@@ -234,7 +251,7 @@ class l10n_ar_invoice_config(osv.osv_memory):
         rel = {}
 
         if company_id and responsability_id and point_of_sale:
- 
+
             obj_company = self.pool.get('res.company')
             obj_seq_type = self.pool.get('ir.sequence.type')
 
