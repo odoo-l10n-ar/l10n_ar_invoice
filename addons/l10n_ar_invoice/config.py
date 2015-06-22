@@ -149,23 +149,23 @@ class l10n_ar_invoice_config(osv.osv_memory):
         'start_date': fields.date('Inicio de Actividades', required=True),
         'responsability_id': fields.many2one(
             'afip.responsability', 'Resposability',
-            required=True, domain=[('code','!=','CF')]),
+            required=True, domain=[('code', '!=', 'CF')]),
         'do_export': fields.boolean(
             'Realiza o realizará operaciones de Exportación'),
         'remove_old_journals': fields.boolean(
             'Eliminar los diarios existentes',
             help=u'Si es su primera instalación indique que necesita borrar'
-            ' los diarios existentes. Si agrega un nuevo punto de ventas'
-            ' indique que no va a eliminar los journals. Igual, puede indicar'
-            ' cuales borra y cuales no en el próximo paso.'),
+            u' los diarios existentes. Si agrega un nuevo punto de ventas'
+            u' indique que no va a eliminar los journals. Igual, puede indicar'
+            u' cuales borra y cuales no en el próximo paso.'),
         'point_of_sale': fields.integer(
             'Número de Punto de Venta',
             help=u'Este es el número que aparecerá como prefijo del número'
-            ' de la factura. Si solo tiene un solo talonario ese número es 1.'
-            ' Si necesita agregar un nuevo punto de venta debe acceder a'
-            ' opciones Administración/Configuración/Wizards de'
-            ' Configuración/Wizards de Configuración y ejecutar nuevamente'
-            ' el wizard de "Configuración de Facturación".'),
+            u' de la factura. Si solo tiene un solo talonario ese número es 1.'
+            u' Si necesita agregar un nuevo punto de venta debe acceder a'
+            u' opciones Administración/Configuración/Wizards de'
+            u' Configuración/Wizards de Configuración y ejecutar nuevamente'
+            u' el wizard de "Configuración de Facturación".'),
         'journals_to_delete': fields.one2many(
             'l10n_ar_invoice.del_journal', 'builder_id', 'Journals to delete'),
         'sequences_to_create': fields.one2many(
@@ -174,22 +174,25 @@ class l10n_ar_invoice_config(osv.osv_memory):
             'l10n_ar_invoice.new_journal', 'builder_id', 'Journals to create'),
     }
 
-    _defaults= {
+    _defaults = {
         'company_id': _default_company,
         'do_export': False,
         'remove_old_journals': True,
         'point_of_sale': 1,
-        'journals_to_delete': lambda self, cr, uid, c, context=None: self.update_del_journals(
+        'journals_to_delete': lambda self, cr, uid, c, context=None:
+        self.update_del_journals(
             cr, uid, [],
             self._default_company(cr, uid, c, context),
             self._default_responsability(cr, uid, c, context),
             False, True, 1, context=context),
-        'sequences_to_create': lambda self, cr, uid, c, context=None: self.update_new_journals(
+        'sequences_to_create': lambda self, cr, uid, c, context=None:
+        self.update_new_journals(
             cr, uid, [],
             self._default_company(cr, uid, c, context),
             self._default_responsability(cr, uid, c, context),
             False, True, 1, context=context)[1],
-        'journals_to_create': lambda self, cr, uid, c, context=None: self.update_new_journals(
+        'journals_to_create': lambda self, cr, uid, c, context=None:
+        self.update_new_journals(
             cr, uid, [],
             self._default_company(cr, uid, c, context),
             self._default_responsability(cr, uid, c, context),
@@ -210,31 +213,31 @@ class l10n_ar_invoice_config(osv.osv_memory):
                 'start_date': company.partner_id.start_date,
                 'responsability_id': company.partner_id.responsability_id.id,
             }
-        return { 'value': v }
+        return {'value': v}
 
     def update_del_journals(self, cr, uid, ids,
                             company_id, responsability_id, do_export,
                             remove_old_journals, point_of_sale,
                             context=None):
         """
-        Remove Sale Journal, Purchase Journal, Sale Refund Journal, Purchase Refund Journal.
+        Remove Sale Journal, Purchase Journal, Sale Refund Journal,
+        Purchase Refund Journal.
         """
         ret = []
-        djis = []
 
         if company_id and responsability_id and point_of_sale:
-
             obj_journal = self.pool.get('account.journal')
-            obj_del_journal = self.pool.get('l10n_ar_invoice.del_journal')
-
             if remove_old_journals:
                 jou_ids = obj_journal.search(cr, uid, [
-                    ('type','in',['sale','purchase','sale_refund','purchase_refund']),
-                    ('company_id','=',company_id)]
+                    ('type', 'in',
+                     ['sale', 'purchase', 'sale_refund', 'purchase_refund']),
+                    ('company_id', '=', company_id)]
                 )
                 jous = obj_journal.read(cr, uid, jou_ids, ['name'])
                 for jou in jous:
-                    dj = {'name': jou['name'], 'journal_id': jou['id'], 'builder_id': ids }
+                    dj = {'name': jou['name'],
+                          'journal_id': jou['id'],
+                          'builder_id': ids}
                     ret.append(dj)
 
         return ret
@@ -251,39 +254,40 @@ class l10n_ar_invoice_config(osv.osv_memory):
         rel = {}
 
         if company_id and responsability_id and point_of_sale:
-
-            obj_company = self.pool.get('res.company')
-            obj_seq_type = self.pool.get('ir.sequence.type')
-
-            currency_id = obj_company.browse(cr, uid, company_id).currency_id.id
-
             cr.execute("""
-                       select row_number() over () as row,
-                          Ri.name as Ri,
-                          Dc.name as document_class,
-                          JC.name as name,
-                          max(JC.code) as code,
-                          JC.type as type,
-                          DC.id as document_class_id,
-                          max(JC.id) as journal_class_id
-                       from afip_responsability_relation as RC
-                       left join afip_responsability as Ri on (RC.issuer_id = Ri.id)
-                       left join afip_responsability as Rr on (RC.receptor_id = Rr.id)
-                       left join afip_document_class as DC on (RC.document_class_id = DC.id)
-                       left join afip_journal_class  as JC on (RC.document_class_id = JC.document_class_id)
-                       where Ri.id = %s
-                         and Ri.name is not Null
-                         and Dc.name is not Null
-                         and JC.name is not Null
-                       group by Ri.name, JC.name, JC.type, DC.name, DC.id order by name
+select row_number() over () as row,
+   Ri.name as Ri,
+   Dc.name as document_class,
+   JC.name as name,
+   max(JC.code) as code,
+   JC.type as type,
+   DC.id as document_class_id,
+   max(JC.id) as journal_class_id
+from afip_responsability_relation as RC
+left join afip_responsability as Ri
+                       on (RC.issuer_id = Ri.id)
+left join afip_responsability as Rr
+                       on (RC.receptor_id = Rr.id)
+left join afip_document_class as DC
+                       on (RC.document_class_id = DC.id)
+left join afip_journal_class  as JC
+                       on (RC.document_class_id = JC.document_class_id)
+where Ri.id = %s
+  and Ri.name is not Null
+  and Dc.name is not Null
+  and JC.name is not Null
+group by Ri.name, JC.name, JC.type, DC.name, DC.id order by name
                        """,
                        (responsability_id,))
 
             fetch_items = list(cr.fetchall())
-            items = [ dict(zip([c.name for c in cr.description], item)) for item in fetch_items ]
+            items = [dict(zip([c.name for c in cr.description], item))
+                     for item in fetch_items]
 
             if not do_export:
-                items = [ i for i in items if i['code'] not in ['FVE', 'FCE', 'DVE', 'DCE', 'CVE', 'CCE' ] ]
+                items = [i for i in items
+                         if i['code'] not in
+                         ['FVE', 'FCE', 'DVE', 'DCE', 'CVE', 'CCE']]
 
             # Create sequence by journal
             _code_to_type = {
@@ -292,14 +296,14 @@ class l10n_ar_invoice_config(osv.osv_memory):
                 'purchase': 'journal_pur_vou',
                 'purchase_refund': 'journal_pur_vou',
             }
-            #_code_to_type = dict( (k, obj_seq_type.search(cr, uid, [('code','=',v)])[0] ) for k,v in _code_to_type.items() )
 
             for item in items:
                 if item['type'] is None:
                     print item['name'], item['code'], item['type']
-                    import pdb; pdb.set_trace()
+                    raise RuntimeError('No type defined!!!')
                 sequence = {
-                    'name': u"%s (%04i-%s)" % (item['name'], point_of_sale, item['code']),
+                    'name': u"%s (%04i-%s)" % (
+                        item['name'], point_of_sale, item['code']),
                     'code': _code_to_type[item['type']],
                     'number_next': 1,
                     'prefix': '%04i-' % (point_of_sale,),
@@ -308,12 +312,13 @@ class l10n_ar_invoice_config(osv.osv_memory):
                     'company_id': company_id,
                 }
                 seq.append(sequence)
-                rel[item['row']]= sequence['name']
+                rel[item['row']] = sequence['name']
 
             # Create journal
             for item in items:
                 journal = {
-                    'name': u"%s (%04i-%s)" % (item['name'], point_of_sale, item['code']),
+                    'name': u"%s (%04i-%s)" % (
+                        item['name'], point_of_sale, item['code']),
                     'code': u"%s%04i" % (item['code'], point_of_sale),
                     'journal_class_id': item['journal_class_id'],
                     'company_id': company_id,
@@ -323,7 +328,7 @@ class l10n_ar_invoice_config(osv.osv_memory):
                 }
                 ret.append(journal)
 
-            _logger.info('Journals to create %s' % [ r['name'] for r in ret ])
+            _logger.info('Journals to create %s' % [r['name'] for r in ret])
 
         return ret, seq
 
@@ -336,28 +341,31 @@ class l10n_ar_invoice_config(osv.osv_memory):
                                      wiz.remove_old_journals,
                                      wiz.point_of_sale,
                                      context=context)
-            wiz.write({'journals_to_delete':  [(5,)]+[ (0, 0, v) for v in res['value']['journals_to_delete']  ],
-                       'sequences_to_create': [(5,)]+[ (0, 0, v) for v in res['value']['sequences_to_create'] ],
-                       'journals_to_create':  [(5,)]+[ (0, 0, v) for v in res['value']['journals_to_create']  ] })
+            wiz.write({'journals_to_delete': [(5,)] +
+                       [(0, 0, v) for v in res['value']['journals_to_delete']],
+                       'sequences_to_create': [(5,)] +
+                       [(0, 0, v) for v in res['value']['sequences_to_create']],
+                       'journals_to_create': [(5,)] +
+                       [(0, 0, v) for v in res['value']['journals_to_create']]})
         return {}
 
     def onchange_form(self, cr, uid, ids,
-                        company_id, responsability_id, do_export,
-                        remove_old_journals, point_of_sale,
-                        context=None):
+                      company_id, responsability_id, do_export,
+                      remove_old_journals, point_of_sale,
+                      context=None):
         v = {
-            'journals_to_delete': self.update_del_journals (cr, uid, ids,
-                                                            company_id, responsability_id, do_export,
-                                                            remove_old_journals, point_of_sale),
+            'journals_to_delete': self.update_del_journals(
+                cr, uid, ids, company_id, responsability_id, do_export,
+                remove_old_journals, point_of_sale),
         }
-        j, s = self.update_new_journals (cr, uid, ids, company_id,
-                                         responsability_id, do_export,
-                                         remove_old_journals, point_of_sale)
+        j, s = self.update_new_journals(
+            cr, uid, ids, company_id, responsability_id, do_export,
+            remove_old_journals, point_of_sale)
         v.update({
             'sequences_to_create': s,
             'journals_to_create': j,
         })
-        return { 'value': v }
+        return {'value': v}
 
     def delete_journals(self, cr, uid, ids, context=None):
         """
@@ -380,7 +388,8 @@ class l10n_ar_invoice_config(osv.osv_memory):
 
     def create_journals(self, cr, uid, ids, context=None):
         """
-        Generate Items to generate Sequences and Journals associated to Invoices Types
+        Generate Items to generate Sequences and Journals associated to
+        Invoices Types
         """
         obj_new_journal = self.pool.get('l10n_ar_invoice.new_journal')
 
@@ -397,18 +406,20 @@ class l10n_ar_invoice_config(osv.osv_memory):
         obj_partner = self.pool.get('res.partner')
         obj_document_type = self.pool.get('afip.document_type')
 
-        document_type_cuit = obj_document_type.search(cr, uid, [('code','=','CUIT')])[0]
+        document_type_cuit = obj_document_type.search(
+            cr, uid, [('code', '=', 'CUIT')])[0]
 
         for wzd in self.browse(cr, uid, ids):
             partner_id = wzd.company_id.partner_id.id
-            obj_partner.write(cr, uid, partner_id,
-                                               {'responsability_id': wzd.responsability_id.id,
-                                                'document_number': wzd.cuit,
-                                                'document_type_id': document_type_cuit,
-                                                'iibb': wzd.iibb,
-                                                'start_date': wzd.start_date,
-                                                'vat': 'ar%s' % wzd.cuit,
-                                               })
+            obj_partner.write(
+                cr, uid, partner_id,
+                {'responsability_id': wzd.responsability_id.id,
+                 'document_number': wzd.cuit,
+                 'document_type_id': document_type_cuit,
+                 'iibb': wzd.iibb,
+                 'start_date': wzd.start_date,
+                 'vat': 'ar%s' % wzd.cuit,
+                 })
             obj_partner.check_vat(cr, uid, [partner_id])
 
         self.delete_journals(cr, uid, ids, context=context)

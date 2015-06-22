@@ -53,6 +53,6 @@
                 'test/inv_ri2ri.yml',
                 'test/inv_ri2rm.yml',
                 'test/bug_1042944.yml'],
-    'version': '8.0.1.1',
+    'version': '8.0.1.2',
     'website': 'https://launchpad.net/~openerp-l10n-ar-localization'}
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
