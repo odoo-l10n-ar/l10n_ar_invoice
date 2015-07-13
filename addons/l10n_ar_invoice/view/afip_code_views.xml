@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_afip_account_tax_code_form" model="ir.ui.view">
+            <field name="name">account.tax.code.afip.form</field>
+            <field name="model">account.tax.code</field>
+            <field name="inherit_id" ref="account.view_tax_code_form"/>
+            <field name="arch" type="xml">
+                <group string="Statistics" position="after">
+                    <group string="AFIP">
+                        <field name='afip_code'/>
+                        <field name='parent_afip_code'/>
+                    </group>
+                </group>
+            </field>
+        </record>
+
+    </data>
+</openerp>
+<!-- vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4
+     -->
