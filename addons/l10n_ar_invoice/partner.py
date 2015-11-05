@@ -78,13 +78,13 @@ class res_partner(osv.osv):
     def afip_validation(self, cr, uid, ids, context={}):
         """
         Hay que validar si:
-        - el partner no es de tipo 'consumidor final' tenga un CUIT asociado.
-        - Si el cuit es extrangero, hay que asignar a document_number y
+        - El partner no es de tipo 'consumidor final' tenga un CUIT asociado.
+        - Si el CUIT es extranjero, hay que asignar a document_number y
           document_type los correspondientes a la interpretación argentina del
           CUIT.
-        - Si es responsable monotributo hay que asegurarse que tenga vat
+        - Si es responsable monotributo hay que asegurarse que tenga VAT
           asignado. El documento y número de documento deberían ser DNI.
-        - Si es responsable inscripto y persona juridica indicar el cuit copia
+        - Si es Responsable Inscripto y Persona Jurídica indicar el CUIT copia
           del VAT.
 
         El objetivo es que en la generación de factura utilice la información de
