@@ -208,7 +208,7 @@ class account_invoice(models.Model):
             # you need more information to generate document.
             if partner.responsability_id.code == 'CF' \
                     and invoice.amount_total > 1000 and \
-                    (partner.document_type.code in [None, 'Sigd']
+                    (partner.document_type_id.code in [None, 'Sigd']
                      or invoice.partner_id.document_number is None):
                 raise except_orm(_('Partner without Identification for total'
                                    ' invoices > $1000.-'),
