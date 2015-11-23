@@ -241,88 +241,48 @@ class account_invoice(models.Model):
         return res.get(len(ids) == 1 and ids[0], res)
 
     @api.multi
-    def onchange_partner_id(self, type, partner_id, date_invoice=False,
-                            payment_term=False, partner_bank_id=False,
-                            company_id=False):
+    @api.onchange('partner_id', 'company_id')
+    def _onchange_partner_id(self):
+        # Set list of valid journals by partner responsability
+        # partner_obj = self.pool.get('res.partner')
+        partner = self.partner_id
+        company = self.company_id
+        responsability = partner.responsability_id
+        result = {}
 
-        result = super(account_invoice, self).onchange_partner_id(
-            type, partner_id, date_invoice, payment_term,
-            partner_bank_id, company_id)
-
-        if partner_id:
-            # Set list of valid journals by partner responsability
-            # partner_obj = self.pool.get('res.partner')
-            partner = self.env['res.partner'].browse(partner_id)
-            company = self.env['res.company'].browse(company_id)
-            responsability = partner.responsability_id
-
-            if not responsability:
-                result['warning'] = {
-                    'title': _(
-                        'The partner has not set any fiscal responsability'),
-                    'message': _(
-                        'Please, set partner fiscal responsability in the'
-                        ' partner form before continuing.')}
-                return result
-
-            if responsability.issuer_relation_ids is None:
-                return result
-
-            type_map = {
-                'out_invoice': ['sale'],
-                'out_refund': ['sale_refund'],
-                'in_invoice': ['purchase'],
-                'in_refund': ['purchase_refund'],
+        if not responsability:
+            msg = {
+                'title': _('The partner has not set any fiscal responsability'),
+                'message': _('Please, set partner fiscal responsability in the'
+                             ' partner form before continuing.')
             }
+            return {'warning', msg}
 
-            if not company.partner_id.responsability_id.id:
-                result['warning'] = {'title': _('Your company has not set'
-                                                ' any fiscal responsability'),
-                                     'message': _('Please, set your company'
-                                                  ' responsability in the'
-                                                  ' company form before'
-                                                  ' continuing.')}
-                return result
+        if responsability.issuer_relation_ids is None:
+            return {}
 
-            self._cr.execute("""
-            SELECT DISTINCT J.id, J.name, IRSEQ.number_next
-            FROM account_journal J
-            LEFT join ir_sequence IRSEQ on (J.sequence_id = IRSEQ.id)
-            LEFT join afip_journal_class JC on (J.journal_class_id = JC.id)
-            LEFT join afip_document_class DC on (JC.document_class_id = DC.id)
-            LEFT join afip_responsability_relation RR on
-                             (DC.id = RR.document_class_id)
-            WHERE
-            (RR.id is Null OR (RR.id is not Null AND
-                             RR.issuer_id = %s AND RR.receptor_id = %s)) AND
-            J.type in %s AND
-            J.id is not NULL AND
-            J.sequence_id is not NULL
-            AND IRSEQ.number_next is not NULL
-            ORDER BY IRSEQ.number_next DESC;
-            """, (company.partner_id.responsability_id.id,
-                  partner.responsability_id.id, tuple(type_map[type])))
-            accepted_journal_ids = [x[0] for x in self._cr.fetchall()]
+        if not company.partner_id.responsability_id.id:
+            msg = {
+                'title': _('Your company has not set any fiscal'
+                           ' responsability'),
+                'message': _('Please, set your company responsability in the'
+                             ' company form before continuing.')
+            }
+            return {'warning', msg}
 
-            if 'domain' not in result:
-                result['domain'] = {}
-            if 'value' not in result:
-                result['value'] = {}
+        accepted_journal_ids = self.partner_id.prefered_journals(
+            self.company_id.id, self.type)
 
-            if accepted_journal_ids:
-                result['domain'].update({
-                    'journal_id': [('id', 'in', accepted_journal_ids)],
-                })
-                result['value'].update({
-                    'journal_id': accepted_journal_ids[0],
-                })
-            else:
-                result['domain'].update({
-                    'journal_id': [('id', 'in', [])],
-                })
-                result['value'].update({
-                    'journal_id': False,
-                })
+        if accepted_journal_ids:
+            result['domain'].update({
+                'journal_id': [('id', 'in', accepted_journal_ids)],
+            })
+            self.journal_id = accepted_journal_ids[0]
+        else:
+            result['domain'].update({
+                'journal_id': [('id', 'in', [])],
+            })
+            self.journal_id = False
 
         return result
 
