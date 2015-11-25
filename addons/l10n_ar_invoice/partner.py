@@ -106,27 +106,24 @@ class res_partner(osv.osv):
         Devuelve la lista de journals disponibles para este partner.
         """
         # Set list of valid journals by partner responsability
-        partner_obj = self.pool.get('res.partner')
-        company_obj = self.pool.get('res.company')
+        partner_pool = self.pool.get('res.partner')
+        company_pool = self.pool.get('res.company')
+        journal_pool = self.pool.get('account.journal')
 
         result = {}
         context = context or {}
 
+        type_map = {
+            'out_invoice': ['sale'],
+            'out_refund': ['sale_refund'],
+            'in_invoice': ['purchase'],
+            'in_refund': ['purchase_refund'],
+        }
+
         for partner in self.browse(cr, uid, ids):
             partner_id = partner.id
-            partner = partner_obj.browse(cr, uid, partner_id)
-            company = company_obj.browse(cr, uid, company_id)
-            responsability = partner.responsability_id
-
-            if responsability.issuer_relation_ids is None:
-                return result
-
-            type_map = {
-                'out_invoice': ['sale'],
-                'out_refund': ['sale_refund'],
-                'in_invoice': ['purchase'],
-                'in_refund': ['purchase_refund'],
-            }
+            partner = partner_pool.browse(cr, uid, partner_id)
+            company = company_pool.browse(cr, uid, company_id)
 
             if not company.partner_id:
                 raise osv.except_osv(
@@ -138,34 +135,25 @@ class res_partner(osv.osv):
                     _('Error!'),
                     _('Your company has not setted any responsability'))
 
-            cr.execute(
-                """
-                SELECT DISTINCT J.id, J.name, IRSEQ.number_next
-                FROM account_journal J
-                LEFT join ir_sequence IRSEQ
-                on (J.sequence_id = IRSEQ.id)
-                LEFT join afip_journal_class JC
-                on (J.journal_class_id = JC.id)
-                LEFT join afip_document_class DC
-                on (JC.document_class_id = DC.id)
-                LEFT join afip_responsability_relation RR
-                on (DC.id = RR.document_class_id)
-                WHERE
-                (RR.id is Null
-                OR (RR.id is not Null
-                AND RR.issuer_id = %s AND RR.receptor_id = %s)) AND
-                J.type in %s AND
-                J.id is not NULL AND
-                J.sequence_id is not NULL
-                AND IRSEQ.number_next is not NULL
-                ORDER BY IRSEQ.number_next DESC;
-                """, (company.partner_id.responsability_id.id,
-                      partner.responsability_id.id,
-                      tuple(type_map[type])))
-            result[partner_id] = [x[0] for x in cr.fetchall()]
+            if not partner.responsability_id:
+                raise osv.except_osv(
+                    _('Error!'),
+                    _('This partner has not setted any responsability'))
+
+            journal_ids = journal_pool.search(
+                cr, uid, [
+                    ('type', 'in', type_map[type]),
+                    ('journal_class_id.document_class_id.'
+                     'responsability_relation_ids.issuer_id', '=',
+                     company.partner_id.responsability_id.id),
+                    ('journal_class_id.document_class_id.'
+                     'responsability_relation_ids.receptor_id', '=',
+                     partner.responsability_id.id),
+                ], order="lst_order asc")
+
+            result[partner_id] = journal_ids
 
         return result
-
 
 res_partner()
 
