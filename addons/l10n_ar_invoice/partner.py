@@ -108,7 +108,7 @@ class res_partner(osv.osv):
         # Set list of valid journals by partner responsability
         partner_pool = self.pool.get('res.partner')
         company_pool = self.pool.get('res.company')
-        journal_pool = self.pool.get('account.journal')
+        journal_class_pool = self.pool.get('afip.journal_class')
 
         result = {}
         context = context or {}
@@ -140,16 +140,19 @@ class res_partner(osv.osv):
                     _('Error!'),
                     _('This partner has not setted any responsability'))
 
-            journal_ids = journal_pool.search(
+            journal_data = journal_class_pool.search_read(
                 cr, uid, [
                     ('type', 'in', type_map[type]),
-                    ('journal_class_id.document_class_id.'
-                     'responsability_relation_ids.issuer_id', '=',
+                    ('document_class_id.responsability_relation_ids'
+                     '.issuer_id', '=',
                      company.partner_id.responsability_id.id),
-                    ('journal_class_id.document_class_id.'
-                     'responsability_relation_ids.receptor_id', '=',
+                    ('document_class_id.responsability_relation_ids'
+                     '.receptor_id', '=',
                      partner.responsability_id.id),
-                ], order="lst_order asc")
+                ], ['journal_ids'], order="sequence asc")
+
+            journal_ids = reduce(lambda a, b: a + b,
+                                 [jc['journal_ids'] for jc in journal_data])
 
             result[partner_id] = journal_ids
 

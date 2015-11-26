@@ -77,6 +77,7 @@ class afip_journal_class(osv.osv):
     _columns = {
         'name': fields.char('Name', size=64, required=True),
         'code': fields.char('Code', size=8, required=True),
+        'sequence': fields.integer('Sequence', required=True),
         'document_class_id': fields.many2one(
             'afip.document_class', 'Document Class'),
         'type': fields.selection([
@@ -110,6 +111,7 @@ class afip_journal_class(osv.osv):
     }
 
     _sql_constraints = [('name', 'unique(name)', 'Not repeat name!')]
+    _defaults = { 'sequence': 0 }
 afip_journal_class()
 
 

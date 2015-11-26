@@ -50,7 +50,6 @@
                             <separator string="AFIP" colspan="4"/>
                             <field name="journal_class_id"/>
                             <field name="point_of_sale"/>
-                            <field name="lst_order"/>
                         </group>
                     </page>
                 </notebook>

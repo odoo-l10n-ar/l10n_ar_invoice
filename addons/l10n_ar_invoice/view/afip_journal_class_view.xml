@@ -36,6 +36,7 @@
                     <field name='active'/>
                     <field name='journal_ids'/>
                     <field name='product_types'/>
+                    <field name='sequence'/>
                 </form>
             </field>
         </record>
@@ -49,6 +50,7 @@
                     <field name="code"/>
                     <field name="afip_code"/>
                     <field name='active'/>
+                    <field name='sequence' widget="handle"/>
                 </tree>
             </field>
         </record>

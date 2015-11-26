@@ -11,7 +11,6 @@ class account_journal(osv.osv):
         'journal_class_id': fields.many2one('afip.journal_class',
                                             'Document class'),
         'point_of_sale': fields.integer('Point of sale ID'),
-        'lst_order': fields.integer('List order'),
     }
 account_journal()
 
