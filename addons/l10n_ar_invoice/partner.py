@@ -101,17 +101,31 @@ class res_partner(osv.osv):
                                'vat', 'is_vat_subject']):
             pass
 
-    def prefered_journals(self, cr, uid, ids, company_id, type, context=None):
+    def prefered_journals(self, cr, uid, ids, type, context=None):
         """
         Devuelve la lista de journals disponibles para este partner.
         """
         # Set list of valid journals by partner responsability
         partner_pool = self.pool.get('res.partner')
-        company_pool = self.pool.get('res.company')
         journal_class_pool = self.pool.get('afip.journal_class')
 
-        result = {}
         context = context or {}
+
+        if 'company_id' in context:
+            company_pool = self.pool.get('res.company')
+            company = company_pool.browse(cr, uid, context['company_id'])
+        else:
+            company = self.pool.get('res.users').browse(cr, uid, uid).company_id
+
+        if not company.partner_id:
+            raise Warning(_('Error!\n'
+                            'Your company has not setted any partner'))
+
+        if not company.partner_id.responsability_id:
+            raise Warning(_('Error!\n'
+                            'Your company has not setted any responsability'))
+
+        result = {}
 
         type_map = {
             'out_invoice': ['sale'],
@@ -123,22 +137,12 @@ class res_partner(osv.osv):
         for partner in self.browse(cr, uid, ids):
             partner_id = partner.id
             partner = partner_pool.browse(cr, uid, partner_id)
-            company = company_pool.browse(cr, uid, company_id)
-
-            if not company.partner_id:
-                raise osv.except_osv(
-                    _('Error!'),
-                    _('Your company has not setted any partner'))
-
-            if not company.partner_id.responsability_id:
-                raise osv.except_osv(
-                    _('Error!'),
-                    _('Your company has not setted any responsability'))
 
             if not partner.responsability_id:
-                raise osv.except_osv(
-                    _('Error!'),
-                    _('This partner has not setted any responsability'))
+                raise Warning(
+                    _('Error!\n'
+                      'This partner has not setted any responsability')
+                )
 
             journal_data = journal_class_pool.search_read(
                 cr, uid, [

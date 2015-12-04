@@ -2,7 +2,7 @@
 from openerp import api, models, fields, _
 from openerp.exceptions import except_orm
 from datetime import date, timedelta
-from openerp import exceptions
+from openerp.exceptions import Warning
 
 
 def _all_taxes(x):
@@ -93,7 +93,7 @@ def _calc_concept(product_types):
     elif product_types == set(['consu', 'service']):
         concept = '3'
     else:
-        raise exceptions.Warning(
+        raise Warning(
             _('Cant compute AFIP concept from product types %s.') %
             product_types
         )
@@ -198,11 +198,12 @@ class account_invoice(models.Model):
                     ('receptor_id.code', '=', partner.responsability_id.code)
                 ])
             if not resp_class:
-                raise except_orm(
-                    _('Invalid receptor'),
-                    _('Your partner cant receive this document.'
+                raise Warning(
+                    _('Invalid receptor\n'
+                      'Your partner (%s) can\'t receive this document (%s).'
                       ' Check AFIP responsability of the partner,'
-                      ' or Journal Account of the invoice.'))
+                      ' or Journal Account of the invoice.') %
+                    (partner.responsability_id.name, invoice_class.name))
 
             # If Final Consumer have pay more than 1000$,
             # you need more information to generate document.

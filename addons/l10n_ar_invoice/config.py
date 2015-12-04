@@ -72,11 +72,13 @@ class l10n_ar_invoice_new_sequence(osv.osv_memory):
         obj_sequence = self.pool.get('ir.sequence')
 
         vals = self.read(cr, uid, ids, ['name', 'code', 'number_next', 'prefix',
-                                        'suffix', 'padding'])
+                                        'suffix', 'padding', 'company_id'])
         names = [v['name'] for v in vals]
         for val in vals:
             del val['id']
             val['implementation'] = 'no_gap'
+            val = dict((k, v[0]) if type(v) is tuple else (k, v)
+                       for k, v in val.items())
             obj_sequence.create(cr, uid, val)
         _logger.info('Sequences created %s' % ','.join(names))
 
