@@ -118,14 +118,9 @@ class account_invoice(models.Model):
             product_types = set([
                 line.product_id.type for line in inv.invoice_line
             ])
-            if False in product_types:
-                raise Warning("Products %s has not defined type" % ','.join(
-                    '%s [%s]' % (line.product_id.name or 'No name',
-                                 line.invoice_id.name)
-                    for line in inv.invoice_line
-                    if line.product_id.type is False
-                ))
-            inv.afip_concept = concept_obj.get_code(product_types)
+            inv.afip_concept = (concept_obj.get_code(product_types)
+                                if False not in product_types
+                                else False)
 
     def _get_service_begin_date(self):
         today = date.today()
