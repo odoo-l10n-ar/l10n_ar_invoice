@@ -118,9 +118,9 @@ class account_invoice(models.Model):
             product_types = set([
                 line.product_id.type for line in inv.invoice_line
             ])
-            inv.afip_concept = (concept_obj.get_code(product_types)
-                                if False not in product_types
-                                else False)
+            inv.afip_concept = concept_obj.get_code(product_types) \
+                if False not in product_types \
+                else False
 
     def _get_service_begin_date(self):
         today = date.today()
@@ -213,10 +213,19 @@ class account_invoice(models.Model):
                     and invoice.amount_total > 1000 and \
                     (partner.document_type_id.code in [None, 'Sigd']
                      or invoice.partner_id.document_number is None):
-                raise except_orm(_('Partner without Identification for total'
-                                   ' invoices > $1000.-'),
-                                 _('You must define valid document type and'
-                                   ' number for this Final Consumer.'))
+                raise Warning(_('Partner without Identification for total'
+                                ' invoices > $1000.-\n'
+                                'You must define valid document type and'
+                                ' number for this Final Consumer.'))
+
+            # Afip concept must be defined
+            if invoice.afip_concept is False:
+                if any(l.product_id is False for l in invoice.invoice_line):
+                    raise Warning(_('All lines must have a product'))
+                if any(l.product_id.type is False
+                       for l in invoice.invoice_line):
+                    raise Warning(_('One product has not type'))
+
         return True
 
     def compute_all(self, cr, uid, ids, line_filter=lambda line: True,
