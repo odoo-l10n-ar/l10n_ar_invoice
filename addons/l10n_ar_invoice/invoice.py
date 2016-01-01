@@ -120,7 +120,9 @@ class account_invoice(models.Model):
             ])
             if False in product_types:
                 raise Warning("Products %s has not defined type" % ','.join(
-                    line.product_id.name for line in inv.invoice_line
+                    '%s [%s]' % (line.product_id.name or 'No name',
+                                 line.invoice_id.name)
+                    for line in inv.invoice_line
                     if line.product_id.type is False
                 ))
             inv.afip_concept = concept_obj.get_code(product_types)
