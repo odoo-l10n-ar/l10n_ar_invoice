@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from openerp import api, models, fields, _
-from datetime import date, timedelta
+from datetime import date
+from dateutil.relativedelta import relativedelta
 from openerp.exceptions import Warning
 
 
@@ -122,21 +123,20 @@ class account_invoice(models.Model):
                 else False
 
     def _get_service_begin_date(self):
-        today = date.today()
-        first = date(day=1, month=today.month, year=today.year)
-        prev_last_day = first - timedelta(days=1)
+        import pdb; pdb.set_trace()
         try:
-            period = self.period_id.find(prev_last_day)
+            period = self.period_id.find()
+            if not self.env.context.get('is_prepaid', False):
+                period = period.find(date.today() + relativedelta(months=-1))
             return period.date_start
         except:
             return False
 
     def _get_service_end_date(self):
-        today = date.today()
-        first = date(day=1, month=today.month, year=today.year)
-        prev_last_day = first - timedelta(days=1)
         try:
-            period = self.period_id.find(prev_last_day)
+            period = self.period_id.find()
+            if not self.env.context.get('is_prepaid', False):
+                period = period.find(date.today() + relativedelta(months=-1))
             return period.date_stop
         except:
             return False
