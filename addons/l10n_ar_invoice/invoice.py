@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from openerp import api, models, fields, _
-from openerp.exceptions import except_orm
 from datetime import date, timedelta
 from openerp.exceptions import Warning
 
@@ -126,15 +125,21 @@ class account_invoice(models.Model):
         today = date.today()
         first = date(day=1, month=today.month, year=today.year)
         prev_last_day = first - timedelta(days=1)
-        period = self.period_id.find(prev_last_day)
-        return period and period.date_start or False
+        try:
+            period = self.period_id.find(prev_last_day)
+            return period.date_start
+        except:
+            return False
 
     def _get_service_end_date(self):
         today = date.today()
         first = date(day=1, month=today.month, year=today.year)
         prev_last_day = first - timedelta(days=1)
-        period = self.period_id.find(prev_last_day)
-        return period and prev_last_day or False
+        try:
+            period = self.period_id.find(prev_last_day)
+            return period.date_stop
+        except:
+            return False
 
     afip_concept = fields.Selection(
         [('1', 'Consumible'), ('2', 'Service'), ('3', 'Mixted')],
@@ -146,35 +151,37 @@ class account_invoice(models.Model):
     afip_service_end = fields.Date(
         'Service End Date', default=_get_service_end_date)
 
-    def afip_validation(self):
+    @api.multi
+    def _afip_test_journal(self):
         """
-        Check basic AFIP request to generate invoices.
+        Check if you choose the right journal.
         """
         for invoice in self:
-            # If parter is not in Argentina, ignore it.
-            if invoice.company_id.partner_id.country_id.name != 'Argentina':
-                continue
-
-            # Check if you choose the right journal.
             if invoice.type == 'out_invoice' and \
                     invoice.journal_id.journal_class_id.afip_code not in\
                     [1, 6, 11, 51, 19, 2, 7, 12, 52, 20]:
-                raise except_orm(
-                    _('Wrong Journal'),
-                    _('Out invoice journal must have a valid journal class.'))
+                raise Warning(
+                    _('Wrong Journal\n'
+                      'Out invoice journal must have a valid journal class.'))
             if invoice.type == 'out_refund' and \
                     invoice.journal_id.journal_class_id.afip_code not in\
                     [3, 8, 13, 53, 21]:
-                raise except_orm(
-                    _('Wrong Journal'),
-                    _('Out invoice journal must have a valid journal class.'))
+                raise Warning(
+                    _('Wrong Journal\n'
+                      'Out invoice journal must have a valid journal class.'))
 
+    @api.multi
+    def _afip_test_document(self):
+        """
+        Test documentation
+        """
+        for invoice in self:
             # Partner responsability ?
             partner = invoice.partner_id
             if not partner.responsability_id:
-                raise except_orm(
-                    _('No responsability'),
-                    _('Your partner have not afip responsability assigned.'
+                raise Warning(
+                    _('No responsability\n'
+                      'Your partner have not afip responsability assigned.'
                       ' Assign one please.'))
 
             # Take responsability classes for this journal
@@ -188,9 +195,9 @@ class account_invoice(models.Model):
 
             # You can emmit this document?
             if not resp_class:
-                raise except_orm(
-                    _('Invalid emisor'),
-                    _('Your responsability with AFIP dont let you generate'
+                raise Warning(
+                    _('Invalid emisor\n'
+                      'Your responsability with AFIP dont let you generate'
                       ' this kind of document.'))
 
             # Partner can receive this document?
@@ -207,17 +214,29 @@ class account_invoice(models.Model):
                       ' or Journal Account of the invoice.') %
                     (partner.responsability_id.name, invoice_class.name))
 
+    @api.multi
+    def _afip_test_limits(self):
+        """
+        Test limits
+        """
+        for invoice in self:
             # If Final Consumer have pay more than 1000$,
             # you need more information to generate document.
-            if partner.responsability_id.code == 'CF' \
+            if invoice.partner_id.responsability_id.code == 'CF' \
                     and invoice.amount_total > 1000 and \
-                    (partner.document_type_id.code in [None, 'Sigd']
+                    (invoice.partner_id.document_type_id.code in [None, 'Sigd']
                      or invoice.partner_id.document_number is None):
                 raise Warning(_('Partner without Identification for total'
                                 ' invoices > $1000.-\n'
                                 'You must define valid document type and'
                                 ' number for this Final Consumer.'))
 
+    @api.multi
+    def _afip_test_lines(self):
+        """
+        Test invoice lines
+        """
+        for invoice in self:
             # Afip concept must be defined
             if invoice.afip_concept is False:
                 if any(l.product_id is False for l in invoice.invoice_line):
@@ -225,6 +244,28 @@ class account_invoice(models.Model):
                 if any(l.product_id.type is False
                        for l in invoice.invoice_line):
                     raise Warning(_('One product has not type'))
+            elif invoice.afip_concept != 1:
+                # Check if concept is service then start and end must be set
+                if invoice.afip_service_start is False or \
+                        invoice.afip_service_end is False:
+                    raise Warning(_('Please set afip service dates'))
+                if invoice.afip_service_start > invoice.afip_service_end:
+                    raise Warning(_('Service dates are wrong'))
+
+    @api.multi
+    def afip_validation(self):
+        """
+        Check basic AFIP request to generate invoices.
+        """
+        for invoice in self:
+            # If company is not in Argentina, ignore it.
+            if invoice.company_id.partner_id.country_id.name != 'Argentina':
+                continue
+
+            self._afip_test_journal()
+            self._afip_test_document()
+            self._afip_test_limits()
+            self._afip_test_lines()
 
         return True
 
