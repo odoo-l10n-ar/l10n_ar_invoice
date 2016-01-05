@@ -123,7 +123,6 @@ class account_invoice(models.Model):
                 else False
 
     def _get_service_begin_date(self):
-        import pdb; pdb.set_trace()
         try:
             period = self.period_id.find()
             if not self.env.context.get('is_prepaid', False):
