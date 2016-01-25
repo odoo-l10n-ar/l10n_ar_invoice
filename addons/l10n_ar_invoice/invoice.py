@@ -15,7 +15,7 @@ def _all_except_vat(x):
 
 class account_invoice_line(models.Model):
     """
-    Line of an invoice. Compute pirces with and without vat,
+    Line of an invoice. Compute prices with and without vat,
     for unit or line quantity.
     """
     _name = "account.invoice.line"
