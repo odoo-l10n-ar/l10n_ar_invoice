@@ -243,7 +243,7 @@ class account_invoice(models.Model):
                 if any(l.product_id.type is False
                        for l in invoice.invoice_line):
                     raise Warning(_('One product has not type'))
-            elif invoice.afip_concept != 1:
+            elif invoice.afip_concept != '1':
                 # Check if concept is service then start and end must be set
                 if invoice.afip_service_start is False or \
                         invoice.afip_service_end is False:

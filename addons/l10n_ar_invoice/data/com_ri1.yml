@@ -71,6 +71,8 @@
         company_id: com_ivari
         company_ids:
                 - com_ivari
+        groups_id:
+                - group_l10n_ar_invoice_user
  
 #
 # El responsable inscripto esta listo para facturar !!!
