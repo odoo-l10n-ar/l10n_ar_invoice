@@ -41,7 +41,7 @@
 
 - Execute Wizard to create journals for responsable inscripto
 - !python {model: l10n_ar_invoice.config }: |
-        if not self.pool.get('account.account').search(cr, uid, [('company_id','=',ref('com_ivari2'))]):
+        if not self.pool.get('account.journal').search(cr, uid, [('company_id','=',ref('com_ivari2')),('journal_class_id','!=',False)]):
            self.view_init(cr, uid, [ref("inv_wiz_ivari2")], {})
            self.update_journals(cr, uid, [ref("inv_wiz_ivari2")], {})
            self.execute(cr, uid, [ref("inv_wiz_ivari2")], {})
