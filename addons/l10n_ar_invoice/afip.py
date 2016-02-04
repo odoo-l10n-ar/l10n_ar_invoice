@@ -1,86 +1,82 @@
 # -*- coding: utf-8 -*-
 from openerp import api, models, _
-from openerp import fields as Fields
-from openerp.osv import fields, osv
+from openerp import fields
 from openerp import exceptions
 
 
-class afip_journal_template(osv.osv):
+class afip_journal_template(models.Model):
     _name = 'afip.journal_template'
-    _columns = {
-        'name': fields.char('Name', size=120),
-        'code': fields.integer('Code'),
-    }
-afip_journal_template()
+    _description = 'AFIP Document template'
 
+    name=fields.Char('Name', size=120)
+    code=fields.Integer('Code')
 
-class afip_document_class(osv.osv):
+    _sql_constraints = [('name', 'unique(name)', 'Not repeat name!')]
+
+class afip_document_class(models.Model):
     _name = 'afip.document_class'
     _description = 'Document class'
-    _columns = {
-        'name': fields.char('Name', size=64, required=True),
-        'description': fields.text('Description'),
-        'responsability_relation_ids': fields.one2many(
+
+    name=fields.Char('Name', size=64, required=True)
+    description=fields.Text('Description')
+    responsability_relation_ids=fields.One2many(
             'afip.responsability_relation', 'document_class_id',
-            'Reponsability relations'),
-        'journal_class_ids': fields.one2many(
+            'Reponsability relations')
+    journal_class_ids=fields.One2many(
             'afip.journal_class', 'document_class_id',
-            'Journal classes'),
-    }
+            'Journal classes')
+
     _sql_constraints = [('name', 'unique(name)', 'Not repeat name!')]
-afip_document_class()
 
 
-class afip_responsability(osv.osv):
+class afip_responsability(models.Model):
     _name = 'afip.responsability'
     _description = 'VAT Responsability'
-    _columns = {
-        'name': fields.char('Name', size=64, required=True),
-        'code': fields.char('Code', size=8, required=True),
-        'active': fields.boolean('Active'),
-        'issuer_relation_ids': fields.one2many(
+
+    name=fields.Char('Name', size=64, required=True)
+    code=fields.Char('Code', size=8, required=True)
+    active=fields.Boolean('Active', default=True)
+    issuer_relation_ids=fields.One2many(
             'afip.responsability_relation', 'issuer_id',
-            'Issuer relation'),
-        'receptor_relation_ids': fields.one2many(
+            'Issuer relation')
+    receptor_relation_ids=fields.One2many(
             'afip.responsability_relation', 'receptor_id',
-            'Receptor relation'),
-    }
+            'Receptor relation')
+
     _sql_constraints = [('name', 'unique(name)', 'Not repeat name!'),
                         ('code', 'unique(code)', 'Not repeat code!')]
-afip_responsability()
 
 
-class afip_responsability_relation(osv.osv):
+class afip_responsability_relation(models.Model):
     _name = 'afip.responsability_relation'
     _description = 'Responsability relation'
-    _columns = {
-        'name': fields.char('Name', size=64),
-        'issuer_id': fields.many2one(
-            'afip.responsability', 'Issuer', required=True),
-        'receptor_id': fields.many2one(
-            'afip.responsability', 'Receptor', required=True),
-        'document_class_id': fields.many2one(
-            'afip.document_class', 'Document class', required=True),
-        'active': fields.boolean('Active'),
-    }
+
+    name=fields.Char('Name', size=64)
+    issuer_id=fields.Many2one(
+            'afip.responsability', 'Issuer', required=True)
+    receptor_id=fields.Many2one(
+            'afip.responsability', 'Receptor', required=True)
+    document_class_id=fields.Many2one(
+            'afip.document_class', 'Document class', required=True)
+    active=fields.Boolean('Active', default=True)
+
     _sql_constraints = [
         ('main_constraints',
          'unique(issuer_id, receptor_id, document_class_id)',
          'Not configuration!'),
         ('name', 'unique(name)', 'Not repeat name!')]
-afip_responsability_relation()
 
 
-class afip_journal_class(osv.osv):
+class afip_journal_class(models.Model):
     _name = 'afip.journal_class'
     _description = 'AFIP Journal types'
-    _columns = {
-        'name': fields.char('Name', size=64, required=True),
-        'code': fields.char('Code', size=8, required=True),
-        'sequence': fields.integer('Sequence', required=True),
-        'document_class_id': fields.many2one(
-            'afip.document_class', 'Document Class'),
-        'type': fields.selection([
+
+    name=fields.Char('Name', size=64, required=True)
+    code=fields.Char('Code', size=8, required=True)
+    sequence=fields.Integer('Sequence', required=True, default=0)
+    document_class_id=fields.Many2one(
+            'afip.document_class', 'Document Class')
+    type=fields.Selection([
             ('sale', 'Sale'),
             ('sale_refund', 'Sale Refund'),
             ('purchase', 'Purchase'),
@@ -88,7 +84,7 @@ class afip_journal_class(osv.osv):
             ('cash', 'Cash'),
             ('bank', 'Bank and Cheques'),
             ('general', 'General'),
-            ('situation', 'Opening/Closing Situation')
+            ('situation', 'Opening/Closing Situation'),
         ], 'Type', size=32, required=True,
             help="Select 'Sale' for Sale journal to be used at the time"
             " of making invoice."
@@ -97,44 +93,39 @@ class afip_journal_class(osv.osv):
             " Select 'Cash' to be used at the time of making payment."
             " Select 'General' for miscellaneous operations."
             " Select 'Opening/Closing Situation' to be used at the time"
-            " of new fiscal year creation or end of year entries generation."),
-        'afip_code': fields.integer('AFIP Code', required=True),
-        'journal_ids': fields.one2many(
+            " of new fiscal year creation or end of year entries generation.")
+    afip_code=fields.Integer('AFIP Code', required=True)
+    journal_ids=fields.One2many(
             'account.journal', 'journal_class_id',
-            'Journals'),
-        'active': fields.boolean('Active'),
-        'product_types': fields.char(
+            'Journals')
+    active=fields.Boolean('Active', default=True)
+    product_types=fields.Char(
             'Product types',
             help='Only use products with this product types in this journals. '
             'Types must be a subset of adjust, consu and service separated'
-            ' by commas.'),
-    }
+            ' by commas.')
 
     _sql_constraints = [('name', 'unique(name)', 'Not repeat name!')]
-    _defaults = { 'sequence': 0 }
-afip_journal_class()
 
 
-class afip_document_type(osv.osv):
+class afip_document_type(models.Model):
     _name = 'afip.document_type'
     _description = 'AFIP document types'
-    _columns = {
-        'name': fields.char('Name', size=120, required=True),
-        'code': fields.char('Code', size=16, required=True),
-        'afip_code': fields.integer('AFIP Code', required=True),
-        'active': fields.boolean('Active'),
-    }
-afip_document_type()
+
+    name=fields.Char('Name', size=120, required=True)
+    code=fields.Char('Code', size=16, required=True)
+    afip_code=fields.Integer('AFIP Code', required=True)
+    active=fields.Boolean('Active', default=True)
 
 
 class afip_concept_type(models.Model):
     _name = 'afip.concept_type'
     _description = 'AFIP concept types'
 
-    name = Fields.Char('Name', size=120, required=True)
-    afip_code = Fields.Integer('AFIP Code', required=True)
-    active = Fields.Boolean('Active')
-    product_types = Fields.Char(
+    name = fields.Char('Name', size=120, required=True)
+    afip_code = fields.Integer('AFIP Code', required=True)
+    active = fields.Boolean('Active', default=True)
+    product_types = fields.Char(
         'Product types',
         help='Translate this product types to this AFIP concept. '
         'Types must be a subset of adjust, consu and service'
@@ -157,42 +148,30 @@ class afip_concept_type(models.Model):
         )
 
     _sql_constraints = [('name', 'unique(name)', 'Not repeat name!')]
-afip_concept_type()
 
 
-class afip_tax_code(osv.osv):
+class afip_tax_code(models.Model):
     _inherit = 'account.tax.code'
 
-    def _get_parent_afip_code(self, cr, uid, ids,
-                              field_name, args, context=None):
-        r = {}
+    afip_code=fields.Integer('AFIP Code')
+    parent_afip_code=fields.Integer(compute='_get_parent_afip_code',
+                                    string='Parent AFIP Code')
 
-        for tc in self.read(cr, uid, ids, ['afip_code', 'parent_id'],
-                            context=context):
-            _id = tc['id']
-            if tc['afip_code']:
-                r[_id] = tc['afip_code']
-            elif tc['parent_id']:
-                p_id = tc['parent_id'][0]
-                r[_id] = self._get_parent_afip_code(cr, uid, [p_id],
-                                                    None, None)[p_id]
+    @api.multi
+    def _get_parent_afip_code(self):
+        for tc in self:
+            if tc.afip_code:
+                tc.parent_afip_code = tc.afip_code
+            elif tc.parent_id:
+                tc.parent_afip_code = tc.parent_id._get_parent_afip_code()
             else:
-                r[_id] = 0
+                tc.parent_afip_code = False
 
-        return r
-
-    _columns = {
-        'afip_code': fields.integer('AFIP Code'),
-        'parent_afip_code': fields.function(_get_parent_afip_code,
-                                            type='integer', method=True,
-                                            string='Parent AFIP Code',
-                                            readonly=1),
-    }
-
-    def get_afip_name(self, cr, uid, ids, context=None):
+    @api.multi
+    def get_afip_name(self):
         r = {}
 
-        for tc in self.browse(cr, uid, ids, context=context):
+        for tc in self:
             if tc.afip_code:
                 r[tc.id] = tc.name
             elif tc.parent_id:
@@ -202,20 +181,50 @@ class afip_tax_code(osv.osv):
 
         return r
 
-afip_tax_code()
 
-
-class afip_optional_type(osv.osv):
+class afip_optional_type(models.Model):
     _name = 'afip.optional_type'
     _description = 'AFIP optional types'
-    _columns = {
-        'name': fields.char('Name', size=120, required=True),
-        'afip_code': fields.integer('AFIP Code', required=True),
-        'apply_rule': fields.char('Apply rule'),
-        'value_computation': fields.char('Value computation'),
-        'active': fields.boolean('Active'),
-    }
-afip_optional_type()
 
+    name=fields.Char('Name', size=120, required=True)
+    afip_code=fields.Integer('AFIP Code', required=True)
+    apply_rule=fields.Char('Apply rule')
+    value_computation=fields.Char('Value computation')
+    active=fields.Boolean('Active', default=True)
+
+class afip_product_unit(models.Model):
+    _inherit = 'product.uom'
+
+    afip_code = fields.Integer('AFIP Code')
+
+
+class afip_language(models.Model):
+    _inherit = 'res.lang'
+
+    afip_code = fields.Integer('AFIP Code')
+
+
+class afip_destination(models.Model):
+    _name = 'afip.destination'
+
+    name=fields.Char('Name', required=True)
+    afip_code=fields.Integer('Code', required=True)
+    afip_cuit_person=fields.Char('Person AFIP ID')
+    afip_cuit_company=fields.Char('Company AFIP ID')
+    afip_cuit_other=fields.Char('Other AFIP ID')
+    country_ids=fields.Many2many('res.country', string='Associated Countries')
+    state_ids=fields.Many2many('res.country.state', string='Associated States')
+    active=fields.Boolean('Active', default=True)
+
+    _sql_constraints = [('name', 'unique(name)', 'Not repeat name!')]
+
+class afip_incoterm(models.Model):
+    _name = 'afip.incoterm'
+
+    name=fields.Char('Name', required=True)
+    afip_code=fields.Char('Code', size=5)
+    active=fields.Boolean('Active', default=True)
+
+    _sql_constraints = [('name', 'unique(name)', 'Not repeat name!')]
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

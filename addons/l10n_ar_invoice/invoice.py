@@ -149,6 +149,10 @@ class account_invoice(models.Model):
         'Service Start Date', default=_get_service_begin_date)
     afip_service_end = fields.Date(
         'Service End Date', default=_get_service_end_date)
+    afip_incoterm_id = fields.Many2one('afip.incoterm', string="Incoterm")
+    afip_incoterm_description = fields.Text('Incoterm description')
+    afip_commercial_obs = fields.Text('Commercial observations')
+    afip_obs = fields.Text('Commercial observations')
 
     @api.multi
     def _afip_test_journal(self):

@@ -50,14 +50,12 @@
 - !python {model: account.journal }: |
     journal_ids = self.search(cr, uid, [('company_id','=',ref('com_ivari'))])
     expected_journals = 3 * 3 * 2 + 2 # # tipos de documentos, # Clase de Journals, Ventas y Compras, u'Miscellaneous Journal', u'Opening Entries Journal'
-    if (len(journal_ids)!=expected_journals):
-        print [ a.name for a in self.browse(cr, uid, journal_ids) ]
+    if (len(journal_ids)<expected_journals):
         raise AssertionError, 'Error in journals creation for Resp. Insc.. Expected %i, exists %i.' % (expected_journals, len(journal_ids))
 
     journal_ids = self.search(cr, uid, [('company_id','=',ref('com_ivari2'))])
     expected_journals = 3 * 3 * 2 + 3 + 2 # # tipos de documentos, # Clase de Journals, Ventas y Compras, Ventas de Exportación, u'Miscellaneous Journal', u'Opening Entries Journal'
-    if (len(journal_ids)!=expected_journals):
-        print [ a.name for a in self.browse(cr, uid, journal_ids) ]
+    if (len(journal_ids)<expected_journals):
         raise AssertionError, 'Error in journals creation for Resp. Insc.. Expected %i, exists %i.' % (expected_journals, len(journal_ids))
 
 - Check if exists periods associated to this company

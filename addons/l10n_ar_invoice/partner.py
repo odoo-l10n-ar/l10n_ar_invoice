@@ -1,30 +1,32 @@
 # -*- coding: utf-8 -*-
-from openerp.osv import fields, osv
+from openerp import fields, models
 from openerp.tools.translate import _
 import re
 
 
-class res_partner(osv.osv):
+class res_partner(models.Model):
     _inherit = 'res.partner'
 
-    _columns = {
-        'responsability_id': fields.many2one(
+    responsability_id=fields.Many2one(
             'afip.responsability',
             'Responsability'
-        ),
-        'document_type_id': fields.many2one(
+        )
+    document_type_id=fields.Many2one(
             'afip.document_type',
             'Document type',
             on_change="onchange_document(vat,document_type_id,document_number)"
-        ),
-        'document_number': fields.char(
+        )
+    document_number=fields.Char(
             'Document number',
             size=64, select=1,
             on_change="onchange_document(vat,document_type_id,document_number)"
-        ),
-        'iibb': fields.char('Ingresos Brutos', size=64),
-        'start_date': fields.date('Inicio de actividades'),
-    }
+        )
+    iibb=fields.Char('Ingresos Brutos', size=64)
+    start_date=fields.Date('Inicio de actividades')
+    afip_destination_id = fields.Many2one(
+        'afip.destination',
+        'Export Destionation'
+    )
 
     def onchange_document(self, cr, uid, ids, vat, document_type,
                           document_number, context={}):
