@@ -19,3 +19,5 @@
 "access_afip_destination_user","afip.destination.user","model_afip_destination","group_l10n_ar_invoice_user",1,0,0,0
 "access_afip_incoterm_manager","afip.destination.manager","model_afip_incoterm","group_l10n_ar_invoice_admin",1,1,1,1
 "access_afip_incoterm_user","afip.destination.user","model_afip_incoterm","group_l10n_ar_invoice_user",1,0,0,0
+"access_afip_uom_manager","afip.destination.manager","model_afip_uom","group_l10n_ar_invoice_admin",1,1,1,1
+"access_afip_uom_user","afip.destination.user","model_afip_uom","group_l10n_ar_invoice_user",1,0,0,0
