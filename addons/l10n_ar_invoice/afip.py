@@ -138,15 +138,15 @@ class afip_concept_type(models.Model):
         types = set(types)
         if not types:
             return False
+        if False in types:
+            types.remove(False)
+            types.add('undefined')
         for concept in self.search([]):
             product_types = set([s.strip()
                                  for s in concept.product_types.split(',')])
             if product_types == types:
                 return str(concept.afip_code)
-        raise exceptions.Warning(
-            _('Cant compute AFIP concept from product types [%s].') %
-            ','.join(types)
-        )
+	return False
 
     _sql_constraints = [('name', 'unique(name)', 'Not repeat name!')]
 

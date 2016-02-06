@@ -160,6 +160,15 @@ class account_invoice(models.Model):
         Check if you choose the right journal.
         """
         for invoice in self:
+            # If parter is not in Argentina, ignore it.
+            if invoice.company_id.partner_id.country_id.name != 'Argentina':
+                continue
+
+            # Check if journal class is validable
+            if invoice.journal_id.journal_class_id.afip_code is False:
+                continue
+
+            # Check if you choose the right journal.
             if invoice.type == 'out_invoice' and \
                     invoice.journal_id.journal_class_id.afip_code not in\
                     [1, 6, 11, 51, 19, 2, 7, 12, 52, 20]:
