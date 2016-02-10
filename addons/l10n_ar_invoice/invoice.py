@@ -107,6 +107,7 @@ class account_invoice(models.Model):
     _name = "account.invoice"
     _inherit = "account.invoice"
 
+    @api.multi
     @api.depends('invoice_line.product_id.type')
     def _get_concept(self):
         """
@@ -122,7 +123,22 @@ class account_invoice(models.Model):
                 if False not in product_types \
                 else False
 
+    @api.multi
+    @api.depends('journal_id')
+    def _get_afip_for_export(self):
+        """
+        Compute concept type from selected products in invoice.
+        """
+        for inv in self:
+            inv.afip_for_export = inv.journal_id.journal_class_id.afip_code \
+                in (19, 20, 21)
+
+    @api.model
     def _get_service_begin_date(self):
+        """
+        Set begin service date.
+        If the service is prepaid, set dates for the next period.
+        """
         try:
             period = self.period_id.find()
             if not self.env.context.get('is_prepaid', False):
@@ -131,7 +147,12 @@ class account_invoice(models.Model):
         except:
             return False
 
+    @api.model
     def _get_service_end_date(self):
+        """
+        Set begin service date.
+        If the service is prepaid, set dates for the next period.
+        """
         try:
             period = self.period_id.find()
             if not self.env.context.get('is_prepaid', False):
@@ -153,6 +174,8 @@ class account_invoice(models.Model):
     afip_incoterm_description = fields.Text('Incoterm description')
     afip_commercial_obs = fields.Text('Commercial observations')
     afip_obs = fields.Text('Commercial observations')
+    afip_for_export = fields.Boolean(compute='_get_afip_for_export',
+                                     string='Is for export')
 
     @api.multi
     def _afip_test_journal(self):
