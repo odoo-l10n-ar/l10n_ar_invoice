@@ -70,6 +70,7 @@
 - !record {model: res.users, id: user_ivari2}:
         name: Melanoma user
         login: user_ivari2
+        email: user_ivari2@localhost
         lang: es_AR
         company_id: com_ivari2
         company_ids:

@@ -65,6 +65,7 @@
 - !record {model: res.users, id: user_ivari}:
         name: Moldeo user
         login: user_ivari
+        email: user_ivari@localhost
         lang: es_AR
         company_id: com_ivari
         company_ids:
