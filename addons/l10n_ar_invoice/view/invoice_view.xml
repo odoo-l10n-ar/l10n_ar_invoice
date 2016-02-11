@@ -40,7 +40,7 @@
                     </field>
                     <notebook position="inside">
                         <page string="For Export" attrs="{'invisible': [('afip_for_export', 'is', False)]}">
-                            <group string="Incoterm" attrs="'invisible': [('afip_concept', 'in', (2,))]">
+                            <group string="Incoterm" attrs="{'invisible': [('afip_concept', 'in', (2,))]}">
                                 <field name="afip_incoterm_id"
                                     attrs="{'required': [('afip_for_export', 'is', True), ('afip_concept', 'in', (2,))]}"/>
                                 <field name="afip_incoterm_description"
