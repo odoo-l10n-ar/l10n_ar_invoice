@@ -249,9 +249,15 @@ class account_invoice(models.Model):
         Test documentation
         """
         for invoice in self:
+            if invoice.type in ('out_invoice', 'out_refund'):
+                ori_partner = invoice.company_id.partner_id
+                dst_partner = invoice.partner_id
+            else:
+                dst_partner = invoice.company_id.partner_id
+                ori_partner = invoice.partner_id
+
             # Partner responsability ?
-            partner = invoice.partner_id
-            if not partner.responsability_id:
+            if not ori_partner.responsability_id:
                 raise Warning(
                     _('No responsability\n'
                       'Your partner have not afip responsability assigned.'
@@ -260,11 +266,10 @@ class account_invoice(models.Model):
             # Take responsability classes for this journal
             invoice_class = \
                 invoice.journal_id.journal_class_id.document_class_id
-            company = invoice.journal_id.company_id.partner_id
             resp_class = \
                 self.env['afip.responsability_relation'].search(
                     [('document_class_id', '=', invoice_class.id),
-                     ('issuer_id.code', '=', company.responsability_id.code)])
+                     ('issuer_id.code', '=', ori_partner.responsability_id.code)])
 
             # You can emmit this document?
             if not resp_class:
@@ -277,7 +282,7 @@ class account_invoice(models.Model):
             resp_class = \
                 self.env['afip.responsability_relation'].search([
                     ('document_class_id', '=', invoice_class.id),
-                    ('receptor_id.code', '=', partner.responsability_id.code)
+                    ('receptor_id.code', '=', dst_partner.responsability_id.code)
                 ])
             if not resp_class:
                 raise Warning(
@@ -285,7 +290,7 @@ class account_invoice(models.Model):
                       'Your partner (%s) can\'t receive this document (%s).'
                       ' Check AFIP responsability of the partner,'
                       ' or Journal Account of the invoice.') %
-                    (partner.responsability_id.name, invoice_class.name))
+                    (dst_partner.responsability_id.name, invoice_class.name))
 
     @api.multi
     def _afip_test_limits(self):
