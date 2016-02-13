@@ -3,6 +3,13 @@ from openerp import api, models, fields, _
 from datetime import date
 from dateutil.relativedelta import relativedelta
 from openerp.exceptions import Warning
+import re
+import logging
+
+_logger = logging.getLogger(__name__)
+
+# Label filter to recover invoice number
+re_label = re.compile(r'%\([^\)]+\)s')
 
 
 def _all_taxes(x):
@@ -161,6 +168,8 @@ class account_invoice(models.Model):
         except:
             return False
 
+    afip_doc_number = fields.Integer(compute='_get_afip_doc_number',
+                                     string='Document number')
     afip_concept = fields.Selection(
         [('1', 'Consumible'), ('2', 'Service'), ('3', 'Mixted')],
         compute="_get_concept",
@@ -176,6 +185,35 @@ class account_invoice(models.Model):
     afip_obs = fields.Text('Commercial observations')
     afip_for_export = fields.Boolean(compute='_get_afip_for_export',
                                      string='Is for export')
+
+    @api.multi
+    @api.depends('number',
+                 'journal_id.sequence_id.prefix',
+                 'journal_id.sequence_id.suffix')
+    def _get_afip_doc_number(self):
+        """
+        Compute the invoice number from the document name.
+        """
+        for inv in self:
+            if not inv.number:
+                inv.afip_doc_number = False
+                continue
+
+            prefix_re = ".*".join([
+                re.escape(w)
+                for w in re_label.split(inv.journal_id.sequence_id.prefix or "")
+            ])
+            suffix_re = ".*".join([
+                re.escape(w)
+                for w in re_label.split(inv.journal_id.sequence_id.suffix or "")
+            ])
+            re_number = re.compile(prefix_re + r"(\d+)" + suffix_re)
+            result = re_number.search(inv.number)
+            if result:
+                inv.afip_doc_number = int(result.group(1))
+            else:
+                _logger.error("Invoice number can't be computed.")
+                inv.afip_doc_number = False
 
     @api.multi
     def _afip_test_journal(self):
