@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="False">
+
+        <record id="view_afip_destination_form" model="ir.ui.view">
+            <field name="name">afip.destination.form</field>
+            <field name="model">afip.destination</field>
+            <field name="arch" type="xml">
+                <form string="AFIP Destination">
+                    <field name="name"/>
+                    <field name='afip_code'/>
+                    <field name='afip_cuit_person'/>
+                    <field name='afip_cuit_company'/>
+                    <field name='afip_cuit_other'/>
+                    <field name='country_ids'/>
+                    <field name='state_ids'/>
+                    <field name='active'/>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_afip_destination_tree" model="ir.ui.view">
+            <field name="name">afip.destination.tree</field>
+            <field name="model">afip.destination</field>
+            <field name="arch" type="xml">
+                <tree string="AFIP Destination">
+                    <field name="name"/>
+                    <field name='afip_code'/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="act_afip_destination">
+            <field name="name">AFIP Destination</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">afip.destination</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem name="Destinations" action="act_afip_destination" id="menu_action_afip_destination" parent="menu_afip_config"/>
+
+    </data>
+</openerp>
+<!-- vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4
+     -->

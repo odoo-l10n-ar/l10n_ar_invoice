@@ -51,8 +51,7 @@
 - !python {model: account.journal }: |
     journal_ids = self.search(cr, uid, [('company_id','=',ref('com_ivari'))])
     expected_journals = 3 * 3 * 2 + 2 # # tipos de documentos, # Clase de Journals, Ventas y Compras, u'Miscellaneous Journal', u'Opening Entries Journal'
-    if (len(journal_ids)!=expected_journals):
-        print [ a.name for a in self.browse(cr, uid, journal_ids) ]
+    if (len(journal_ids)<expected_journals):
         raise AssertionError, 'Error in journals creation for Resp. Insc.. Expected %i, exists %i.' % (expected_journals, len(journal_ids))
 
 - Check if exists periods associated to this company
@@ -60,13 +59,13 @@
     period_ids = self.search(cr, uid, [('company_id','=',ref('com_ivari'))])
     expected_periods=13
     if (len(period_ids)!=expected_periods):
-        print [ a.name for a in self.browse(cr, uid, period_ids) ]
         raise AssertionError, 'Error in period creation for Resp. Insc.. Expected %i, exists %i.' % (expected_periods, len(period_ids))
 
 - Create user for this company
 - !record {model: res.users, id: user_ivari}:
         name: Moldeo user
         login: user_ivari
+        email: user_ivari@localhost
         lang: es_AR
         company_id: com_ivari
         company_ids:

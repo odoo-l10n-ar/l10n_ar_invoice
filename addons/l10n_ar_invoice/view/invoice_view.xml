@@ -38,6 +38,20 @@
                         <field name="afip_service_end"   attrs="{'invisible': ['!',('afip_concept','in',['2','3'])], 'readonly': ['!',('state','=','draft')]}"/>
                         <field name="afip_concept" invisible="1"/>
                     </field>
+                    <notebook position="inside">
+                        <page string="For Export" attrs="{'invisible': [('afip_for_export', 'is', False)]}">
+                            <group string="Incoterm" attrs="{'invisible': [('afip_concept', 'in', (2,))]}">
+                                <field name="afip_incoterm_id"
+                                    attrs="{'required': [('afip_for_export', 'is', True), ('afip_concept', 'in', (2,))]}"/>
+                                <field name="afip_incoterm_description"
+                                    attrs="{'required': [('afip_for_export', 'is', True), ('afip_concept', 'in', (2,))]}"/>
+                            </group>
+                            <group string="Observations">
+                                <field name="afip_commercial_obs"/>
+                                <field name="afip_obs"/>
+                            </group>
+                        </page>
+                    </notebook>
                 </data>
             </field>
         </record>

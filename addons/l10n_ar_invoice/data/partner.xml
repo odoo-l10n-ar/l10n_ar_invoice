@@ -6,6 +6,7 @@
                 <field name='responsability_id' ref='res_CF'/>
                 <field name='document_type_id' ref='dt_Sigd'/>
                 <field name='document_number'>0</field>
+		<field name='afip_destination'/>
         </record> 
     </data>
 </openerp>

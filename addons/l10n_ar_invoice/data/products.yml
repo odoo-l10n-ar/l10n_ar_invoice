@@ -25,4 +25,9 @@
     name: Producto IVA 27%
     taxes_id: !ref {model: account.tax, search: "[('name','=','01003006:V')]"}
 
+- Set products to be visible for any companies
+- !python {model: product.template }: |
+    pt_ids = self.search(cr, uid, [('company_id', '!=', False)])
+    self.write(cr, uid, pt_ids, {'company_id': False})
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -3,6 +3,13 @@ from openerp import api, models, fields, _
 from datetime import date
 from dateutil.relativedelta import relativedelta
 from openerp.exceptions import Warning
+import re
+import logging
+
+_logger = logging.getLogger(__name__)
+
+# Label filter to recover invoice number
+re_label = re.compile(r'%\([^\)]+\)s')
 
 
 def _all_taxes(x):
@@ -107,6 +114,7 @@ class account_invoice(models.Model):
     _name = "account.invoice"
     _inherit = "account.invoice"
 
+    @api.multi
     @api.depends('invoice_line.product_id.type')
     def _get_concept(self):
         """
@@ -122,7 +130,22 @@ class account_invoice(models.Model):
                 if False not in product_types \
                 else False
 
+    @api.multi
+    @api.depends('journal_id')
+    def _get_afip_for_export(self):
+        """
+        Compute concept type from selected products in invoice.
+        """
+        for inv in self:
+            inv.afip_for_export = inv.journal_id.journal_class_id.afip_code \
+                in (19, 20, 21)
+
+    @api.model
     def _get_service_begin_date(self):
+        """
+        Set begin service date.
+        If the service is prepaid, set dates for the next period.
+        """
         try:
             period = self.period_id.find()
             if not self.env.context.get('is_prepaid', False):
@@ -131,7 +154,12 @@ class account_invoice(models.Model):
         except:
             return False
 
+    @api.model
     def _get_service_end_date(self):
+        """
+        Set begin service date.
+        If the service is prepaid, set dates for the next period.
+        """
         try:
             period = self.period_id.find()
             if not self.env.context.get('is_prepaid', False):
@@ -140,6 +168,8 @@ class account_invoice(models.Model):
         except:
             return False
 
+    afip_doc_number = fields.Integer(compute='_get_afip_doc_number',
+                                     string='Document number')
     afip_concept = fields.Selection(
         [('1', 'Consumible'), ('2', 'Service'), ('3', 'Mixted')],
         compute="_get_concept",
@@ -149,6 +179,41 @@ class account_invoice(models.Model):
         'Service Start Date', default=_get_service_begin_date)
     afip_service_end = fields.Date(
         'Service End Date', default=_get_service_end_date)
+    afip_incoterm_id = fields.Many2one('afip.incoterm', string="Incoterm")
+    afip_incoterm_description = fields.Text('Incoterm description')
+    afip_commercial_obs = fields.Text('Commercial observations')
+    afip_obs = fields.Text('Commercial observations')
+    afip_for_export = fields.Boolean(compute='_get_afip_for_export',
+                                     string='Is for export')
+
+    @api.multi
+    @api.depends('number',
+                 'journal_id.sequence_id.prefix',
+                 'journal_id.sequence_id.suffix')
+    def _get_afip_doc_number(self):
+        """
+        Compute the invoice number from the document name.
+        """
+        for inv in self:
+            if not inv.number:
+                inv.afip_doc_number = False
+                continue
+
+            prefix_re = ".*".join([
+                re.escape(w)
+                for w in re_label.split(inv.journal_id.sequence_id.prefix or "")
+            ])
+            suffix_re = ".*".join([
+                re.escape(w)
+                for w in re_label.split(inv.journal_id.sequence_id.suffix or "")
+            ])
+            re_number = re.compile(prefix_re + r"(\d+)" + suffix_re)
+            result = re_number.search(inv.number)
+            if result:
+                inv.afip_doc_number = int(result.group(1))
+            else:
+                _logger.error("Invoice number can't be computed.")
+                inv.afip_doc_number = False
 
     @api.multi
     def _afip_test_journal(self):
