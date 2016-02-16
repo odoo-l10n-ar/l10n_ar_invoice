@@ -37,6 +37,7 @@
                         <field name="afip_service_start" attrs="{'invisible': ['!',('afip_concept','in',['2','3'])], 'readonly': ['!',('state','=','draft')]}"/>
                         <field name="afip_service_end"   attrs="{'invisible': ['!',('afip_concept','in',['2','3'])], 'readonly': ['!',('state','=','draft')]}"/>
                         <field name="afip_concept" invisible="1"/>
+                        <field name="afip_for_export" invisible="1"/>
                     </field>
                     <notebook position="inside">
                         <page string="For Export" attrs="{'invisible': [('afip_for_export', 'is', False)]}">
